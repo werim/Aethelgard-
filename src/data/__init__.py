@@ -1,1 +1,1 @@
-"""Aethelgard data boundary; intentionally empty in Phase 1."""
+"""Validated, provenance-aware historical market-data boundary."""

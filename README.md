@@ -4,22 +4,23 @@ Aethelgard is a conservative crypto futures **research** and **PAPER-trading** f
 
 ## Safety posture
 
-- Operating mode is fixed to **PAPER_ONLY** in Phase 1.
-- Operational readiness is **RESEARCH_ONLY**.
+- Operating mode remains fixed to **PAPER_ONLY**.
+- Operational readiness remains **RESEARCH_ONLY**.
 - No strategy logic, exchange execution, credentials, live infrastructure, optimizer, or performance claims are included.
-- Simulated, estimated, measured, unknown, and unverified evidence must remain distinguishable in future phases.
+- Simulated, estimated, measured, unknown, and unverified evidence must remain distinguishable.
 
-## Phase 1 scope
+## Implemented scope
 
-This initial foundation provides:
+Phase 1 established modular boundaries, validated configuration, fail-closed PAPER-only mode enforcement, deterministic seed metadata, structured JSON logging, and validation tooling.
 
-- modular repository boundaries,
-- validated YAML and environment-backed settings,
-- fail-closed rejection of any non-paper operating mode,
-- deterministic seed configuration and runtime metadata,
-- structured JSON logging,
-- automated tests and CI configuration,
-- linting, formatting, and static typing setup.
+Phase 2 adds only a historical-data ingestion boundary:
+
+- normalization of supplied Binance Futures fixed-interval kline rows,
+- timestamp, duplicate, missing-candle, row-shape, and OHLC integrity checks,
+- mandatory retrieval provenance metadata,
+- deterministic dataset SHA-256 fingerprints.
+
+It does **not** fetch exchange data, persist immutable datasets, run backtests, issue signals, or execute orders.
 
 ## Getting started
 
@@ -42,7 +43,8 @@ mypy .
 - `config/`: validated research configuration and declared symbol candidates.
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
-- `src/`: separated engineering domains plus Phase 1 configuration/runtime/logging foundation.
+- `src/data/`: validated historical-data ingestion boundary; no external fetching in Phase 2.
+- `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 
 ## License

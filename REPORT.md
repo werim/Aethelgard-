@@ -4,11 +4,11 @@
 
 **Operational readiness:** `RESEARCH_ONLY`
 
-**Evidence classification:** The Phase 1 test/lint/type-check results recorded here are local validation evidence. Trading, execution-cost, strategy, and profitability evidence is `UNAVAILABLE` because those systems are deliberately not implemented.
+**Evidence classification:** Phase 2 candidate-workspace tests and compilation are `MEASURED` validation of code behavior only. Accepted kline rows remain supplied historical input with validated provenance metadata and deterministic content hashing; exchange authenticity and external completeness remain `UNVERIFIED`. Trading, execution-cost, strategy, and profitability evidence remains `UNKNOWN` because those systems are deliberately not implemented.
 
 ## Architecture status
 
-Phase 1 establishes the repository shell and cross-cutting foundation only:
+Phase 2 implements only the data-ingestion integrity boundary after the Phase 1 foundation:
 
 | Area | Status | Evidence state |
 | --- | --- | --- |
@@ -17,7 +17,9 @@ Phase 1 establishes the repository shell and cross-cutting foundation only:
 | Runtime metadata and deterministic seed declaration | Implemented | SIMULATED by automated tests |
 | Structured logging | Implemented | SIMULATED by automated tests |
 | CI/tooling definitions | Implemented | UNVERIFIED remotely until GitHub workflow execution |
-| Data ingestion and provenance | Not implemented | UNKNOWN |
+| Historical kline structure and continuity validation | Implemented for supplied fixed-interval rows | MEASURED by candidate-workspace tests; exact pushed commit pending CI; source authenticity UNVERIFIED |
+| Provenance metadata and deterministic dataset hash | Implemented at ingestion boundary | MEASURED by candidate-workspace tests; immutable storage not implemented |
+| Exchange data fetching | Not implemented | UNKNOWN |
 | Persistence and audit trail | Not implemented | UNKNOWN |
 | Backtesting and execution realism | Not implemented | UNKNOWN |
 | Strategies and probabilistic modeling | Not implemented | UNKNOWN |
@@ -27,18 +29,17 @@ Phase 1 establishes the repository shell and cross-cutting foundation only:
 
 ## Validation coverage
 
-The validation suite targets only Phase 1 behavior:
+The Phase 2 candidate-workspace suite additionally verified that:
 
-- default settings parse correctly and remain PAPER-only,
-- environment overrides remain bounded by safety validation,
-- any LIVE-mode request fails closed,
-- unsafe configuration flags fail closed,
-- runtime metadata is auditable and reports its seed,
-- structured log records are emitted as JSON.
+- identical validated content and acquisition selectors produce a stable dataset hash independently of retrieval time,
+- duplicate timestamps and missing fixed-interval candles fail closed,
+- malformed OHLC records and inconsistent close timestamps fail closed,
+- non-UTC provenance timestamps fail closed.
 
-Commands required for evidence after implementation:
+Commands required for exact-commit evidence:
 
 ```bash
+python -m compileall -q src tests main.py
 pytest -q
 ruff check .
 black --check .
@@ -47,15 +48,16 @@ mypy .
 
 ## Unresolved risks and execution realism gaps
 
-- No exchange or historical data is consumed; timestamp, duplicates, gaps, provenance, and dataset-hash controls are not yet available.
+- No network fetch or immutable raw-data persistence exists. A caller can supply rows and provenance, but the system cannot yet prove their external origin or long-horizon completeness.
+- Validation handles fixed-duration intervals only; exchange-specific non-fixed calendar intervals are outside this phase.
 - No fill simulator exists; fees, spread, slippage, latency, and funding costs remain unavailable rather than assumed zero.
 - No strategy or risk engine exists; capped fractional Kelly, exposure caps, volatility targeting, drawdown protection, concentration limits, regime detection, and circuit breakers remain future scope.
 - No paper runtime evidence exists and no production readiness claim is supportable.
 
 ## Known unknowns
 
-- Behavior under real Binance Futures market-data shapes and quality failures.
-- Calibration, statistical power, validation horizons, and generalization characteristics of any future model.
+- Exchange API response acquisition behavior, rate limits, retries, schema drift, and provenance capture under actual Binance Futures requests.
+- Whether supplied datasets are complete outside their contained timestamp range or authentic to the declared source.
 - Operational latency, market impact, fill uncertainty, and funding-cost distributions.
 - PAPER runtime resilience and audit completeness under long-running conditions.
 
@@ -63,20 +65,23 @@ mypy .
 
 - Any alpha, expectancy, profit, or drawdown behavior.
 - Any realistic order-fill behavior or execution-cost model.
+- External authenticity or persisted immutability of a historical dataset.
 - PAPER_RUNTIME_EXPERIMENTAL or higher readiness.
-- CI success on GitHub until a remote workflow run exists.
+- Exact-commit validation success until CI runs against the pushed commit.
 
 ## Validation execution record
 
-**Validation environment:** local sandbox, Python 3.13.5, 2026-05-25.
+**Validation environment:** local candidate workspace, 2026-05-25.
 
 | Command | Result | Evidence classification |
 | --- | --- | --- |
-| `python -m compileall -q src tests main.py` | Passed | MEASURED local validation |
-| `pytest -q` | First clean-extraction run failed during collection (`ModuleNotFoundError: src`); after configuring project-root import resolution, rerun passed (`7 passed`) | MEASURED local validation |
-| `ruff check .` | Passed after correcting first-pass formatting/`StrEnum` findings | MEASURED local validation |
-| `black --check .` | Passed | MEASURED local validation |
-| `mypy .` | Passed, no issues in 15 source files | MEASURED local validation |
-| `python main.py` | Safe startup recorded `PAPER_ONLY` and `RESEARCH_ONLY`; no execution capability | MEASURED local bootstrap validation |
+| `python -m compileall -q src tests main.py` | Passed on candidate workspace | MEASURED local validation |
+| `pytest -q` | Passed on candidate workspace (`13 passed`) | MEASURED local validation |
+| `ruff check .` | No successful execution evidence captured for this phase | UNVERIFIED |
+| `black --check .` | No successful execution evidence captured for this phase | UNVERIFIED |
+| `mypy .` | No successful execution evidence captured for this phase | UNVERIFIED |
+| GitHub Actions workflow | Pending push of atomic Phase 2 commit | UNVERIFIED |
 
-The initial development validation recorded Ruff formatting/modernization findings that were corrected before the prepared foundation archive was formed. During publication revalidation from a clean extraction, `pytest -q` then failed during test collection because project-root import resolution was not configured. Adding `pythonpath = ["."]` under pytest configuration corrected that defect; the full validation suite was rerun before remote publication. Remote GitHub Actions execution remains `UNVERIFIED` until a workflow run exists.
+The packaged commit contains a non-behavioral standards correction after the measured candidate test run: the evidence label is recorded as the governance vocabulary value `MEASURED` rather than `MEASURED_LOCAL_VALIDATION`, and the `Mapping`/`Sequence` imports use their Python 3.11 collections location. Exact-commit evidence therefore remains pending CI rather than being overclaimed.
+
+No data fetch, order submission, trading mode expansion, performance measurement, or readiness upgrade is included in this phase.

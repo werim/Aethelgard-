@@ -1,3 +1,3 @@
-"""Aethelgard Phase 1 foundation package."""
+"""Aethelgard Phase 2 research package."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
