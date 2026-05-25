@@ -1,0 +1,18 @@
+project:
+  name: Aethelgard
+  phase: FOUNDATION
+runtime:
+  mode: PAPER_ONLY
+  readiness: RESEARCH_ONLY
+  random_seed: 42
+  log_level: INFO
+  timezone: UTC
+paths:
+  raw_data: data/raw
+  processed_data: data/processed
+  cache_data: data/cache
+  reports: reports
+safety:
+  allow_live_trading: false
+  allow_exchange_orders: false
+  performance_claims_enabled: false
