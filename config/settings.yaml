@@ -1,6 +1,6 @@
 project:
   name: Aethelgard
-  phase: DATA_INGESTION
+  phase: DATA_ACQUISITION
 runtime:
   mode: PAPER_ONLY
   readiness: RESEARCH_ONLY

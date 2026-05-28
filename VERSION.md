@@ -1,5 +1,21 @@
 # Version History
 
+## 0.3.0 - 2026-05-27
+
+**Engineering milestone:** Phase 2B read-only historical kline acquisition and immutable raw-artifact evidence boundary.
+
+- Added credential-free public Binance Futures kline GET acquisition with validated fixed-interval selectors, deterministic pagination, and bounded retry/rate-limit behavior.
+- Added immutable local JSON artifact and checksummed metadata persistence with retained fetch diagnostics, checksum/readback verification, and stale/future-dated acquisition-evidence rejection.
+- Added fail-closed tests for incomplete pagination, unsupported or misaligned requests, retry exhaustion, stale/future-dated or tampered artifacts, and conflicting immutable writes.
+- Retained `PAPER_ONLY` and `RESEARCH_ONLY`; no signal, backtest, execution, order, credential, or LIVE trading path was added.
+
+## Validation evidence
+
+- The initial PR head `d4a3afa31c72220fb0333f4db005d82137706d40` received remote GitHub Actions evidence: compilation and tests passed, while `ruff check .` failed on import organization in `tests/test_klines.py`; Black and Mypy were skipped after the Ruff failure.
+- The repair commit reorders the affected existing test import block only. Targeted `ruff check tests/test_klines.py` passed against a reconstructed package-layout workspace after applying the repair.
+- Full exact repair-commit GitHub Actions validation remains `UNVERIFIED` until CI runs on the updated pull-request branch.
+- Public exchange authenticity, external completeness, and runtime trading behavior remain `UNVERIFIED` or `UNKNOWN`; no such claim is made.
+
 ## 0.2.0 - 2026-05-25
 
 **Engineering milestone:** Phase 2 validated historical kline ingestion boundary.

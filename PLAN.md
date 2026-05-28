@@ -9,78 +9,51 @@ This ledger records gated implementation progress using repository-observable ev
 - Operating mode: `PAPER_ONLY`.
 - Operational classification: `RESEARCH_ONLY`.
 - LIVE trading and real exchange orders remain prohibited.
-- Next permitted engineering surface: data-layer acquisition and immutable raw-data evidence only after this baseline reconciliation record.
-- Gates after Gate 1 are blocked until Gate 1 is implemented, validated, documented, and committed.
+- Gates after Gate 1 remain blocked until Gate 1 is reviewed, merged to `dev`, and re-inspected from the new remote baseline.
 
 ## Gate 0 — Baseline reconciliation and ledger establishment
 
 **Recorded:** 2026-05-26
 
-**Status:** `COMPLETE` for repository reconciliation and ledger establishment only. This status does not validate any new runtime or data-acquisition capability.
+**Status:** `COMPLETE` for repository reconciliation and ledger establishment only.
 
-### MEASURED
-
-- Repository accessed through the connected GitHub repository interface: `https://github.com/werim/Aethelgard-` (`werim/Aethelgard-`).
-- Required working branch exists and was inspected by ref: `dev`.
-- Connector-reported repository permissions include `pull: true` and `push: true`; creation of this ledger on `dev` is the concrete write-capability check.
-- The previously recorded baseline commit `d29545fc5b078e0f5cb445e749a13201791a95d6` was compared to `dev`; the live branch was reported as `ahead` by 2 commits with changes to `Aethelgard_Master_Plan.md` and `REPORT.md`.
-- `VERSION.md` exists on `dev` and declares version `0.2.0` with milestone `Phase 2 validated historical kline ingestion boundary`.
-- `CHANGELOG.md` exists on `dev` and documents the `0.2.0` ingestion-boundary change and its stated limitations.
-- `REPORT.md` exists on `dev`, records the 2026-05-26 truthfulness-first audit, and classifies the project as `RESEARCH_ONLY`.
-- `Aethelgard_Master_Plan.md` exists on `dev` and requires PAPER-only operation, evidence classification, fail-closed data handling, incremental modular work, and mandatory documentation/validation reporting.
-- No pre-existing `PLAN.md` file was found before this ledger was created.
-- Modules and validation surface actually inspected on `dev` include:
-  - `src/data/klines.py`: supplied-row historical kline validation, provenance metadata validation, continuity checks, and deterministic dataset hash; no network requests or persistence.
-  - `src/settings.py` and `config/settings.yaml`: `PAPER_ONLY`, `RESEARCH_ONLY`, no live trading, no exchange orders, no performance claims.
-  - `tests/test_klines.py`: deterministic hash, duplicate/gap, malformed OHLC, UTC timestamp, and close-timestamp rejection tests.
-  - `pyproject.toml`: Python 3.11 packaging plus pytest/Ruff/Black/Mypy configuration.
-  - `.github/workflows/ci.yml`: validation workflow configured on pushes and pull requests targeting `dev`.
-- Open pull-request search scoped to `werim/Aethelgard-` returned no visible open pull requests at the time of inspection.
-
-### UNVERIFIED
-
-- The statement in repository documentation that prior local candidate-workspace validation passed (`pytest -q` with `13 passed` and compileall) is preserved as historical documentation evidence; it was not re-executed during this Gate 0 connector-based reconciliation.
-- Exact external authenticity and completeness of any supplied kline dataset remain unverified because no read-only exchange acquisition boundary or immutable raw artifact exists.
-- Absence of an open pull request in the connector result does not prove that no inaccessible or later-created pull request affects `dev`.
-
-### UNAVAILABLE
-
-- Pre-edit `dev` HEAD commit SHA was not surfaced by the available connected-repository branch/file inspection operations. Branch identity and divergence from the recorded baseline were observable; the exact pre-edit tip SHA was not.
-- A local clean clone could not be obtained in the execution environment because a direct `git clone --branch dev --single-branch https://github.com/werim/Aethelgard-.git` attempt failed with `Could not resolve host: github.com`.
-- Because no local checkout was available in this step, fresh local execution of `python -m compileall`, `pytest`, `ruff`, `black`, or `mypy` is unavailable for this documentation-only ledger commit.
-- Current-HEAD CI/workflow results are unavailable in this step because the exact pre-edit branch-tip SHA was not exposed for status lookup; no CI claim is made.
-- A Git working tree status is not applicable to the connected GitHub repository read/write surface: repository refs and file contents were inspected remotely, not through a mutable checked-out tree.
-
-### FAILED
-
-- No repository access or repository write-capability failure occurred during Gate 0.
-- No code validation failure is recorded because no executable code was changed and no executable validation run was available in this documentation-only step.
-- Environment limitation recorded without concealment: direct local clone failed due to DNS resolution for `github.com`, as documented under `UNAVAILABLE`.
-
-### Gate 0 conclusion
-
-The actual `dev` repository is reconciled sufficiently to establish this ledger. The repository remains at a narrow supplied-row validation boundary. The smallest safe next increment is Gate 1 only: public/read-only historical kline acquisition plus an immutable raw-data evidence boundary, including fail-closed freshness and request/provenance consistency checks, deterministic pagination/retry/rate-limit diagnostics, checksum/readback persistence evidence, tests, and required documentation updates.
+The repository established the supplied-row kline validation boundary and identified Gate 1 as the next safe data-layer increment. It did not validate acquisition, persistence, strategy, risk, execution, or runtime capability.
 
 ## Gate 1 — Read-only acquisition and immutable raw-data evidence boundary
 
-**Status:** `NOT STARTED`.
+**Proposed:** 2026-05-27
 
-### Allowed scope
+**Status:** `IMPLEMENTED_IN_FOCUSED_PR_PENDING_REVIEW_AND_MERGE`.
 
-- Public/read-only Binance Futures historical kline acquisition.
-- Explicit fetch metadata and validated request-selector consistency.
-- Fail-closed staleness validation appropriate to the acquired historical data contract.
-- Deterministic pagination and bounded retry/rate-limit behavior with truthful diagnostics.
-- Immutable local raw artifact and metadata/checksum persistence plus readback validation.
-- Tests and documentation required to support those claims.
+### Implemented scope
 
-### Prohibited scope
+- Public/read-only Binance Futures historical kline GET acquisition without credentials.
+- Validated fixed-duration request selectors and canonical persisted provenance parameters.
+- Deterministic pagination and bounded retry/rate-limit handling with diagnostics.
+- Immutable local raw JSON artifact and metadata/checksum persistence, retained fetch diagnostics, and readback validation.
+- Stale/future-dated acquisition-evidence rejection at artifact readback.
+- Candidate-workspace tests and required documentation updates.
 
-- Strategies, signals, feature engineering beyond data validation needs.
-- Backtesting, execution or fill modeling, order submission, PAPER runtime claims.
-- Risk allocation, performance measurement, optimization, or readiness upgrades.
-- LIVE trading or exchange order capability of any kind.
+### MEASURED evidence
 
-### Advancement rule
+- Starting connected-repository baseline: `dev` HEAD `2cbdaeddd5e7471a5236b980c64cdbfad6f51e1e`.
+- No visible open PR affecting `dev` was returned before implementation.
+- Candidate-workspace validation passed: `python -m compileall -q src tests main.py`, `pytest -q` (`22 passed`), `ruff check .`, `black --check .`, and `mypy .`; this candidate evidence was later superseded for the exact initial PR head by the remote Ruff result below.
+- GitHub Actions run #9 on initial PR head `d4a3afa31c72220fb0333f4db005d82137706d40`: compile and test steps passed; Ruff failed with `I001` in `tests/test_klines.py`; Black and Mypy were skipped.
+- The repair scope is non-behavioral and limited to Ruff-organized ordering of the existing `tests/test_klines.py` import block; targeted `ruff check tests/test_klines.py` passed in a reconstructed first-party package layout after applying the repair.
 
-Gate 2 and all later work remain blocked until Gate 1 is implemented, validated, documented, and atomically committed with failures and unavailable evidence stated explicitly.
+### UNVERIFIED or unavailable evidence
+
+- Exact corrected pull-request-head CI evidence remains `UNVERIFIED` until GitHub Actions runs on the updated branch.
+- A direct local clone/working-tree status was unavailable because the execution environment could not resolve `github.com`; candidate validation and the targeted repair validation were reconstructed from connected-repository file reads plus proposed files.
+- Exchange authenticity, completeness outside the explicitly accepted range, and operational resilience under live network conditions remain `UNVERIFIED`.
+
+### Prohibited scope preserved
+
+- No strategies, signals, backtests, execution/fill modeling, risk allocation, performance measurement, PAPER runtime claims, LIVE trading, exchange-order path, or credentials were introduced.
+
+## Gate 2 — Persistence and audit trail
+
+**Status:** `BLOCKED_PENDING_GATE_1_REVIEW_AND_MERGE`.
+
+After Gate 1 is reviewed and merged, the next run must begin from the then-current `dev` and select only the smallest validated persistence/audit-trail increment. Backtesting and all later layers remain blocked until their predecessor evidence boundaries are implemented and validated.
