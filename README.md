@@ -13,14 +13,17 @@ Aethelgard is a conservative crypto futures **research** and **PAPER-trading** f
 
 Phase 1 established modular boundaries, validated configuration, fail-closed PAPER-only mode enforcement, deterministic seed metadata, structured JSON logging, and validation tooling.
 
-Phase 2 adds only a historical-data ingestion boundary:
+Phase 2 added a supplied-row historical-data ingestion boundary with timestamp, continuity, OHLC, provenance, and deterministic fingerprint validation.
 
-- normalization of supplied Binance Futures fixed-interval kline rows,
-- timestamp, duplicate, missing-candle, row-shape, and OHLC integrity checks,
-- mandatory retrieval provenance metadata,
-- deterministic dataset SHA-256 fingerprints.
+Phase 2B adds only a read-only acquisition evidence boundary:
 
-It does **not** fetch exchange data, persist immutable datasets, run backtests, issue signals, or execute orders.
+- credential-free GET acquisition from the public Binance Futures kline endpoint,
+- validated fixed-interval request selectors and deterministic pagination,
+- bounded retry and rate-limit diagnostics,
+- immutable local raw artifact and checksummed metadata storage with persisted fetch diagnostics and verified readback,
+- stale or future-dated acquisition-evidence rejection during artifact readback.
+
+It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, or establish long-horizon exchange completeness.
 
 ## Getting started
 
@@ -36,14 +39,14 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime.
 
 ## Repository map
 
 - `config/`: validated research configuration and declared symbol candidates.
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
-- `src/data/`: validated historical-data ingestion boundary; no external fetching in Phase 2.
+- `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 
