@@ -3,8 +3,8 @@ from collections.abc import Sequence
 import pytest
 
 from src.data.klines import (
-    DataValidationError,
     DatasetProvenance,
+    DataValidationError,
     validate_historical_klines,
 )
 

@@ -11,8 +11,9 @@
 
 ## Validation evidence
 
-- `MEASURED` on the reconstructed candidate workspace containing the proposed Phase 2B contents: `python -m compileall -q src tests main.py` passed; `pytest -q` passed (`22 passed`); `ruff check .` passed; `black --check .` passed; `mypy .` passed.
-- Exact pushed-commit and GitHub Actions validation remain `UNVERIFIED` until CI runs on the pull-request commit.
+- The initial PR head `d4a3afa31c72220fb0333f4db005d82137706d40` received remote GitHub Actions evidence: compilation and tests passed, while `ruff check .` failed on import organization in `tests/test_klines.py`; Black and Mypy were skipped after the Ruff failure.
+- The repair commit reorders the affected existing test import block only. Targeted `ruff check tests/test_klines.py` passed against a reconstructed package-layout workspace after applying the repair.
+- Full exact repair-commit GitHub Actions validation remains `UNVERIFIED` until CI runs on the updated pull-request branch.
 - Public exchange authenticity, external completeness, and runtime trading behavior remain `UNVERIFIED` or `UNKNOWN`; no such claim is made.
 
 ## 0.2.0 - 2026-05-25

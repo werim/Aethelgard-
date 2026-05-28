@@ -13,11 +13,12 @@
 
 - Project phase metadata advanced from `DATA_INGESTION` to `DATA_ACQUISITION` while retaining `PAPER_ONLY` and `RESEARCH_ONLY` controls.
 - Package version advanced to `0.3.0`.
-- Documentation records the Phase 2B measured candidate-validation boundary and remaining evidence limits.
+- Documentation records the Phase 2B candidate-validation boundary, observed PR workflow failure, repair scope, and remaining evidence limits.
 
 ### Fixed
 
 - Closed the documented absence of read-only acquisition, acquisition-evidence freshness rejection, and immutable artifact checksum/readback storage within the bounded data layer.
+- Corrected the `tests/test_klines.py` import organization defect reported by the initial PR GitHub Actions validation workflow (`ruff I001`).
 
 ### Removed
 
@@ -28,7 +29,7 @@
 - Public HTTP acquisition plus local checksums do not prove Binance authenticity, external completeness beyond the requested fixed range, or data fitness for trading decisions.
 - Only listed fixed-duration intervals are admitted; calendar-month intervals are intentionally unsupported.
 - No persistence for runtime decisions, backtesting, execution-cost simulation, strategy, risk allocation, paper runtime, or reporting pipeline is implemented.
-- Exact PR-commit CI validation remains `UNVERIFIED` until GitHub Actions runs on the pushed branch.
+- The initial PR workflow failed at Ruff; full exact repair-commit CI validation remains `UNVERIFIED` until GitHub Actions runs on the updated branch.
 
 ## [0.2.0] - 2026-05-25
 

@@ -38,12 +38,14 @@ The repository established the supplied-row kline validation boundary and identi
 
 - Starting connected-repository baseline: `dev` HEAD `2cbdaeddd5e7471a5236b980c64cdbfad6f51e1e`.
 - No visible open PR affecting `dev` was returned before implementation.
-- Candidate-workspace validation passed: `python -m compileall -q src tests main.py`, `pytest -q` (`22 passed`), `ruff check .`, `black --check .`, and `mypy .`.
+- Candidate-workspace validation passed: `python -m compileall -q src tests main.py`, `pytest -q` (`22 passed`), `ruff check .`, `black --check .`, and `mypy .`; this candidate evidence was later superseded for the exact initial PR head by the remote Ruff result below.
+- GitHub Actions run #9 on initial PR head `d4a3afa31c72220fb0333f4db005d82137706d40`: compile and test steps passed; Ruff failed with `I001` in `tests/test_klines.py`; Black and Mypy were skipped.
+- The repair scope is non-behavioral and limited to Ruff-organized ordering of the existing `tests/test_klines.py` import block; targeted `ruff check tests/test_klines.py` passed in a reconstructed first-party package layout after applying the repair.
 
 ### UNVERIFIED or unavailable evidence
 
-- Exact pull-request commit CI evidence remains `UNVERIFIED` until GitHub Actions runs.
-- A direct local clone/working-tree status was unavailable because the execution environment could not resolve `github.com`; candidate validation was reconstructed from connected-repository file reads plus proposed files.
+- Exact corrected pull-request-head CI evidence remains `UNVERIFIED` until GitHub Actions runs on the updated branch.
+- A direct local clone/working-tree status was unavailable because the execution environment could not resolve `github.com`; candidate validation and the targeted repair validation were reconstructed from connected-repository file reads plus proposed files.
 - Exchange authenticity, completeness outside the explicitly accepted range, and operational resilience under live network conditions remain `UNVERIFIED`.
 
 ### Prohibited scope preserved

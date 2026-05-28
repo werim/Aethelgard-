@@ -4,13 +4,13 @@
 
 **Operational readiness:** `RESEARCH_ONLY`
 
-**Evidence classification:** Phase 2B candidate-workspace validation is `MEASURED` evidence of the proposed code behavior only. The new boundary records credential-free public endpoint responses, request selectors, local data and metadata checksums, persisted fetch diagnostics, immutable-write/readback checks, and artifact freshness checks. Public exchange authenticity and completeness outside an explicitly requested accepted fixed range remain `UNVERIFIED`. Trading, execution-cost, strategy, risk, PAPER-runtime, profitability, and production-readiness evidence remains `UNKNOWN` because those systems are not implemented.
+**Evidence classification:** Phase 2B candidate-workspace validation is `MEASURED` evidence of proposed data-boundary behavior only. Remote GitHub Actions for the initial PR head is now also observed: compilation and tests passed, while Ruff failed on import organization in the pre-existing `tests/test_klines.py` file; subsequent checks were skipped. The repair commit changes only that import ordering and records targeted Ruff validation. Public exchange authenticity and completeness outside an explicitly requested accepted fixed range remain `UNVERIFIED`. Trading, execution-cost, strategy, risk, PAPER-runtime, profitability, and production-readiness evidence remains `UNKNOWN` because those systems are not implemented.
 
 ## Phase 2B implementation record — 2026-05-27
 
 **Starting remote baseline:** connected repository `werim/Aethelgard-`, branch `dev`, HEAD `2cbdaeddd5e7471a5236b980c64cdbfad6f51e1e` (`docs: add Codex incremental automation guide`). Open PR search affecting `dev` returned no visible open PRs. Combined-status and pull-request-workflow queries for the starting HEAD returned no visible status entries or workflow runs.
 
-**Workspace constraint:** a direct local clone of the public repository was attempted but unavailable in the execution container because DNS resolution for `github.com` failed. Validation below was executed in a reconstructed candidate workspace populated from files read through the connected repository and the exact proposed Phase 2B files. A mutable pre-edit Git working tree status is therefore not applicable to the connected repository surface; no clean-local-clone claim is made.
+**Workspace constraint:** a direct local clone of the public repository was attempted but unavailable in the execution container because DNS resolution for `github.com` failed. Candidate validation was executed in a reconstructed workspace populated from files read through the connected repository and the exact proposed Phase 2B files. A mutable pre-edit Git working tree status is therefore not applicable to the connected repository surface; no clean-local-clone claim is made.
 
 **Selected increment:** Gate 1 / Phase 2B, the earliest still-missing coherent increment recorded in `PLAN.md`: read-only public historical kline acquisition plus immutable raw-data evidence storage. No later persistence, backtest, strategy, execution, risk, or runtime layer was begun.
 
@@ -37,8 +37,8 @@
 | --- | --- | --- |
 | Configuration validation and PAPER-only guard | Implemented | Previously tested; retained with only the research phase label advanced. |
 | Runtime metadata and structured logging | Implemented | Previously tested bootstrap-only behavior; no trading runtime. |
-| Historical supplied-row structural validation | Implemented | Existing Phase 2 boundary retained. |
-| Read-only public kline acquisition | Implemented in Phase 2B proposal | `MEASURED` by candidate-workspace tests; exact pushed-commit CI pending. |
+| Historical supplied-row structural validation | Implemented | Existing Phase 2 boundary retained; import organization repair is non-behavioral. |
+| Read-only public kline acquisition | Implemented in Phase 2B proposal | `MEASURED` by candidate-workspace tests; corrected exact PR-head CI pending. |
 | Immutable acquisition artifact/checksum readback | Implemented in Phase 2B proposal | `MEASURED` by candidate-workspace tests; filesystem durability beyond test scope unverified. |
 | General persistence and audit trail | Not implemented | `UNKNOWN` |
 | Backtesting and execution realism | Not implemented | `UNKNOWN` |
@@ -49,18 +49,21 @@
 
 ## Validation execution record
 
-**Validation environment:** reconstructed Phase 2B candidate workspace, 2026-05-27; the candidate includes repository-read baseline sources and exact proposed changed contents.
+**Validation environment:** reconstructed Phase 2B candidate workspace, 2026-05-27; followed by observed GitHub Actions output for the initial PR head and targeted repair verification on 2026-05-28.
 
 | Command or evidence query | Result | Evidence classification |
 | --- | --- | --- |
-| `python -m compileall -q src tests main.py` | Passed | `MEASURED` candidate-workspace code validation |
-| `pytest -q` | Passed: `22 passed` | `MEASURED` candidate-workspace tests |
-| `ruff check .` | Passed after development-time fixes | `MEASURED` candidate-workspace lint validation |
-| `black --check .` | Passed after development-time formatting | `MEASURED` candidate-workspace formatting validation |
-| `mypy .` | Passed: no issues found | `MEASURED` candidate-workspace type validation |
-| Starting `dev` open-PR search | No visible open PR returned | `MEASURED` connector observation only |
-| Starting HEAD combined status/workflow inspection | No visible status entries or workflow runs returned | `UNVERIFIED` CI evidence |
-| Exact proposed commit GitHub Actions run | Pending PR push/run | `UNVERIFIED` |
+| Candidate: `python -m compileall -q src tests main.py` | Passed | `MEASURED` candidate-workspace code validation |
+| Candidate: `pytest -q` | Passed: `22 passed` | `MEASURED` candidate-workspace tests |
+| Candidate: `ruff check .` | Recorded as passed during candidate construction, but did not include the unchanged first-party import classification later exercised by CI | Superseded for exact PR head by remote failure |
+| Candidate: `black --check .` | Passed after development-time formatting | `MEASURED` candidate-workspace formatting validation only |
+| Candidate: `mypy .` | Passed: no issues found | `MEASURED` candidate-workspace type validation only |
+| Initial PR head `d4a3afa...`: GitHub Actions compile step | Passed | `MEASURED` remote CI evidence |
+| Initial PR head `d4a3afa...`: GitHub Actions tests step | Passed | `MEASURED` remote CI evidence |
+| Initial PR head `d4a3afa...`: GitHub Actions Ruff step | Failed: `I001` in `tests/test_klines.py` | `MEASURED` remote CI failure evidence |
+| Initial PR head `d4a3afa...`: GitHub Actions Black/Mypy steps | Skipped after Ruff failure | `UNVERIFIED` for that head |
+| Repair: `ruff check tests/test_klines.py` in reconstructed first-party package layout | Passed after import reorder | `MEASURED` targeted repair validation |
+| Corrected PR-head full GitHub Actions run | Pending updated branch workflow | `UNVERIFIED` |
 
 ## Unresolved risks and execution realism gaps
 
@@ -76,7 +79,7 @@
 - External dataset authenticity or long-horizon completeness beyond accepted locally verified captured content.
 - Runtime decision persistence, lifecycle correctness, risk enforcement, or PAPER-runtime readiness.
 - Statistical validity, absence of leakage, or production readiness.
-- Exact pushed-commit validation success until GitHub Actions reports on the pull-request branch.
+- Exact corrected PR-head validation success until GitHub Actions reports on the updated pull-request branch.
 
 ## Next recommended smallest increment
 
