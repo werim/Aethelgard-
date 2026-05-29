@@ -43,10 +43,17 @@ _FIXED_INTERVALS_MS = {
     "1d": 86_400_000,
 }
 _SYMBOL_PATTERN = re.compile(r"^[A-Z0-9]{5,20}$")
+_METADATA_PATTERN = re.compile(
+    r"^(?P<data>[0-9a-f]{64})\.(?P<metadata>[0-9a-f]{64})\.metadata\.json$"
+)
 
 
 class AcquisitionError(DataValidationError):
     """Raised when a read-only acquisition cannot establish usable evidence."""
+
+
+class TransientTransportError(AcquisitionError):
+    """Raised when a public GET fails before an HTTP response is available."""
 
 
 class ArtifactIntegrityError(DataValidationError):
@@ -65,8 +72,6 @@ class HistoricalKlineRequest:
 
     @property
     def interval_ms(self) -> int:
-        """Return the validated fixed interval in milliseconds."""
-
         try:
             return _FIXED_INTERVALS_MS[self.timeframe]
         except KeyError as exc:
@@ -75,8 +80,6 @@ class HistoricalKlineRequest:
             ) from exc
 
     def validate(self) -> None:
-        """Reject ambiguous, unsafe, or non-deterministic acquisition requests."""
-
         if (
             not _SYMBOL_PATTERN.fullmatch(self.symbol)
             or self.symbol != self.symbol.upper()
@@ -95,8 +98,6 @@ class HistoricalKlineRequest:
             raise AcquisitionError("page_limit must be between 1 and 1500.")
 
     def provenance_parameters(self) -> dict[str, str]:
-        """Canonical selector persisted as provenance for readback checks."""
-
         return {
             "endpoint": PUBLIC_KLINES_URL,
             "symbol": self.symbol,
@@ -127,16 +128,12 @@ class AcquisitionPolicy:
 
 @dataclass(frozen=True)
 class FetchResponse:
-    """One transport response captured for deterministic acquisition handling."""
-
     status_code: int
     payload: object
     headers: Mapping[str, str]
 
 
 class KlineTransport(Protocol):
-    """Injected read-only transport contract used for tests and public fetches."""
-
     def fetch(self, params: Mapping[str, str], timeout_seconds: float) -> FetchResponse:
         """Retrieve one public kline page without credentials or state mutation."""
 
@@ -165,9 +162,9 @@ class PublicBinanceFuturesTransport:
             except (UnicodeDecodeError, json.JSONDecodeError):
                 payload = None
             return FetchResponse(exc.code, payload, dict(exc.headers.items()))
-        except URLError as exc:
-            raise AcquisitionError(
-                "Public kline request failed without response evidence."
+        except (TimeoutError, URLError) as exc:
+            raise TransientTransportError(
+                "Public kline request failed before response evidence was available."
             ) from exc
 
 
@@ -179,6 +176,7 @@ class AcquisitionDiagnostics:
     attempts: int
     retries: int
     response_status_codes: tuple[int, ...]
+    transient_transport_failures: int = 0
 
 
 @dataclass(frozen=True)
@@ -194,8 +192,6 @@ class PersistedArtifact:
 
 @dataclass(frozen=True)
 class AcquisitionResult:
-    """Validated acquired rows plus persisted evidence and diagnostics."""
-
     dataset: ValidatedKlineDataset
     diagnostics: AcquisitionDiagnostics
     artifact: PersistedArtifact
@@ -254,11 +250,7 @@ def acquire_historical_klines(
     clock: Callable[[], datetime] = _utc_now,
     sleeper: Callable[[float], None] = time.sleep,
 ) -> AcquisitionResult:
-    """Acquire complete fixed-range public klines and persist immutable evidence.
-
-    This proves local validation of captured public-response content and request
-    behavior only. It does not establish exchange authenticity or trading fitness.
-    """
+    """Acquire complete fixed-range public klines and persist immutable evidence."""
 
     request.validate()
     active_policy = policy or AcquisitionPolicy()
@@ -269,6 +261,7 @@ def acquire_historical_klines(
     attempts = 0
     retries = 0
     pages = 0
+    transient_failures = 0
     statuses: list[int] = []
 
     while cursor < request.end_time_ms:
@@ -276,10 +269,22 @@ def acquire_historical_klines(
             raise AcquisitionError("Acquisition exceeded bounded page limit.")
         attempt_for_page = 0
         while True:
-            response = reader.fetch(
-                _page_params(request, cursor), active_policy.request_timeout_seconds
-            )
             attempts += 1
+            try:
+                response = reader.fetch(
+                    _page_params(request, cursor), active_policy.request_timeout_seconds
+                )
+            except TransientTransportError as exc:
+                transient_failures += 1
+                if attempt_for_page >= active_policy.max_retries:
+                    raise AcquisitionError(
+                        "Public kline request exhausted bounded retries after "
+                        "transient transport failures."
+                    ) from exc
+                sleeper(active_policy.retry_backoff_seconds)
+                retries += 1
+                attempt_for_page += 1
+                continue
             statuses.append(response.status_code)
             if response.status_code == 200:
                 break
@@ -312,12 +317,11 @@ def acquire_historical_klines(
             raise AcquisitionError("Public kline pagination did not advance.")
         cursor = next_cursor
 
-    fetched_at = _iso_utc(clock())
     provenance = DatasetProvenance(
         source=SOURCE_NAME,
         symbol=request.symbol,
         timeframe=request.timeframe,
-        fetched_at_utc=fetched_at,
+        fetched_at_utc=_iso_utc(clock()),
         request_parameters=request.provenance_parameters(),
     )
     dataset = validate_historical_klines(
@@ -336,6 +340,7 @@ def acquire_historical_klines(
         attempts=attempts,
         retries=retries,
         response_status_codes=tuple(statuses),
+        transient_transport_failures=transient_failures,
     )
     artifact = persist_immutable_dataset(dataset, output_directory, diagnostics)
     return AcquisitionResult(
@@ -367,7 +372,7 @@ def persist_immutable_dataset(
     output_directory: Path,
     diagnostics: AcquisitionDiagnostics,
 ) -> PersistedArtifact:
-    """Write raw validated content and checksum metadata without overwrite paths."""
+    """Write data and checksum-addressed metadata without overwrite paths."""
 
     output_directory.mkdir(parents=True, exist_ok=True)
     payload_bytes = json.dumps(
@@ -375,7 +380,6 @@ def persist_immutable_dataset(
     ).encode("utf-8")
     artifact_sha256 = hashlib.sha256(payload_bytes).hexdigest()
     data_path = output_directory / f"{artifact_sha256}.json"
-    metadata_path = output_directory / f"{artifact_sha256}.metadata.json"
     metadata = {
         "artifact_sha256": artifact_sha256,
         "dataset_sha256": dataset.dataset_sha256,
@@ -387,12 +391,16 @@ def persist_immutable_dataset(
             "attempts": diagnostics.attempts,
             "retries": diagnostics.retries,
             "response_status_codes": list(diagnostics.response_status_codes),
+            "transient_transport_failures": diagnostics.transient_transport_failures,
         },
     }
     metadata_bytes = json.dumps(metadata, sort_keys=True, separators=(",", ":")).encode(
         "utf-8"
     )
     metadata_sha256 = hashlib.sha256(metadata_bytes).hexdigest()
+    metadata_path = (
+        output_directory / f"{artifact_sha256}.{metadata_sha256}.metadata.json"
+    )
     for path, content in ((data_path, payload_bytes), (metadata_path, metadata_bytes)):
         try:
             with path.open("xb") as stream:
@@ -403,11 +411,53 @@ def persist_immutable_dataset(
                     "Immutable artifact path contains altered bytes."
                 ) from None
     return PersistedArtifact(
-        data_path,
-        metadata_path,
-        artifact_sha256,
-        dataset.dataset_sha256,
-        metadata_sha256,
+        data_path=data_path,
+        metadata_path=metadata_path,
+        artifact_sha256=artifact_sha256,
+        dataset_sha256=dataset.dataset_sha256,
+        metadata_sha256=metadata_sha256,
+    )
+
+
+def discover_immutable_artifact(data_path: Path) -> PersistedArtifact:
+    """Recover durable checksum identity for a previously persisted artifact.
+
+    The metadata digest is anchored in the immutable metadata filename. This
+    verifies local captured bytes after a normal process restart; it is not an
+    external signature against an attacker able to replace and rename files.
+    """
+
+    if not re.fullmatch(r"[0-9a-f]{64}\.json", data_path.name):
+        raise ArtifactIntegrityError("Immutable data filename lacks checksum identity.")
+    artifact_sha256 = data_path.stem
+    matches = sorted(data_path.parent.glob(f"{artifact_sha256}.*.metadata.json"))
+    if len(matches) != 1:
+        raise ArtifactIntegrityError(
+            "Durable metadata checksum anchor is missing or ambiguous."
+        )
+    metadata_path = matches[0]
+    match = _METADATA_PATTERN.fullmatch(metadata_path.name)
+    if match is None or match.group("data") != artifact_sha256:
+        raise ArtifactIntegrityError("Durable metadata checksum anchor is invalid.")
+    metadata_sha256 = match.group("metadata")
+    try:
+        payload = json.loads(data_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ArtifactIntegrityError(
+            "Immutable artifact evidence is missing or unreadable."
+        ) from exc
+    if not isinstance(payload, dict) or not isinstance(
+        payload.get("dataset_sha256"), str
+    ):
+        raise ArtifactIntegrityError(
+            "Immutable artifact payload has invalid structure."
+        )
+    return PersistedArtifact(
+        data_path=data_path,
+        metadata_path=metadata_path,
+        artifact_sha256=artifact_sha256,
+        dataset_sha256=cast(str, payload["dataset_sha256"]),
+        metadata_sha256=metadata_sha256,
     )
 
 
