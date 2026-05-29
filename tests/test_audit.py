@@ -66,6 +66,7 @@ def test_rejected_decision_is_persisted_and_verified_after_readback(
     assert restored.record_sha256 == persisted.record_sha256
     assert discovered == (restored,)
     assert persisted.path.name.startswith("decision_001.")
+    assert persisted.claim_path.name == "decision_001.claim"
 
 
 def test_identical_append_is_idempotent_without_creating_duplicate_record(
@@ -76,6 +77,7 @@ def test_identical_append_is_idempotent_without_creating_duplicate_record(
 
     assert first == second
     assert len(list(tmp_path.glob("*.audit.json"))) == 1
+    assert len(list(tmp_path.glob("*.claim"))) == 1
 
 
 def test_conflicting_record_for_existing_decision_id_fails_closed(
@@ -85,6 +87,30 @@ def test_conflicting_record_for_existing_decision_id_fails_closed(
 
     with pytest.raises(AuditIntegrityError, match="different immutable"):
         append_decision_audit(record(outcome=DecisionOutcome.NO_ACTION), tmp_path)
+
+
+def test_missing_claim_fails_readback_verification(tmp_path: Path) -> None:
+    persisted = append_decision_audit(record(), tmp_path)
+    persisted.claim_path.unlink()
+
+    with pytest.raises(AuditIntegrityError, match="claim"):
+        read_decision_audit(persisted.path)
+
+
+def test_interrupted_conflicting_claim_fails_closed(tmp_path: Path) -> None:
+    claim_path = tmp_path / "decision_001.claim"
+    claim_path.write_text("c" * 64 + "\n", encoding="utf-8")
+
+    with pytest.raises(AuditIntegrityError, match="different immutable audit claim"):
+        append_decision_audit(record(), tmp_path)
+
+
+def test_orphan_claim_fails_discovery_closed(tmp_path: Path) -> None:
+    claim_path = tmp_path / "decision_001.claim"
+    claim_path.write_text("c" * 64 + "\n", encoding="utf-8")
+
+    with pytest.raises(AuditIntegrityError, match="matching verified record"):
+        discover_decision_audits(tmp_path)
 
 
 def test_altered_record_bytes_fail_checksum_verification(tmp_path: Path) -> None:
