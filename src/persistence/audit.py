@@ -21,6 +21,7 @@ _SYMBOL_PATTERN = re.compile(r"^[A-Z0-9]{5,20}$")
 _RECORD_NAME_PATTERN = re.compile(
     r"^(?P<decision>[A-Za-z0-9_-]{1,64})\.(?P<digest>[0-9a-f]{64})\.audit\.json$"
 )
+_CLAIM_NAME_PATTERN = re.compile(r"^(?P<decision>[A-Za-z0-9_-]{1,64})\.claim$")
 
 
 class AuditIntegrityError(ValueError):
@@ -167,9 +168,10 @@ class DecisionAuditRecord:
 
 @dataclass(frozen=True)
 class PersistedAuditRecord:
-    """Verified local path and digest for one immutable decision audit record."""
+    """Verified local paths and digest for one immutable decision audit record."""
 
     path: Path
+    claim_path: Path
     record_sha256: str
     record: DecisionAuditRecord
 
@@ -252,6 +254,33 @@ def _record_from_payload(payload: dict[str, object]) -> DecisionAuditRecord:
     return record
 
 
+def _read_claim(path: Path) -> str:
+    if _CLAIM_NAME_PATTERN.fullmatch(path.name) is None:
+        raise AuditIntegrityError("Audit claim filename is invalid.")
+    try:
+        digest = path.read_text(encoding="utf-8").strip()
+    except (OSError, UnicodeDecodeError) as exc:
+        raise AuditIntegrityError("Audit claim cannot be read.") from exc
+    if not _SHA256_PATTERN.fullmatch(digest):
+        raise AuditIntegrityError("Audit claim digest is invalid.")
+    return digest
+
+
+def _claim_decision_identity(
+    decision_id: str, digest: str, output_directory: Path
+) -> Path:
+    claim_path = output_directory / f"{decision_id}.claim"
+    try:
+        with claim_path.open("x", encoding="utf-8") as stream:
+            stream.write(digest + "\n")
+    except FileExistsError:
+        if _read_claim(claim_path) != digest:
+            raise AuditIntegrityError(
+                "A different immutable audit claim already exists for decision_id."
+            )
+    return claim_path
+
+
 def append_decision_audit(
     record: DecisionAuditRecord, output_directory: Path
 ) -> PersistedAuditRecord:
@@ -272,6 +301,7 @@ def append_decision_audit(
         existing_match = existing
     if existing_match is not None:
         return existing_match
+    _claim_decision_identity(record.decision_id, digest, output_directory)
     envelope: dict[str, object] = {"record_sha256": digest, "record": payload}
     encoded = _canonical_bytes(envelope)
     try:
@@ -310,7 +340,12 @@ def read_decision_audit(path: Path) -> PersistedAuditRecord:
         raise AuditIntegrityError(
             "Audit filename decision identity does not match payload."
         )
-    return PersistedAuditRecord(path=path, record_sha256=digest, record=record)
+    claim_path = path.parent / f"{record.decision_id}.claim"
+    if _read_claim(claim_path) != digest:
+        raise AuditIntegrityError("Audit claim does not match record checksum.")
+    return PersistedAuditRecord(
+        path=path, claim_path=claim_path, record_sha256=digest, record=record
+    )
 
 
 def discover_decision_audits(
@@ -324,4 +359,11 @@ def discover_decision_audits(
         read_decision_audit(path)
         for path in sorted(output_directory.glob("*.audit.json"))
     ]
+    record_digests = {record.record.decision_id: record.record_sha256 for record in records}
+    for claim_path in sorted(output_directory.glob("*.claim")):
+        match = _CLAIM_NAME_PATTERN.fullmatch(claim_path.name)
+        if match is None:
+            raise AuditIntegrityError("Audit claim filename is invalid.")
+        if record_digests.get(match.group("decision")) != _read_claim(claim_path):
+            raise AuditIntegrityError("Audit claim lacks its matching verified record.")
     return tuple(records)
