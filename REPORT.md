@@ -4,83 +4,63 @@
 
 **Operational readiness:** `RESEARCH_ONLY`
 
-**Evidence classification:** Phase 2B candidate-workspace validation is `MEASURED` evidence of proposed data-boundary behavior only. Remote GitHub Actions for the initial PR head is now also observed: compilation and tests passed, while Ruff failed on import organization in the pre-existing `tests/test_klines.py` file; subsequent checks were skipped. The repair commit changes only that import ordering and records targeted Ruff validation. Public exchange authenticity and completeness outside an explicitly requested accepted fixed range remain `UNVERIFIED`. Trading, execution-cost, strategy, risk, PAPER-runtime, profitability, and production-readiness evidence remains `UNKNOWN` because those systems are not implemented.
+**Operating mode:** `PAPER_ONLY`
 
-## Phase 2B implementation record — 2026-05-27
+**Current proposed increment:** Gate 1.1 acquisition-integrity repair and CI evidence hardening only.
 
-**Starting remote baseline:** connected repository `werim/Aethelgard-`, branch `dev`, HEAD `2cbdaeddd5e7471a5236b980c64cdbfad6f51e1e` (`docs: add Codex incremental automation guide`). Open PR search affecting `dev` returned no visible open PRs. Combined-status and pull-request-workflow queries for the starting HEAD returned no visible status entries or workflow runs.
+## Actual repository baseline inspected
 
-**Workspace constraint:** a direct local clone of the public repository was attempted but unavailable in the execution container because DNS resolution for `github.com` failed. Candidate validation was executed in a reconstructed workspace populated from files read through the connected repository and the exact proposed Phase 2B files. A mutable pre-edit Git working tree status is therefore not applicable to the connected repository surface; no clean-local-clone claim is made.
+- Repository: `werim/Aethelgard-`.
+- Starting branch: remote `dev`.
+- Starting HEAD: `c6c163a0d21960ee08b0162bd9e41cf06ac9396b`, the merge commit for PR #1.
+- Phase 2B corrected PR head: `cd7c1e642525da7fc4d47c614b03c9f5e541501d`.
+- Visible workflow evidence: GitHub Actions `validation` run #10 for the corrected PR head completed successfully before merge.
+- A direct mutable local clone/working-tree status is unavailable in this execution environment; no clean-local-tree claim is made.
 
-**Selected increment:** Gate 1 / Phase 2B, the earliest still-missing coherent increment recorded in `PLAN.md`: read-only public historical kline acquisition plus immutable raw-data evidence storage. No later persistence, backtest, strategy, execution, risk, or runtime layer was begun.
+## Earliest still-missing coherent increment
 
-### Added data-boundary capability
+Gate 2 is not yet safe to begin. Review of merged Phase 2B identified two Gate 1 integrity failures:
 
-| Capability | Evidence state | Boundary and limitation |
+1. A timeout, DNS interruption, or connection reset before an HTTP response raised directly from the public transport and bypassed the declared bounded retry policy.
+2. Metadata checksum identity was returned only in an in-memory artifact object, so an ordinary process restart lacked a durable checksum identity to validate metadata readback.
+
+Gate 1.1 is therefore selected as the earliest missing coherent increment. It repairs only those findings and strengthens validation evidence collection.
+
+## Gate 1.1 proposed changes
+
+| Capability | Proposed behavior | Claim limit |
 | --- | --- | --- |
-| Public historical acquisition | `MEASURED` in candidate tests | Credential-free GET only to the fixed Binance Futures public kline endpoint; no authentication or order endpoint. |
-| Request/provenance consistency | `MEASURED` in candidate tests | Fixed-duration timeframe allowlist, aligned start/end selectors, canonical persisted selector metadata, source/endpoint readback checks. |
-| Deterministic pagination | `MEASURED` in candidate tests | Cursor advances by validated candle interval; empty/incomplete or non-advancing ranges fail closed. |
-| Retry/rate-limit handling | `MEASURED` in candidate tests | Retry only for selected transient response statuses, bounded by policy, with persisted status/retry diagnostics. |
-| Immutable raw artifact evidence | `MEASURED` in candidate tests | Canonical JSON artifact and checksummed metadata, including fetch diagnostics, are written without overwrite; conflicting bytes and tampering fail closed. |
-| Freshness rejection | `MEASURED` in candidate tests | Artifact readback rejects stale or future-dated acquisition evidence; intentionally historical candle ranges are not falsely treated as stale. |
-
-### Safety boundary
-
-- Operation remains `PAPER_ONLY` and `RESEARCH_ONLY`.
-- The new public transport is GET-only and contains no credentials, order submission, account mutation, live trading switch, signal generation, position management, or performance calculation.
-- No costs, fills, alpha, profitability, completeness, authenticity, or readiness upgrades are inferred.
-
-## Architecture status
-
-| Area | Status | Evidence state |
-| --- | --- | --- |
-| Configuration validation and PAPER-only guard | Implemented | Previously tested; retained with only the research phase label advanced. |
-| Runtime metadata and structured logging | Implemented | Previously tested bootstrap-only behavior; no trading runtime. |
-| Historical supplied-row structural validation | Implemented | Existing Phase 2 boundary retained; import organization repair is non-behavioral. |
-| Read-only public kline acquisition | Implemented in Phase 2B proposal | `MEASURED` by candidate-workspace tests; corrected exact PR-head CI pending. |
-| Immutable acquisition artifact/checksum readback | Implemented in Phase 2B proposal | `MEASURED` by candidate-workspace tests; filesystem durability beyond test scope unverified. |
-| General persistence and audit trail | Not implemented | `UNKNOWN` |
-| Backtesting and execution realism | Not implemented | `UNKNOWN` |
-| Strategies and probabilistic modeling | Not implemented | `UNKNOWN` |
-| Risk systems and circuit breaker | Not implemented | `UNKNOWN` |
-| PAPER execution runtime | Not implemented | `UNKNOWN` |
-| LIVE execution | Prohibited | Not applicable |
+| Transient transport retry | Retry pre-response transient public GET failures within bounded policy; fail closed on exhaustion. | No network reliability or availability claim. |
+| Diagnostics persistence | Persist transient transport failure count alongside status-code/retry evidence. | Diagnostics describe local observed attempts only. |
+| Restart discovery | Encode metadata SHA-256 in immutable metadata filename and recover artifact identity from the data file path. | No external signature or adversarial-storage protection claim. |
+| Tamper/missing-anchor rejection | Reject metadata bytes that no longer match checksum identity and reject absent/ambiguous identity anchors. | Detects ordinary local alteration under preserved artifact naming. |
+| Public-only safety test | Assert public transport uses `GET` without authorization/API-key headers. | No authenticated exchange action exists. |
+| Workflow evidence | Run compile/tests on Python 3.11 and 3.12, upload JUnit reports; run Ruff/Black/Mypy on 3.11. | CI correctness evidence only. |
 
 ## Validation execution record
 
-**Validation environment:** reconstructed Phase 2B candidate workspace, 2026-05-27; followed by observed GitHub Actions output for the initial PR head and targeted repair verification on 2026-05-28.
-
-| Command or evidence query | Result | Evidence classification |
+| Check | Result | Evidence classification |
 | --- | --- | --- |
-| Candidate: `python -m compileall -q src tests main.py` | Passed | `MEASURED` candidate-workspace code validation |
-| Candidate: `pytest -q` | Passed: `22 passed` | `MEASURED` candidate-workspace tests |
-| Candidate: `ruff check .` | Recorded as passed during candidate construction, but did not include the unchanged first-party import classification later exercised by CI | Superseded for exact PR head by remote failure |
-| Candidate: `black --check .` | Passed after development-time formatting | `MEASURED` candidate-workspace formatting validation only |
-| Candidate: `mypy .` | Passed: no issues found | `MEASURED` candidate-workspace type validation only |
-| Initial PR head `d4a3afa...`: GitHub Actions compile step | Passed | `MEASURED` remote CI evidence |
-| Initial PR head `d4a3afa...`: GitHub Actions tests step | Passed | `MEASURED` remote CI evidence |
-| Initial PR head `d4a3afa...`: GitHub Actions Ruff step | Failed: `I001` in `tests/test_klines.py` | `MEASURED` remote CI failure evidence |
-| Initial PR head `d4a3afa...`: GitHub Actions Black/Mypy steps | Skipped after Ruff failure | `UNVERIFIED` for that head |
-| Repair: `ruff check tests/test_klines.py` in reconstructed first-party package layout | Passed after import reorder | `MEASURED` targeted repair validation |
-| Corrected PR-head full GitHub Actions run | Pending updated branch workflow | `UNVERIFIED` |
+| Reconstructed targeted candidate: `python -m compileall -q src tests` | Passed | `MEASURED` for proposed acquisition/test source only |
+| Reconstructed targeted candidate: `python -m pytest -q tests/test_acquisition.py` | Passed: `17 passed` | `MEASURED` for proposed acquisition tests only |
+| Ruff / Black / Mypy locally | Tools not available in the local execution container | `UNAVAILABLE` locally; required in PR workflow |
+| Full repository suite on exact PR commit | Pending PR workflow | `UNVERIFIED` |
+| Python 3.12 on exact PR commit | Pending proposed matrix workflow | `UNVERIFIED` |
 
-## Unresolved risks and execution realism gaps
+## Safety boundary
 
-- The boundary acquires public API responses and validates locally captured content, but does not independently prove Binance authenticity, availability, or completeness beyond the exact fixed-range response accepted by validation.
-- Network schema drift, sustained rate limiting, external outages, and long-running acquisition operations need further operational evidence; bounded retry fails closed rather than masking these conditions.
-- Immutable local artifacts do not yet form a generalized persistence/audit-trail layer for decisions, configurations, or runtime state.
-- No fill simulator exists; fees, spread, slippage, latency, funding, and unknown execution costs remain unavailable rather than assumed zero.
-- No strategy, risk engine, drawdown circuit breaker, or PAPER execution runtime exists.
+- Operation remains `PAPER_ONLY` and `RESEARCH_ONLY`.
+- No account access, credential support, signal generation, order submission, execution simulation, strategy, risk allocation, or performance analysis is introduced.
+- Unknown execution costs remain unknown, never silently treated as zero.
+- Gate 2 remains blocked until Gate 1.1 is validated, reviewed, and merged.
 
-## What cannot yet be proven
+## Unresolved risks and what cannot yet be proven
 
-- Any alpha, expectancy, profit, drawdown, realistic order-fill behavior, or execution-cost behavior.
-- External dataset authenticity or long-horizon completeness beyond accepted locally verified captured content.
-- Runtime decision persistence, lifecycle correctness, risk enforcement, or PAPER-runtime readiness.
-- Statistical validity, absence of leakage, or production readiness.
-- Exact corrected PR-head validation success until GitHub Actions reports on the updated pull-request branch.
+- Local artifact checksum evidence does not prove exchange authenticity or protect against a hostile actor who can rewrite and rename all local evidence files.
+- External completeness beyond accepted requested fixed ranges remains unverified.
+- No general persistence/audit trail exists for decisions or rejected evidence.
+- No backtest, fills, fees, spread, slippage, funding, latency, risk control, PAPER runtime, profitability, or production readiness can be proven.
 
-## Next recommended smallest increment
+## Next recommended step
 
-After review and merge of Phase 2B only, re-inspect `dev` and implement the smallest general persistence/audit-trail increment required to preserve research decisions and rejected evidence. Do not start backtesting, execution simulation, strategy, or risk work before that persistence boundary is validated.
+Review and validate Gate 1.1 only. After merge, re-inspect `dev` and implement the smallest append-only decision/rejected-evidence persistence boundary. Do not begin later modeling or execution work first.
