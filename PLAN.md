@@ -37,8 +37,9 @@
 
 - `MEASURED`: reconstructed targeted candidate execution of compilation and acquisition tests (`17 passed`).
 - `MEASURED`: initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`, GitHub Actions run #12: Python 3.12 compilation/tests/JUnit succeeded; Python 3.11 compilation/tests/JUnit/Ruff succeeded, then Black failed on formatting in `tests/test_acquisition.py`.
-- `MEASURED`: formatting-only follow-up applies Black's required layout to the affected checksum-anchor test statement; no functional acquisition behavior was altered by that follow-up.
-- `UNVERIFIED`: corrected PR head full workflow result and Mypy until GitHub Actions reruns on the follow-up commit.
+- `MEASURED`: formatting follow-up head `14200bfcf32d037735c9dc1ac08c6b3eff380de3`, GitHub Actions run #13: Python 3.12 compilation/tests/JUnit succeeded; Python 3.11 compilation/tests/JUnit/Ruff/Black succeeded, then Mypy failed in the new test's `Request` type reference.
+- `MEASURED`: type-only follow-up imports `urllib.request.Request` directly for the affected cast/assertion; no functional acquisition behavior is changed by the follow-up.
+- `UNVERIFIED`: type-corrected PR head full workflow result until GitHub Actions reruns.
 - `UNAVAILABLE`: direct mutable local clone/working-tree evidence in this execution environment.
 
 ### Boundary limit

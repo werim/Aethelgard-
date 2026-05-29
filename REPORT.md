@@ -2,68 +2,57 @@
 
 ## Current classification
 
-**Operational readiness:** `RESEARCH_ONLY`
+- Operational readiness: `RESEARCH_ONLY`
+- Operating mode: `PAPER_ONLY`
+- Active increment: Gate 1.1 acquisition-integrity repair and CI evidence hardening.
 
-**Operating mode:** `PAPER_ONLY`
+## Baseline
 
-**Current proposed increment:** Gate 1.1 acquisition-integrity repair and CI evidence hardening only.
-
-## Actual repository baseline inspected
-
-- Repository: `werim/Aethelgard-`.
-- Starting branch: remote `dev`.
-- Starting HEAD: `c6c163a0d21960ee08b0162bd9e41cf06ac9396b`, the merge commit for PR #1.
-- Phase 2B corrected PR head: `cd7c1e642525da7fc4d47c614b03c9f5e541501d`.
-- Visible workflow evidence: GitHub Actions `validation` run #10 for the corrected Phase 2B PR head completed successfully before merge.
-- A direct mutable local clone/working-tree status is unavailable in this execution environment; no clean-local-tree claim is made.
+- Repository: `werim/Aethelgard-`
+- Base branch: `dev`
+- Starting HEAD: `c6c163a0d21960ee08b0162bd9e41cf06ac9396b`, merge commit for PR #1.
+- The corrected Phase 2B PR head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` completed validation run #10 successfully before merge.
+- Direct mutable local clone status is unavailable in this execution environment; no clean-local-tree claim is made.
 
 ## Earliest still-missing coherent increment
 
-Gate 2 is not yet safe to begin. Review of merged Phase 2B identified two Gate 1 integrity failures:
+Gate 1.1 repairs two review findings before any Gate 2 work:
 
-1. A timeout, DNS interruption, or connection reset before an HTTP response raised directly from the public transport and bypassed the declared bounded retry policy.
-2. Metadata checksum identity was returned only in an in-memory artifact object, so an ordinary process restart lacked a durable checksum identity to validate metadata readback.
+1. Pre-response transient public transport failures did not enter the declared bounded retry policy.
+2. Metadata checksum identity could not be recovered after an ordinary process restart without the original in-memory artifact value.
 
-Gate 1.1 is therefore selected as the earliest missing coherent increment. It repairs only those findings and strengthens validation evidence collection.
+Gate 2 remains blocked until Gate 1.1 is validated, reviewed, and merged.
 
-## Gate 1.1 proposed changes
+## Proposed repair boundary
 
-| Capability | Proposed behavior | Claim limit |
+| Area | Proposed change | Evidence limit |
 | --- | --- | --- |
-| Transient transport retry | Retry pre-response transient public GET failures within bounded policy; fail closed on exhaustion. | No network reliability or availability claim. |
-| Diagnostics persistence | Persist transient transport failure count alongside status-code/retry evidence. | Diagnostics describe local observed attempts only. |
-| Restart discovery | Encode metadata SHA-256 in immutable metadata filename and recover artifact identity from the data file path. | No external signature or adversarial-storage protection claim. |
-| Tamper/missing-anchor rejection | Reject metadata bytes that no longer match checksum identity and reject absent/ambiguous identity anchors. | Detects ordinary local alteration under preserved artifact naming. |
-| Public-only safety test | Assert public transport uses `GET` without authorization/API-key headers. | No authenticated exchange action exists. |
-| Workflow evidence | Run compile/tests on Python 3.11 and 3.12, upload JUnit reports; run Ruff/Black/Mypy on 3.11. | CI correctness evidence only. |
+| Retry | Retry pre-response transient GET failures within bounded policy and fail closed on exhaustion. | No availability claim. |
+| Diagnostics | Persist transient failure count with request diagnostics. | Describes captured local attempts only. |
+| Readback | Store metadata digest in checksum-addressed metadata naming and add restart discovery. | Local readback consistency only. |
+| Tests | Add retry, restart, altered/missing metadata, diagnostics, and GET/no-credential tests. | Unit-test evidence only. |
+| Workflow | Run compilation/tests on Python 3.11 and 3.12, store JUnit reports, run Ruff/Black/Mypy on 3.11. | CI validation only. |
 
-## Validation execution record
+## Validation evidence
 
-| Check | Result | Evidence classification |
+| Check | Result | Classification |
 | --- | --- | --- |
-| Reconstructed targeted candidate: `python -m compileall -q src tests` | Passed | `MEASURED` for proposed acquisition/test source only |
-| Reconstructed targeted candidate: `python -m pytest -q tests/test_acquisition.py` | Passed: `17 passed` | `MEASURED` for proposed acquisition tests only |
-| Initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`: Python 3.12 compile/tests/JUnit | Passed in GitHub Actions run #12 | `MEASURED` remote CI evidence |
-| Initial PR #2 head: Python 3.11 compile/tests/JUnit/Ruff | Passed in GitHub Actions run #12 | `MEASURED` remote CI evidence |
-| Initial PR #2 head: Python 3.11 Black | Failed on formatting in `tests/test_acquisition.py` | `MEASURED` remote CI failure evidence |
-| Initial PR #2 head: Python 3.11 Mypy | Skipped after Black failure | `UNVERIFIED` for initial head |
-| Formatting follow-up | Applies Black-required statement layout only; no functional code change | `MEASURED` repair scope; corrected-head CI pending |
-| Corrected PR #2 head full workflow / Mypy | Pending rerun | `UNVERIFIED` |
+| Targeted candidate compilation | Passed | `MEASURED` for proposed acquisition/test source only |
+| Targeted candidate acquisition tests | Passed: `17 passed` | `MEASURED` for proposed tests only |
+| PR #2 initial head, run #12, Python 3.12 compile/tests/JUnit | Passed | `MEASURED` remote CI evidence |
+| PR #2 initial head, run #12, Python 3.11 compile/tests/JUnit/Ruff | Passed | `MEASURED` remote CI evidence |
+| PR #2 initial head, run #12, Python 3.11 Black | Failed on test formatting | `MEASURED` remote CI failure |
+| Formatting head, run #13, Python 3.12 compile/tests/JUnit | Passed | `MEASURED` remote CI evidence |
+| Formatting head, run #13, Python 3.11 compile/tests/JUnit/Ruff/Black | Passed | `MEASURED` remote CI evidence |
+| Formatting head, run #13, Python 3.11 Mypy | Failed on the new test type reference | `MEASURED` remote CI failure |
+| Type-only follow-up | Uses the direct standard-library request type in the affected test; functional acquisition code unchanged. | Corrected-head CI pending |
 
-## Safety boundary
+## Safety boundary and unresolved risks
 
-- Operation remains `PAPER_ONLY` and `RESEARCH_ONLY`.
-- No account access, credential support, signal generation, order submission, execution simulation, strategy, risk allocation, or performance analysis is introduced.
-- Unknown execution costs remain unknown, never silently treated as zero.
-- Gate 2 remains blocked until Gate 1.1 is validated, reviewed, and merged.
+- No account access, credentials, signal generation, order submission, execution simulation, strategy, risk allocation, or performance analysis is introduced.
+- Local checksum-based readback does not prove exchange authenticity or external completeness.
+- No general decision/rejection audit trail, backtest, fill model, execution-cost model, risk runtime, profitability result, or production-readiness result exists.
 
-## Unresolved risks and what cannot yet be proven
+## Next step
 
-- Local artifact checksum evidence does not prove exchange authenticity or protect against a hostile actor who can rewrite and rename all local evidence files.
-- External completeness beyond accepted requested fixed ranges remains unverified.
-- No general persistence/audit trail exists for decisions or rejected evidence.
-- No backtest, fills, fees, spread, slippage, funding, latency, risk control, PAPER runtime, profitability, or production readiness can be proven.
-
-## Next recommended step
-
-Validate and review Gate 1.1 only. After merge, re-inspect `dev` and implement the smallest append-only decision/rejected-evidence persistence boundary. Do not begin later modeling or execution work first.
+Validate and review Gate 1.1 only. After merge, re-inspect `dev` and implement only the smallest append-only decision and rejected-evidence persistence boundary.

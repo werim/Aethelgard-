@@ -14,7 +14,8 @@
 
 - `MEASURED` before PR creation in a reconstructed targeted workspace: `python -m compileall -q src tests` passed and `python -m pytest -q tests/test_acquisition.py` passed (`17 passed`).
 - GitHub Actions `validation` run #12 on initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`: Python 3.12 compilation, tests, and JUnit upload passed; Python 3.11 compilation, tests, JUnit upload, and Ruff passed, then Black failed on formatting in `tests/test_acquisition.py`; Mypy was skipped.
-- A formatting-only follow-up commit applies Black's required layout to the affected test. Exact corrected-head GitHub Actions evidence remains `UNVERIFIED` until the rerun completes.
+- GitHub Actions `validation` run #13 on formatting follow-up head `14200bfcf32d037735c9dc1ac08c6b3eff380de3`: Python 3.12 compilation, tests, and JUnit upload passed; Python 3.11 compilation, tests, JUnit upload, Ruff, and Black passed, then Mypy failed in the new transport-boundary test's `Request` type reference.
+- A type-only follow-up imports `urllib.request.Request` directly in the test and uses that standard-library type for the cast/assertion. Exact corrected-head GitHub Actions evidence remains `UNVERIFIED` until rerun completion.
 - The merged Phase 2B PR repair head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` had a successful GitHub Actions `validation` run #10 before merge.
 - Local checksum-addressed metadata discovery is not an external signature or protection against an adversary able to replace and rename the complete artifact set.
 

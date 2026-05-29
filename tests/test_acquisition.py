@@ -3,6 +3,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import cast
 from urllib.error import URLError
+from urllib.request import Request
 
 import pytest
 
@@ -320,9 +321,9 @@ def test_public_transport_uses_get_without_credentials(
 
     monkeypatch.setattr(acquisition, "urlopen", fake_urlopen)
     response = PublicBinanceFuturesTransport().fetch({"symbol": "BTCUSDT"}, 1.0)
-    request_object = cast(acquisition.Request, captured["request"])
+    request_object = cast(Request, captured["request"])
     assert response.status_code == 200
-    assert isinstance(request_object, acquisition.Request)
+    assert isinstance(request_object, Request)
     assert request_object.get_method() == "GET"
     assert request_object.full_url.startswith(acquisition.PUBLIC_KLINES_URL)
     assert request_object.get_header("Authorization") is None

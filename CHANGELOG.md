@@ -14,14 +14,14 @@
 - Package version advanced to `0.3.1` while the research phase remains `DATA_ACQUISITION`.
 - Ruff, Black, and Mypy run once on Python 3.11; code compilation and tests run on both supported CI interpreters.
 - Documentation records that Gate 2 remains blocked until this Gate 1.1 integrity repair is reviewed and merged.
-- Added a formatting-only follow-up after the initial PR #2 validation run reported Black-required layout in `tests/test_acquisition.py`.
+- Added narrowly scoped follow-up repairs after remote validation: Black-required test formatting and a Mypy-safe direct `urllib.request.Request` type reference in the public-transport test.
 
 ### Fixed
 
 - Fixed the bounded retry gap where transport failures occurring before any HTTP response bypassed `max_retries`.
 - Fixed the restart verification gap where metadata checksum identity existed only in an in-memory `PersistedArtifact` value.
 - Corrected the merged Phase 2B documentation state to acknowledge successful repaired-head validation before merge and the two subsequently discovered integrity findings.
-- Applied Black-required formatting to the new checksum-anchor fail-closed test after remote validation identified the mismatch.
+- Fixed CI findings without altering acquisition behavior: Black formatting in the checksum-anchor test and Mypy type resolution in the GET/no-credential test.
 
 ### Removed
 
@@ -32,7 +32,7 @@
 - Checksum-addressed local filenames verify ordinary stored-byte consistency and reject accidental/local tampering after restart; they are not cryptographic signatures against an adversary able to replace and rename all artifact files.
 - Public HTTP acquisition plus local checksums do not prove Binance authenticity, external completeness beyond the requested fixed range, or data fitness for trading decisions.
 - No generalized decision persistence, backtesting, execution-cost simulation, strategy, risk allocation, PAPER runtime, or reporting pipeline is implemented.
-- GitHub Actions run #12 on the initial PR #2 head passed Python 3.12 compilation/tests/JUnit and Python 3.11 compilation/tests/JUnit/Ruff, then failed at Black; corrected-head full CI and Mypy remain `UNVERIFIED` until the rerun completes.
+- GitHub Actions run #12 passed Python 3.12 validation and Python 3.11 tests/Ruff before failing Black; run #13 passed Python 3.12 validation and Python 3.11 tests/Ruff/Black before failing Mypy. Exact type-corrected-head CI remains `UNVERIFIED` until rerun completion.
 
 ## [0.3.0] - 2026-05-27
 
