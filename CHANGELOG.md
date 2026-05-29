@@ -14,12 +14,14 @@
 - Package version advanced to `0.3.1` while the research phase remains `DATA_ACQUISITION`.
 - Ruff, Black, and Mypy run once on Python 3.11; code compilation and tests run on both supported CI interpreters.
 - Documentation records that Gate 2 remains blocked until this Gate 1.1 integrity repair is reviewed and merged.
+- Added a formatting-only follow-up after the initial PR #2 validation run reported Black-required layout in `tests/test_acquisition.py`.
 
 ### Fixed
 
 - Fixed the bounded retry gap where transport failures occurring before any HTTP response bypassed `max_retries`.
 - Fixed the restart verification gap where metadata checksum identity existed only in an in-memory `PersistedArtifact` value.
 - Corrected the merged Phase 2B documentation state to acknowledge successful repaired-head validation before merge and the two subsequently discovered integrity findings.
+- Applied Black-required formatting to the new checksum-anchor fail-closed test after remote validation identified the mismatch.
 
 ### Removed
 
@@ -30,7 +32,7 @@
 - Checksum-addressed local filenames verify ordinary stored-byte consistency and reject accidental/local tampering after restart; they are not cryptographic signatures against an adversary able to replace and rename all artifact files.
 - Public HTTP acquisition plus local checksums do not prove Binance authenticity, external completeness beyond the requested fixed range, or data fitness for trading decisions.
 - No generalized decision persistence, backtesting, execution-cost simulation, strategy, risk allocation, PAPER runtime, or reporting pipeline is implemented.
-- Exact PR-commit full-suite and Python 3.12 evidence remain `UNVERIFIED` until the proposed workflow completes.
+- GitHub Actions run #12 on the initial PR #2 head passed Python 3.12 compilation/tests/JUnit and Python 3.11 compilation/tests/JUnit/Ruff, then failed at Black; corrected-head full CI and Mypy remain `UNVERIFIED` until the rerun completes.
 
 ## [0.3.0] - 2026-05-27
 

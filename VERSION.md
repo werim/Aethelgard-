@@ -13,7 +13,8 @@
 ## Validation evidence
 
 - `MEASURED` before PR creation in a reconstructed targeted workspace: `python -m compileall -q src tests` passed and `python -m pytest -q tests/test_acquisition.py` passed (`17 passed`).
-- Ruff, Black, Mypy, the full repository suite, and Python 3.12 validation are `UNVERIFIED` locally because the directly cloned repository/tool environment was unavailable; the proposed workflow is the required remote validation gate.
+- GitHub Actions `validation` run #12 on initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`: Python 3.12 compilation, tests, and JUnit upload passed; Python 3.11 compilation, tests, JUnit upload, and Ruff passed, then Black failed on formatting in `tests/test_acquisition.py`; Mypy was skipped.
+- A formatting-only follow-up commit applies Black's required layout to the affected test. Exact corrected-head GitHub Actions evidence remains `UNVERIFIED` until the rerun completes.
 - The merged Phase 2B PR repair head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` had a successful GitHub Actions `validation` run #10 before merge.
 - Local checksum-addressed metadata discovery is not an external signature or protection against an adversary able to replace and rename the complete artifact set.
 

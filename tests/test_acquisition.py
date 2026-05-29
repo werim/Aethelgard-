@@ -274,9 +274,7 @@ def test_missing_checksum_anchor_fails_closed(tmp_path: Path) -> None:
         transport=ScriptedTransport([complete_response()]),
         clock=lambda: NOW,
     )
-    legacy_metadata_path = (
-        tmp_path / f"{result.artifact.artifact_sha256}.metadata.json"
-    )
+    legacy_metadata_path = tmp_path / f"{result.artifact.artifact_sha256}.metadata.json"
     result.artifact.metadata_path.rename(legacy_metadata_path)
     with pytest.raises(ArtifactIntegrityError, match="anchor"):
         discover_immutable_artifact(result.artifact.data_path)

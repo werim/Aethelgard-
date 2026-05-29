@@ -14,7 +14,7 @@
 - Starting branch: remote `dev`.
 - Starting HEAD: `c6c163a0d21960ee08b0162bd9e41cf06ac9396b`, the merge commit for PR #1.
 - Phase 2B corrected PR head: `cd7c1e642525da7fc4d47c614b03c9f5e541501d`.
-- Visible workflow evidence: GitHub Actions `validation` run #10 for the corrected PR head completed successfully before merge.
+- Visible workflow evidence: GitHub Actions `validation` run #10 for the corrected Phase 2B PR head completed successfully before merge.
 - A direct mutable local clone/working-tree status is unavailable in this execution environment; no clean-local-tree claim is made.
 
 ## Earliest still-missing coherent increment
@@ -43,9 +43,12 @@ Gate 1.1 is therefore selected as the earliest missing coherent increment. It re
 | --- | --- | --- |
 | Reconstructed targeted candidate: `python -m compileall -q src tests` | Passed | `MEASURED` for proposed acquisition/test source only |
 | Reconstructed targeted candidate: `python -m pytest -q tests/test_acquisition.py` | Passed: `17 passed` | `MEASURED` for proposed acquisition tests only |
-| Ruff / Black / Mypy locally | Tools not available in the local execution container | `UNAVAILABLE` locally; required in PR workflow |
-| Full repository suite on exact PR commit | Pending PR workflow | `UNVERIFIED` |
-| Python 3.12 on exact PR commit | Pending proposed matrix workflow | `UNVERIFIED` |
+| Initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`: Python 3.12 compile/tests/JUnit | Passed in GitHub Actions run #12 | `MEASURED` remote CI evidence |
+| Initial PR #2 head: Python 3.11 compile/tests/JUnit/Ruff | Passed in GitHub Actions run #12 | `MEASURED` remote CI evidence |
+| Initial PR #2 head: Python 3.11 Black | Failed on formatting in `tests/test_acquisition.py` | `MEASURED` remote CI failure evidence |
+| Initial PR #2 head: Python 3.11 Mypy | Skipped after Black failure | `UNVERIFIED` for initial head |
+| Formatting follow-up | Applies Black-required statement layout only; no functional code change | `MEASURED` repair scope; corrected-head CI pending |
+| Corrected PR #2 head full workflow / Mypy | Pending rerun | `UNVERIFIED` |
 
 ## Safety boundary
 
@@ -63,4 +66,4 @@ Gate 1.1 is therefore selected as the earliest missing coherent increment. It re
 
 ## Next recommended step
 
-Review and validate Gate 1.1 only. After merge, re-inspect `dev` and implement the smallest append-only decision/rejected-evidence persistence boundary. Do not begin later modeling or execution work first.
+Validate and review Gate 1.1 only. After merge, re-inspect `dev` and implement the smallest append-only decision/rejected-evidence persistence boundary. Do not begin later modeling or execution work first.

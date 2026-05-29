@@ -36,7 +36,9 @@
 ### Evidence classification
 
 - `MEASURED`: reconstructed targeted candidate execution of compilation and acquisition tests (`17 passed`).
-- `UNVERIFIED`: exact proposed commit full-suite, lint, format, typing, and Python 3.12 results until GitHub Actions reports.
+- `MEASURED`: initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`, GitHub Actions run #12: Python 3.12 compilation/tests/JUnit succeeded; Python 3.11 compilation/tests/JUnit/Ruff succeeded, then Black failed on formatting in `tests/test_acquisition.py`.
+- `MEASURED`: formatting-only follow-up applies Black's required layout to the affected checksum-anchor test statement; no functional acquisition behavior was altered by that follow-up.
+- `UNVERIFIED`: corrected PR head full workflow result and Mypy until GitHub Actions reruns on the follow-up commit.
 - `UNAVAILABLE`: direct mutable local clone/working-tree evidence in this execution environment.
 
 ### Boundary limit
