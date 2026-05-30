@@ -38,8 +38,9 @@ Gate 2A implements only the smallest local-file persistence and audit-trail boun
 | PR #3 initial head GitHub Actions | Failed at Python 3.11 Ruff with `B904` in `src/persistence/audit.py` | `MEASURED` remote CI failure |
 | Ruff follow-up | Added `raise ... from exc` in the audit claim conflict path; functional audit behavior unchanged | `CHANGED`; later reached Black |
 | Black follow-up evidence | Python 3.11 Black failed because `src/persistence/audit.py` required formatting | `MEASURED` remote CI failure |
-| Black formatting follow-up | Applied Black formatting to `src/persistence/audit.py`; functional audit behavior unchanged | `CHANGED` pending rerun |
-| Exact Gate 2A Black-formatted follow-up head GitHub Actions | Pending until workflow reruns | `UNVERIFIED` |
+| Partial Black formatting follow-up | Applied a manual formatting guess that still failed Black on the next run | `CHANGED`; superseded |
+| Exact Black formatting follow-up | Applied the local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior unchanged | `CHANGED` pending rerun |
+| Exact Gate 2A exact-Black follow-up head GitHub Actions | Pending until workflow reruns | `UNVERIFIED` |
 | Full exact-branch local suite, Ruff, Black, Mypy | Not available locally in this execution environment | `UNAVAILABLE` |
 | Direct clean working-tree status | Git clone failed with DNS resolution for `github.com` | `UNAVAILABLE` |
 
@@ -53,4 +54,4 @@ Gate 2A implements only the smallest local-file persistence and audit-trail boun
 
 ## Next step
 
-Wait for PR #3 Black-formatted follow-up GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.
+Wait for PR #3 exact-Black follow-up GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.
