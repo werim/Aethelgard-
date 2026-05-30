@@ -8,15 +8,18 @@ run backtests, approve execution, submit orders, or certify readiness.
 from __future__ import annotations
 
 import hashlib
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
 from src.persistence.audit import DecisionAuditRecord, PersistedAuditRecord, append_decision_audit
 from src.persistence.events import (
+    AuditEventIntegrityError,
     AuditEventRecord,
     AuditEventType,
     PersistedAuditEvent,
     append_audit_event,
+    list_audit_events,
 )
 
 
@@ -28,8 +31,17 @@ class PersistedDecisionAuditEvent:
     event: PersistedAuditEvent
 
 
-def _event_id_for_decision_audit(audit: PersistedAuditRecord) -> str:
-    identity = f"{audit.record.decision_id}:{audit.record_sha256}"
+def _record_digest(record: DecisionAuditRecord) -> str:
+    payload = record.canonical_payload()
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _event_id_for_decision_audit(
+    decision_id: str,
+    decision_audit_sha256: str,
+) -> str:
+    identity = f"{decision_id}:{decision_audit_sha256}"
     digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:32]
     return f"decision_audit_appended_{digest}"
 
@@ -53,6 +65,25 @@ def _event_payload(audit: PersistedAuditRecord) -> dict[str, object]:
     }
 
 
+def _preflight_event_identity(
+    record: DecisionAuditRecord,
+    database_path: Path,
+    expected_event_id: str,
+) -> None:
+    if not database_path.exists():
+        return
+    for persisted in list_audit_events(database_path):
+        event = persisted.event
+        if (
+            event.decision_id == record.decision_id
+            and event.event_type is AuditEventType.DECISION_AUDIT_APPENDED
+            and event.event_id != expected_event_id
+        ):
+            raise AuditEventIntegrityError(
+                "A conflicting database audit event already exists for this decision."
+            )
+
+
 def append_decision_audit_event(
     record: DecisionAuditRecord,
     audit_directory: Path,
@@ -68,9 +99,12 @@ def append_decision_audit_event(
     external notarization.
     """
 
+    record_digest = _record_digest(record)
+    event_id = _event_id_for_decision_audit(record.decision_id, record_digest)
+    _preflight_event_identity(record, database_path, event_id)
     persisted_audit = append_decision_audit(record, audit_directory)
     event = AuditEventRecord(
-        event_id=_event_id_for_decision_audit(persisted_audit),
+        event_id=event_id,
         event_type=AuditEventType.DECISION_AUDIT_APPENDED,
         occurred_at_utc=occurred_at_utc or record.recorded_at_utc,
         decision_id=record.decision_id,
