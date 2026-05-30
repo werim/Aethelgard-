@@ -16,7 +16,7 @@
 - README, VERSION, PLAN, and REPORT records reconcile that Gate 2A PR #3 merged into `dev` and that its final head completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
 - Persistence documentation now distinguishes local JSON decision audit evidence from the new database-backed audit-event evidence boundary.
 - Recorded PR #4 initial Python 3.11 Ruff `E501` failure in `src/persistence/events.py` and the follow-up formatting-only repair.
-- Recorded PR #4 Python 3.11 Black failure after the Ruff follow-up and the expanded formatting-only repair.
+- Recorded PR #4 Python 3.11 Black failures and formatting-only repairs.
 
 ### Fixed
 
@@ -25,6 +25,7 @@
 - Wrapped the long `AuditEventIntegrityError` raise line reported by Ruff `E501`; functional audit-event behavior is unchanged.
 - Moved the decode-error text into a short local variable so Black can keep the raise line short enough for Ruff; functional audit-event behavior is unchanged.
 - Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional audit-event behavior is unchanged.
+- Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
 
 ### Removed
 
