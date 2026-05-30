@@ -39,7 +39,7 @@
 
 - `MEASURED`: reconstructed targeted candidate execution of compilation and acquisition tests (`17 passed`).
 - `MEASURED`: GitHub Actions `validation` run #14 on corrected PR #2 head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed successfully before Gate 2A began.
-- `UNAVAILABLE`: direct mutable local clone/working-tree evidence in the Gate 2A execution environment because `git clone` failed with DNS resolution for `github.com`.
+- `UNAVAILABLE`: direct mutable local clone/working-tree evidence in the Gate 2A execution environment because direct local git operations were unavailable.
 
 ### Boundary limit
 
@@ -47,9 +47,11 @@ Checksum-addressed local metadata discovery verifies ordinary persisted-byte con
 
 ## Gate 2A — Append-only research decision audit trail
 
-**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
+**Status:** `MERGED_TO_DEV`.
 
 **Starting baseline:** `dev` merge commit `d09b7361a26f61d6cea7c0077d6d22a913548df0` after Gate 1.1 merge.
+
+**Merged baseline:** PR #3 merged into `dev` at merge commit `5ce82c134656e206ce90c2b93585bb80222ebf71`.
 
 ### Scope
 
@@ -62,8 +64,8 @@ Checksum-addressed local metadata discovery verifies ordinary persisted-byte con
 ### Evidence classification
 
 - `MEASURED`: targeted reconstructed local validation before branch publication passed `python -m compileall -q src tests` and `python -m pytest -q tests/test_audit.py` for the initial audit test set (`7 passed`).
-- `UNVERIFIED`: exact Gate 2A branch-head GitHub Actions validation until the PR workflow runs.
-- `UNAVAILABLE`: Ruff, Black, Mypy, full-suite exact-branch local validation, and direct local clean working-tree evidence in this execution environment.
+- `MEASURED`: PR #3 final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before merge.
+- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
 
 ### Boundary limit
 
@@ -71,6 +73,30 @@ Gate 2A is a local file evidence boundary only. It is not a database transaction
 
 ## Gate 2B — Database-backed persistence and audit events
 
-**Status:** `BLOCKED_PENDING_GATE_2A_VALIDATION_REVIEW_AND_MERGE`.
+**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
 
-Only after Gate 2A is validated, reviewed, and merged may the next run start from the then-current `dev` and implement the smallest database-backed event persistence boundary. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.
+**Starting baseline:** `dev` merge commit `5ce82c134656e206ce90c2b93585bb80222ebf71` after Gate 2A merge.
+
+### Scope
+
+- Add the smallest local SQLite audit-event ledger for research-only persistence events.
+- Persist canonical JSON payloads and SHA-256 payload checksums.
+- Validate event identity, decision identity, UTC timestamps, `PAPER_ONLY`, `RESEARCH_ONLY`, and deterministic JSON payloads.
+- Make identical append idempotent while rejecting conflicting event IDs and repeated decision/type pairs.
+- Add fail-closed tests for schema initialization, readback, idempotency, conflict rejection, checksum tampering, UTC/mode safety, and JSON determinism.
+
+### Evidence classification
+
+- `MEASURED`: PR #3 final head GitHub Actions `validation` run #28 passed before Gate 2B began.
+- `UNVERIFIED`: exact Gate 2B branch-head GitHub Actions validation until the PR workflow runs.
+- `UNAVAILABLE`: direct local compilation, full-suite tests, Ruff, Black, Mypy, and clean working-tree evidence in this execution environment.
+
+### Boundary limit
+
+Gate 2B is a local database persistence boundary only. It is not a strategy runtime, execution ledger, fill model, cost model, risk allocator, reporting system, paper runtime, live path, or readiness certification.
+
+## Gate 2C — Persistence integration review
+
+**Status:** `BLOCKED_PENDING_GATE_2B_VALIDATION_REVIEW_AND_MERGE`.
+
+Only after Gate 2B is validated, reviewed, and merged may the next run start from the then-current `dev` and perform the smallest integration review between file audit records and database audit events. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.
