@@ -17,6 +17,7 @@
 - Persistence documentation now distinguishes local JSON decision audit evidence from the new database-backed audit-event evidence boundary.
 - Recorded PR #4 initial Python 3.11 Ruff `E501` failure in `src/persistence/events.py` and the follow-up formatting-only repair.
 - Recorded PR #4 Python 3.11 Black failures and formatting-only repairs.
+- Recorded PR #4 Python 3.11 Mypy failure for the intentionally unserializable payload test and the type-only follow-up repair.
 
 ### Fixed
 
@@ -27,6 +28,7 @@
 - Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional audit-event behavior is unchanged.
 - Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
 - Applied current allowed Black `26.5.1` formatting for `list_audit_events`; functional audit-event behavior is unchanged.
+- Cast the intentionally unserializable payload test fixture to `dict[str, object]` so Mypy accepts the negative test while runtime JSON-determinism behavior remains unchanged.
 
 ### Removed
 
