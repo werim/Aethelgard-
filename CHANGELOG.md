@@ -15,11 +15,13 @@
 - Package version advanced to `0.5.0`.
 - README, VERSION, PLAN, and REPORT records reconcile that Gate 2A PR #3 merged into `dev` and that its final head completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
 - Persistence documentation now distinguishes local JSON decision audit evidence from the new database-backed audit-event evidence boundary.
+- Recorded PR #4 initial Python 3.11 Ruff `E501` failure in `src/persistence/events.py` and the follow-up formatting-only repair.
 
 ### Fixed
 
 - Closed the documented absence of any smallest database-backed audit-event ledger boundary.
 - Replaced stale Gate 2A pending-validation documentation with measured PR #3 success evidence.
+- Wrapped the long `AuditEventIntegrityError` raise line reported by Ruff `E501`; functional audit-event behavior is unchanged.
 
 ### Removed
 
@@ -30,7 +32,7 @@
 - Gate 2B stores local SQLite audit events only. It is not a strategy runtime, execution ledger, fill model, risk system, reporting pipeline, or distributed event bus.
 - SQLite payload checksums verify local database-row consistency only. They are not external notarization or adversarial tamper protection against complete database replacement.
 - Gate 2B does not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
-- Exact Gate 2B branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+- Exact Gate 2B branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow reruns.
 
 ## [0.4.0] - 2026-05-30
 
