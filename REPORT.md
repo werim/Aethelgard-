@@ -48,9 +48,11 @@ Gate 2B implements only the smallest local SQLite event-ledger boundary for rese
 | Gate 1.1 corrected-head GitHub Actions | Passed: `validation` run #14 | `MEASURED` remote CI evidence for prior gate |
 | Gate 2A final-head GitHub Actions | Passed: `validation` run #28 on head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` | `MEASURED` remote CI evidence before Gate 2B |
 | Gate 2B branch creation | Created branch `gate-2b-db-audit-events` from `5ce82c134656e206ce90c2b93585bb80222ebf71` | `MEASURED` connector operation |
-| Gate 2B exact branch-head compilation | Pending until workflow runs | `UNVERIFIED` |
-| Gate 2B exact branch-head tests | Pending until workflow runs | `UNVERIFIED` |
-| Gate 2B Ruff, Black, Mypy | Pending until workflow runs | `UNVERIFIED` |
+| Gate 2B PR #4 initial GitHub Actions | Failed at Python 3.11 Ruff with `E501` in `src/persistence/events.py:139` | `MEASURED` remote CI failure |
+| Gate 2B Ruff follow-up | Wrapped the long `AuditEventIntegrityError` raise line; functional behavior unchanged | `CHANGED`; pending rerun |
+| Gate 2B exact branch-head compilation | Pending until workflow reruns | `UNVERIFIED` |
+| Gate 2B exact branch-head tests | Pending until workflow reruns | `UNVERIFIED` |
+| Gate 2B Ruff, Black, Mypy | Pending until workflow reruns | `UNVERIFIED` |
 | Direct clean working-tree status | Local git status unavailable in this execution environment | `UNAVAILABLE` |
 
 ## Safety boundary and unresolved risks
@@ -64,4 +66,4 @@ Gate 2B implements only the smallest local SQLite event-ledger boundary for rese
 
 ## Next step
 
-Wait for Gate 2B branch GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2C from the then-current `dev`, limited to the smallest integration review between file audit records and database audit events.
+Wait for Gate 2B branch GitHub Actions validation rerun. Only after successful review and merge should the next run begin Gate 2C from the then-current `dev`, limited to the smallest integration review between file audit records and database audit events.
