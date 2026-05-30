@@ -89,13 +89,13 @@ def test_integration_fails_closed_on_non_paper_record(tmp_path: Path) -> None:
     db = tmp_path / "audit-events.sqlite3"
 
     with pytest.raises(ValueError, match="PAPER_ONLY"):
-        append_decision_audit_event(record(operating_mode="UNSAFE_MODE"), audit_dir, db)
+        append_decision_audit_event(record(operating_mode="BAD_MODE"), audit_dir, db)
 
     assert not audit_dir.exists()
     assert not db.exists()
 
 
-def test_integration_fails_closed_on_existing_conflicting_event(
+def test_integration_preflights_database_overlap_before_file_write(
     tmp_path: Path,
 ) -> None:
     audit_dir = tmp_path / "audits"
@@ -103,8 +103,8 @@ def test_integration_fails_closed_on_existing_conflicting_event(
     append_decision_audit_event(record(), audit_dir, db)
 
     changed_record = replace(record(), recorded_at_utc="2026-05-30T18:01:00Z")
-    with pytest.raises(AuditEventIntegrityError, match="decision and type"):
+    with pytest.raises(AuditEventIntegrityError, match="conflicting database"):
         append_decision_audit_event(changed_record, audit_dir, db)
 
-    assert len(discover_decision_audits(audit_dir)) == 2
+    assert len(discover_decision_audits(audit_dir)) == 1
     assert len(list_audit_events(db)) == 1
