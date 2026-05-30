@@ -14,11 +14,13 @@
 - Package version advanced to `0.4.0` and project phase metadata advanced to `PERSISTENCE_AUDIT`.
 - README, VERSION, PLAN, and REPORT records now reflect that Gate 1.1 completed GitHub Actions run #14 successfully and that Gate 2A starts from merged `dev` commit `d09b7361a26f61d6cea7c0077d6d22a913548df0`.
 - `src/persistence/__init__.py` now describes the research-only persistence boundary instead of remaining Phase-1-empty.
+- Recorded PR #3 initial Ruff `B904` failure and the exception-chaining follow-up repair.
 
 ### Fixed
 
 - Closed the documented absence of any generalized decision/rejection audit persistence boundary at the smallest local-file evidence layer.
 - Prevented unavailable execution evidence from being persisted as a misleading zero value by requiring `UNAVAILABLE` evidence to carry a reason and no value/source reference.
+- Fixed Ruff `B904` in the audit-claim conflict path by raising the `AuditIntegrityError` from the caught `FileExistsError`.
 
 ### Removed
 
@@ -29,7 +31,7 @@
 - Gate 2A stores local JSON audit evidence and claim files only; it is not a database-backed event ledger or transactional runtime journal.
 - Audit records do not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
 - Local checksum and claim files verify ordinary local stored-byte consistency and decision identity conflicts only. They are not external notarization or protection against an adversary able to replace the complete evidence set.
-- Exact Gate 2A branch-head GitHub Actions validation remains `UNVERIFIED` until the PR workflow runs.
+- Exact Gate 2A follow-up head GitHub Actions validation remains `UNVERIFIED` until the workflow reruns.
 
 ## [0.3.1] - 2026-05-29
 
