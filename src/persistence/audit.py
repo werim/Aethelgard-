@@ -125,7 +125,9 @@ class DecisionAuditRecord:
             raise AuditIntegrityError("symbol must use uppercase exchange notation.")
         if not self.timeframe.strip():
             raise AuditIntegrityError("timeframe is required.")
-        if not self.reason_codes or any(not code.strip() for code in self.reason_codes):
+        if not self.reason_codes or any(
+            not code.strip() for code in self.reason_codes
+        ):
             raise AuditIntegrityError("At least one non-empty reason code is required.")
         if not _SHA256_PATTERN.fullmatch(self.dataset_sha256):
             raise AuditIntegrityError(
