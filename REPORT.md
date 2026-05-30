@@ -52,8 +52,9 @@ Gate 2B implements only the smallest local SQLite event-ledger boundary for rese
 | Gate 2B Ruff follow-up | Wrapped the long `AuditEventIntegrityError` raise line; functional behavior unchanged | `CHANGED`; later reached Black |
 | Gate 2B Black follow-up evidence | Python 3.11 Black failed because `src/persistence/events.py` required formatting | `MEASURED` remote CI failure |
 | Gate 2B Black/Ruff follow-up | Moved the decode-error message into a short local variable; functional behavior unchanged | `CHANGED`; later still hit Black |
-| Gate 2B expanded Black follow-up | Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional behavior unchanged | `CHANGED`; later exact local Black diff showed only one remaining line collapse |
-| Gate 2B exact Black follow-up | Applied local Black 24.10.0 diff: collapsed the `datetime.fromisoformat(...)` line to exactly 88 characters; functional behavior unchanged | `CHANGED`; pending rerun |
+| Gate 2B expanded Black follow-up | Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional behavior unchanged | `CHANGED`; later exact local Black diff showed only one remaining line collapse under Black 24.10.0 |
+| Gate 2B Black 24.10.0 follow-up | Applied local Black 24.10.0 diff: collapsed the `datetime.fromisoformat(...)` line to exactly 88 characters; functional behavior unchanged | `CHANGED`; later CI still failed under the unconstrained `<27` Black install |
+| Gate 2B current-Black follow-up | Installed current allowed Black `26.5.1` locally and applied its formatter diff for `list_audit_events`; functional behavior unchanged | `CHANGED`; pending rerun |
 | Gate 2B exact branch-head compilation | Pending until workflow reruns | `UNVERIFIED` |
 | Gate 2B exact branch-head tests | Pending until workflow reruns | `UNVERIFIED` |
 | Gate 2B Ruff, Black, Mypy | Pending until workflow reruns | `UNVERIFIED` |
