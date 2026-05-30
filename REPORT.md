@@ -35,7 +35,9 @@ Gate 2A implements only the smallest local-file persistence and audit-trail boun
 | Gate 1.1 corrected-head GitHub Actions | Passed: `validation` run #14 | `MEASURED` remote CI evidence for prior gate |
 | Targeted candidate compilation before branch publication | Passed: `python -m compileall -q src tests` | `MEASURED` for reconstructed candidate source only |
 | Targeted candidate audit tests before branch publication | Passed: `python -m pytest -q tests/test_audit.py` (`7 passed`) | `MEASURED` for initial audit tests only |
-| Exact Gate 2A branch-head GitHub Actions | Pending until PR workflow runs | `UNVERIFIED` |
+| PR #3 initial head GitHub Actions | Failed at Python 3.11 Ruff with `B904` in `src/persistence/audit.py` | `MEASURED` remote CI failure |
+| Ruff follow-up | Added `raise ... from exc` in the audit claim conflict path; functional audit behavior unchanged | `CHANGED` pending rerun |
+| Exact Gate 2A follow-up head GitHub Actions | Pending until workflow reruns | `UNVERIFIED` |
 | Full exact-branch local suite, Ruff, Black, Mypy | Not available locally in this execution environment | `UNAVAILABLE` |
 | Direct clean working-tree status | Git clone failed with DNS resolution for `github.com` | `UNAVAILABLE` |
 
@@ -49,4 +51,4 @@ Gate 2A implements only the smallest local-file persistence and audit-trail boun
 
 ## Next step
 
-Open and validate the Gate 2A PR. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.
+Wait for PR #3 follow-up GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.
