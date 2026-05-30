@@ -1,6 +1,7 @@
 import sqlite3
 from dataclasses import replace
 from pathlib import Path
+from typing import cast
 
 import pytest
 
@@ -124,7 +125,7 @@ def test_non_utc_timestamp_and_non_paper_mode_fail_closed(tmp_path: Path) -> Non
 
 def test_payload_must_be_deterministic_json_mapping(tmp_path: Path) -> None:
     db = database_path(tmp_path)
-    bad_payload = {"unserializable": {"nested"}}
+    bad_payload = cast(dict[str, object], {"unserializable": {"nested"}})
 
     with pytest.raises(AuditEventIntegrityError, match="deterministic JSON"):
         append_audit_event(db, event(payload=bad_payload))
