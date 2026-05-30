@@ -109,9 +109,7 @@ class DecisionAuditRecord:
                 "decision_id must be a safe non-empty identifier."
             )
         try:
-            moment = datetime.fromisoformat(
-                self.recorded_at_utc.replace("Z", "+00:00")
-            )
+            moment = datetime.fromisoformat(self.recorded_at_utc.replace("Z", "+00:00"))
         except ValueError as exc:
             raise AuditIntegrityError(
                 "recorded_at_utc must be an ISO-8601 timestamp."
@@ -125,9 +123,7 @@ class DecisionAuditRecord:
             raise AuditIntegrityError("symbol must use uppercase exchange notation.")
         if not self.timeframe.strip():
             raise AuditIntegrityError("timeframe is required.")
-        if not self.reason_codes or any(
-            not code.strip() for code in self.reason_codes
-        ):
+        if not self.reason_codes or any(not code.strip() for code in self.reason_codes):
             raise AuditIntegrityError("At least one non-empty reason code is required.")
         if not _SHA256_PATTERN.fullmatch(self.dataset_sha256):
             raise AuditIntegrityError(
