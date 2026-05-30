@@ -4,55 +4,54 @@
 
 - Operational readiness: `RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 1.1 acquisition-integrity repair and CI evidence hardening.
+- Active increment: Gate 2A append-only research decision audit trail.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD: `c6c163a0d21960ee08b0162bd9e41cf06ac9396b`, merge commit for PR #1.
-- The corrected Phase 2B PR head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` completed validation run #10 successfully before merge.
-- Direct mutable local clone status is unavailable in this execution environment; no clean-local-tree claim is made.
+- Starting HEAD: `d09b7361a26f61d6cea7c0077d6d22a913548df0`, merge commit for PR #2.
+- Gate 1.1 corrected PR head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed GitHub Actions `validation` run #14 successfully before Gate 2A began.
+- No visible open PR affecting `dev` was found before this increment.
+- Direct mutable local clone status is unavailable in this execution environment; `git clone` failed with DNS resolution for `github.com`.
 
-## Earliest still-missing coherent increment
+## Implemented Gate 2A boundary
 
-Gate 1.1 repairs two review findings before any Gate 2 work:
+Gate 2A implements only the smallest local-file persistence and audit-trail boundary for rejected/no-action research decisions.
 
-1. Pre-response transient public transport failures did not enter the declared bounded retry policy.
-2. Metadata checksum identity could not be recovered after an ordinary process restart without the original in-memory artifact value.
-
-Gate 2 remains blocked until Gate 1.1 is validated, reviewed, and merged.
-
-## Proposed repair boundary
-
-| Area | Proposed change | Evidence limit |
+| Area | Change | Evidence limit |
 | --- | --- | --- |
-| Retry | Retry pre-response transient GET failures within bounded policy and fail closed on exhaustion. | No availability claim. |
-| Diagnostics | Persist transient failure count with request diagnostics. | Describes captured local attempts only. |
-| Readback | Store metadata digest in checksum-addressed metadata naming and add restart discovery. | Local readback consistency only. |
-| Tests | Add retry, restart, altered/missing metadata, diagnostics, and GET/no-credential tests. | Unit-test evidence only. |
-| Workflow | Run compilation/tests on Python 3.11 and 3.12, store JUnit reports, run Ruff/Black/Mypy on 3.11. | CI validation only. |
+| Decision record | Added `DecisionAuditRecord` for `REJECTED` and `NO_ACTION` outcomes only. | Does not generate decisions or signals. |
+| Evidence classification | Added explicit `MEASURED`, `MODELED`, and `UNAVAILABLE` evidence items. | Classification records declared local evidence only. |
+| Unknown evidence handling | Requires unavailable evidence to carry a reason and no value/source reference. | Prevents representing missing execution evidence as zero. |
+| Append-only storage | Writes checksum-addressed `*.audit.json` files and `decision_id.claim` anchors with exclusive creation. | Local filesystem consistency only; not a database transaction. |
+| Readback validation | Verifies payload checksum, filename checksum, claim checksum, UTC timestamp, PAPER-only mode, and evidence provenance. | Does not prove external authenticity or adversarial tamper resistance. |
+| Tests | Added focused audit tests for readback, idempotency, conflicts, claims, tampering, evidence provenance, UTC, and mode safety. | Targeted unit-test evidence only. |
 
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
-| Targeted candidate compilation | Passed | `MEASURED` for proposed acquisition/test source only |
-| Targeted candidate acquisition tests | Passed: `17 passed` | `MEASURED` for proposed tests only |
-| PR #2 initial head, run #12, Python 3.12 compile/tests/JUnit | Passed | `MEASURED` remote CI evidence |
-| PR #2 initial head, run #12, Python 3.11 compile/tests/JUnit/Ruff | Passed | `MEASURED` remote CI evidence |
-| PR #2 initial head, run #12, Python 3.11 Black | Failed on test formatting | `MEASURED` remote CI failure |
-| Formatting head, run #13, Python 3.12 compile/tests/JUnit | Passed | `MEASURED` remote CI evidence |
-| Formatting head, run #13, Python 3.11 compile/tests/JUnit/Ruff/Black | Passed | `MEASURED` remote CI evidence |
-| Formatting head, run #13, Python 3.11 Mypy | Failed on the new test type reference | `MEASURED` remote CI failure |
-| Type-only follow-up | Uses the direct standard-library request type in the affected test; functional acquisition code unchanged. | Corrected-head CI pending |
+| Gate 1.1 corrected-head GitHub Actions | Passed: `validation` run #14 | `MEASURED` remote CI evidence for prior gate |
+| Targeted candidate compilation before branch publication | Passed: `python -m compileall -q src tests` | `MEASURED` for reconstructed candidate source only |
+| Targeted candidate audit tests before branch publication | Passed: `python -m pytest -q tests/test_audit.py` (`7 passed`) | `MEASURED` for initial audit tests only |
+| PR #3 initial head GitHub Actions | Failed at Python 3.11 Ruff with `B904` in `src/persistence/audit.py` | `MEASURED` remote CI failure |
+| Ruff follow-up | Added `raise ... from exc` in the audit claim conflict path; functional audit behavior unchanged | `CHANGED`; later reached Black |
+| Black follow-up evidence | Python 3.11 Black failed because `src/persistence/audit.py` required formatting | `MEASURED` remote CI failure |
+| Partial Black formatting follow-up | Applied a manual formatting guess that still failed Black on the next run | `CHANGED`; superseded |
+| Exact Black formatting follow-up | Applied the local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior unchanged | `CHANGED` pending rerun |
+| Exact Gate 2A exact-Black follow-up head GitHub Actions | Pending until workflow reruns | `UNVERIFIED` |
+| Full exact-branch local suite, Ruff, Black, Mypy | Not available locally in this execution environment | `UNAVAILABLE` |
+| Direct clean working-tree status | Git clone failed with DNS resolution for `github.com` | `UNAVAILABLE` |
 
 ## Safety boundary and unresolved risks
 
-- No account access, credentials, signal generation, order submission, execution simulation, strategy, risk allocation, or performance analysis is introduced.
-- Local checksum-based readback does not prove exchange authenticity or external completeness.
-- No general decision/rejection audit trail, backtest, fill model, execution-cost model, risk runtime, profitability result, or production-readiness result exists.
+- No account access, credentials, strategy, signal generation, backtest, fill model, order submission, risk allocation, PAPER runtime, LIVE path, or profitability analysis is introduced.
+- Local JSON audit records and claim files are not database transactions and do not provide multi-process crash recovery beyond fail-closed identity claims.
+- Local checksums and claims are not external notarization and do not protect against an adversary able to replace the complete evidence set.
+- No execution costs, spreads, slippage, latency, funding, orderbook state, or fill quality are estimated by Gate 2A; such evidence must remain `UNAVAILABLE` unless later measured or modeled.
+- Database-backed persistence, lifecycle events, reporting, backtesting, execution realism, and risk controls remain unimplemented.
 
 ## Next step
 
-Validate and review Gate 1.1 only. After merge, re-inspect `dev` and implement only the smallest append-only decision and rejected-evidence persistence boundary.
+Wait for PR #3 exact-Black follow-up GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.

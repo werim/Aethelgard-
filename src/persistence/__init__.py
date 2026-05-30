@@ -1,1 +1,1 @@
-"""Aethelgard persistence boundary; intentionally empty in Phase 1."""
+"""Research-only persistence and audit-trail boundaries for Aethelgard."""
