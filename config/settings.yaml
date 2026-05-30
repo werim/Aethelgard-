@@ -1,6 +1,6 @@
 project:
   name: Aethelgard
-  phase: DATA_ACQUISITION
+  phase: PERSISTENCE_AUDIT
 runtime:
   mode: PAPER_ONLY
   readiness: RESEARCH_ONLY
