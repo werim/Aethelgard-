@@ -275,11 +275,11 @@ def _claim_decision_identity(
     try:
         with claim_path.open("x", encoding="utf-8") as stream:
             stream.write(digest + "\n")
-    except FileExistsError:
+    except FileExistsError as exc:
         if _read_claim(claim_path) != digest:
             raise AuditIntegrityError(
                 "A different immutable audit claim already exists for decision_id."
-            )
+            ) from exc
     return claim_path
 
 
