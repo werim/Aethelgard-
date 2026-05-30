@@ -49,7 +49,9 @@ Gate 2B implements only the smallest local SQLite event-ledger boundary for rese
 | Gate 2A final-head GitHub Actions | Passed: `validation` run #28 on head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` | `MEASURED` remote CI evidence before Gate 2B |
 | Gate 2B branch creation | Created branch `gate-2b-db-audit-events` from `5ce82c134656e206ce90c2b93585bb80222ebf71` | `MEASURED` connector operation |
 | Gate 2B PR #4 initial GitHub Actions | Failed at Python 3.11 Ruff with `E501` in `src/persistence/events.py:139` | `MEASURED` remote CI failure |
-| Gate 2B Ruff follow-up | Wrapped the long `AuditEventIntegrityError` raise line; functional behavior unchanged | `CHANGED`; pending rerun |
+| Gate 2B Ruff follow-up | Wrapped the long `AuditEventIntegrityError` raise line; functional behavior unchanged | `CHANGED`; later reached Black |
+| Gate 2B Black follow-up evidence | Python 3.11 Black failed because `src/persistence/events.py` required formatting | `MEASURED` remote CI failure |
+| Gate 2B Black/Ruff follow-up | Moved the decode-error message into a short local variable so Black can keep the raise line short enough for Ruff; functional behavior unchanged | `CHANGED`; pending rerun |
 | Gate 2B exact branch-head compilation | Pending until workflow reruns | `UNVERIFIED` |
 | Gate 2B exact branch-head tests | Pending until workflow reruns | `UNVERIFIED` |
 | Gate 2B Ruff, Black, Mypy | Pending until workflow reruns | `UNVERIFIED` |
