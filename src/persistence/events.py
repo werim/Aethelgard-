@@ -136,7 +136,9 @@ def _row_to_persisted(row: sqlite3.Row) -> PersistedAuditEvent:
     try:
         decoded = cast(object, json.loads(payload_json))
     except json.JSONDecodeError as exc:
-        raise AuditEventIntegrityError("Audit event payload cannot be decoded.") from exc
+        raise AuditEventIntegrityError(
+            "Audit event payload cannot be decoded."
+        ) from exc
     if not isinstance(decoded, dict):
         raise AuditEventIntegrityError("Audit event payload must be a mapping.")
     payload = cast(dict[str, object], decoded)
