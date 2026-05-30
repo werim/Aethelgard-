@@ -109,7 +109,9 @@ class DecisionAuditRecord:
                 "decision_id must be a safe non-empty identifier."
             )
         try:
-            moment = datetime.fromisoformat(self.recorded_at_utc.replace("Z", "+00:00"))
+            moment = datetime.fromisoformat(
+                self.recorded_at_utc.replace("Z", "+00:00")
+            )
         except ValueError as exc:
             raise AuditIntegrityError(
                 "recorded_at_utc must be an ISO-8601 timestamp."
@@ -359,7 +361,9 @@ def discover_decision_audits(
         read_decision_audit(path)
         for path in sorted(output_directory.glob("*.audit.json"))
     ]
-    record_digests = {record.record.decision_id: record.record_sha256 for record in records}
+    record_digests = {
+        record.record.decision_id: record.record_sha256 for record in records
+    }
     for claim_path in sorted(output_directory.glob("*.claim")):
         match = _CLAIM_NAME_PATTERN.fullmatch(claim_path.name)
         if match is None:
