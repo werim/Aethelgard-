@@ -16,8 +16,10 @@
 - `MEASURED` before branch publication in a reconstructed targeted workspace: `python -m compileall -q src tests` passed and `python -m pytest -q tests/test_audit.py` passed for the initial audit tests (`7 passed`).
 - `MEASURED`: Gate 1.1 corrected PR head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed GitHub Actions `validation` run #14 successfully before Gate 2A began.
 - `MEASURED`: PR #3 initial head `a3621feb5f68c2eee8b1273321fe5aa2cfdbc6b2` reached Ruff on Python 3.11 after earlier validation steps, then failed with `B904` in `src/persistence/audit.py` because the audit-claim conflict raise lacked exception chaining.
-- `CHANGED`: follow-up head `efc128f8dfb98ccf189b0c896537185a78a44f36` chains the `AuditIntegrityError` from the caught `FileExistsError`; functional audit behavior is unchanged.
-- `UNVERIFIED`: exact Gate 2A follow-up head GitHub Actions evidence until the workflow reruns.
+- `MEASURED`: PR #3 follow-up head `1a8237635db1c9ee0c3d48db8e6f63aaeffbf939` reached Black on Python 3.11 after Ruff passed, then failed because `src/persistence/audit.py` required formatting.
+- `CHANGED`: follow-up head `efc128f8dfb98ccf189b0c896537185a78a44f36` chained the `AuditIntegrityError` from the caught `FileExistsError`; functional audit behavior was unchanged.
+- `CHANGED`: follow-up head `e2ef8ee76995d3261a37a3da23bc0bd47d0ed140` applies Black formatting to `src/persistence/audit.py`; functional audit behavior is unchanged.
+- `UNVERIFIED`: exact Gate 2A Black-formatted follow-up head GitHub Actions evidence until the workflow reruns.
 - `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because `git clone` failed with DNS resolution for `github.com`.
 - Local JSON audit records plus claim files provide local stored-byte and identity consistency only. They are not a database transaction log, external notarization, or protection against an attacker able to replace the complete local evidence set.
 
