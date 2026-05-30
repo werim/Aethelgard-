@@ -47,7 +47,9 @@ class AuditEventRecord:
 
     def validate(self) -> None:
         if not _EVENT_ID_PATTERN.fullmatch(self.event_id):
-            raise AuditEventIntegrityError("event_id must be a safe non-empty identifier.")
+            raise AuditEventIntegrityError(
+                "event_id must be a safe non-empty identifier."
+            )
         if not _DECISION_ID_PATTERN.fullmatch(self.decision_id):
             raise AuditEventIntegrityError(
                 "decision_id must be a safe non-empty identifier."
