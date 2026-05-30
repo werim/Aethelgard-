@@ -55,7 +55,9 @@ class AuditEventRecord:
                 "decision_id must be a safe non-empty identifier."
             )
         try:
-            moment = datetime.fromisoformat(self.occurred_at_utc.replace("Z", "+00:00"))
+            moment = datetime.fromisoformat(
+                self.occurred_at_utc.replace("Z", "+00:00")
+            )
         except ValueError as exc:
             raise AuditEventIntegrityError(
                 "occurred_at_utc must be an ISO-8601 timestamp."
@@ -155,7 +157,8 @@ def _row_to_persisted(row: sqlite3.Row) -> PersistedAuditEvent:
         raise AuditEventIntegrityError("Unsupported audit event type.") from exc
     schema_version = row["schema_version"]
     if not isinstance(schema_version, int):
-        raise AuditEventIntegrityError("Audit event schema_version must be an integer.")
+        message = "Audit event schema_version must be an integer."
+        raise AuditEventIntegrityError(message)
     event = AuditEventRecord(
         event_id=str(row["event_id"]),
         event_type=event_type,
