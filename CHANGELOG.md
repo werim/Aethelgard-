@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.5.0] - 2026-05-30
+
+### Added
+
+- Database-backed research audit-event persistence in `src/persistence/events.py` using a local SQLite `audit_events` ledger.
+- Immutable audit-event identity with idempotent identical append behavior and fail-closed conflict rejection.
+- Canonical JSON payload storage with SHA-256 verification during readback and listing.
+- UTC timestamp, `PAPER_ONLY`, `RESEARCH_ONLY`, schema-version, and deterministic JSON payload validation.
+- Audit-event tests covering schema initialization, readback, idempotency, conflicting event identity, repeated decision/type conflicts, checksum tampering, UTC/mode safety, and JSON determinism.
+
+### Changed
+
+- Package version advanced to `0.5.0`.
+- README, VERSION, PLAN, and REPORT records reconcile that Gate 2A PR #3 merged into `dev` and that its final head completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
+- Persistence documentation now distinguishes local JSON decision audit evidence from the new database-backed audit-event evidence boundary.
+- Recorded PR #4 initial Python 3.11 Ruff `E501` failure in `src/persistence/events.py` and the follow-up formatting-only repair.
+- Recorded PR #4 Python 3.11 Black failures and formatting-only repairs.
+- Recorded PR #4 Python 3.11 Mypy failure for the intentionally unserializable payload test and the type-only follow-up repair.
+
+### Fixed
+
+- Closed the documented absence of any smallest database-backed audit-event ledger boundary.
+- Replaced stale Gate 2A pending-validation documentation with measured PR #3 success evidence.
+- Wrapped the long `AuditEventIntegrityError` raise line reported by Ruff `E501`; functional audit-event behavior is unchanged.
+- Moved the decode-error text into a short local variable so Black can keep the raise line short enough for Ruff; functional audit-event behavior is unchanged.
+- Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional audit-event behavior is unchanged.
+- Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
+- Applied current allowed Black `26.5.1` formatting for `list_audit_events`; functional audit-event behavior is unchanged.
+- Cast the intentionally unserializable payload test fixture to `dict[str, object]` so Mypy accepts the negative test while runtime JSON-determinism behavior remains unchanged.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 2B stores local SQLite audit events only. It is not a strategy runtime, execution ledger, fill model, risk system, reporting pipeline, or distributed event bus.
+- SQLite payload checksums verify local database-row consistency only. They are not external notarization or adversarial tamper protection against complete database replacement.
+- Gate 2B does not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
+- Exact Gate 2B branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow reruns.
+
 ## [0.4.0] - 2026-05-30
 
 ### Added
@@ -15,6 +56,7 @@
 - README, VERSION, PLAN, and REPORT records now reflect that Gate 1.1 completed GitHub Actions run #14 successfully and that Gate 2A starts from merged `dev` commit `d09b7361a26f61d6cea7c0077d6d22a913548df0`.
 - `src/persistence/__init__.py` now describes the research-only persistence boundary instead of remaining Phase-1-empty.
 - Recorded PR #3 initial Ruff `B904` failure, the exception-chaining follow-up repair, the partial Black formatting failure, and the exact Black 24.10.0 formatting repair.
+- Recorded PR #3 final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` GitHub Actions `validation` run #28 success before Gate 2B began.
 
 ### Fixed
 
@@ -32,7 +74,6 @@
 - Gate 2A stores local JSON audit evidence and claim files only; it is not a database-backed event ledger or transactional runtime journal.
 - Audit records do not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
 - Local checksum and claim files verify ordinary local stored-byte consistency and decision identity conflicts only. They are not external notarization or protection against an adversary able to replace the complete evidence set.
-- Exact Gate 2A exact-Black follow-up head GitHub Actions validation remains `UNVERIFIED` until the workflow reruns.
 
 ## [0.3.1] - 2026-05-29
 
