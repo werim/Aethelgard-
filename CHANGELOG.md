@@ -26,6 +26,7 @@
 - Moved the decode-error text into a short local variable so Black can keep the raise line short enough for Ruff; functional audit-event behavior is unchanged.
 - Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional audit-event behavior is unchanged.
 - Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
+- Applied current allowed Black `26.5.1` formatting for `list_audit_events`; functional audit-event behavior is unchanged.
 
 ### Removed
 
