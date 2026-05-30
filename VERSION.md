@@ -17,9 +17,11 @@
 - `MEASURED`: Gate 1.1 corrected PR head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed GitHub Actions `validation` run #14 successfully before Gate 2A began.
 - `MEASURED`: PR #3 initial head `a3621feb5f68c2eee8b1273321fe5aa2cfdbc6b2` reached Ruff on Python 3.11 after earlier validation steps, then failed with `B904` in `src/persistence/audit.py` because the audit-claim conflict raise lacked exception chaining.
 - `MEASURED`: PR #3 follow-up head `1a8237635db1c9ee0c3d48db8e6f63aaeffbf939` reached Black on Python 3.11 after Ruff passed, then failed because `src/persistence/audit.py` required formatting.
+- `MEASURED`: PR #3 follow-up head `433dbe6bd8276764e540b6b39c28fa6450d82035` reached Black on Python 3.11 and again failed because `src/persistence/audit.py` still required exact Black line collapsing.
 - `CHANGED`: follow-up head `efc128f8dfb98ccf189b0c896537185a78a44f36` chained the `AuditIntegrityError` from the caught `FileExistsError`; functional audit behavior was unchanged.
-- `CHANGED`: follow-up head `e2ef8ee76995d3261a37a3da23bc0bd47d0ed140` applies Black formatting to `src/persistence/audit.py`; functional audit behavior is unchanged.
-- `UNVERIFIED`: exact Gate 2A Black-formatted follow-up head GitHub Actions evidence until the workflow reruns.
+- `CHANGED`: follow-up head `e2ef8ee76995d3261a37a3da23bc0bd47d0ed140` applied partial Black formatting to `src/persistence/audit.py`; functional audit behavior was unchanged.
+- `CHANGED`: follow-up head `818d17bfc255a52b9ed32392d2a48c257640a545` applies the exact local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior is unchanged.
+- `UNVERIFIED`: exact Gate 2A exact-Black follow-up head GitHub Actions evidence until the workflow reruns.
 - `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because `git clone` failed with DNS resolution for `github.com`.
 - Local JSON audit records plus claim files provide local stored-byte and identity consistency only. They are not a database transaction log, external notarization, or protection against an attacker able to replace the complete local evidence set.
 
