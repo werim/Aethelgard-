@@ -15,7 +15,7 @@ Phase 1 established modular boundaries, validated configuration, fail-closed PAP
 
 Phase 2 added a supplied-row historical-data ingestion boundary with timestamp, continuity, OHLC, provenance, and deterministic fingerprint validation.
 
-Phase 2B adds only a read-only acquisition evidence boundary:
+Phase 2B added only a read-only acquisition evidence boundary:
 
 - credential-free GET acquisition from the public Binance Futures kline endpoint,
 - validated fixed-interval request selectors and deterministic pagination,
@@ -23,7 +23,14 @@ Phase 2B adds only a read-only acquisition evidence boundary:
 - immutable local raw artifact and checksummed metadata storage with persisted fetch diagnostics and verified readback,
 - stale or future-dated acquisition-evidence rejection during artifact readback.
 
-It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, or establish long-horizon exchange completeness.
+Gate 2A adds only a research decision audit-trail boundary:
+
+- append-only local JSON audit records for `REJECTED` and `NO_ACTION` outcomes,
+- explicit `MEASURED`, `MODELED`, and `UNAVAILABLE` evidence classification,
+- checksum-addressed audit filenames plus `decision_id.claim` conflict anchors,
+- fail-closed readback when record bytes, claims, UTC timestamps, PAPER-only mode, or evidence provenance are invalid.
+
+It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, or provide a database-backed runtime event log.
 
 ## Getting started
 
@@ -39,7 +46,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`, not an execution approval path.
 
 ## Repository map
 
@@ -47,6 +54,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
+- `src/persistence/`: research-only decision audit evidence persistence boundary.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 
