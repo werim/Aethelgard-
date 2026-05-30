@@ -17,14 +17,16 @@
 
 **Measured merge-path evidence:** Corrected PR head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` completed GitHub Actions `validation` run #10 successfully before merge.
 
-**Post-merge findings:** Review identified two integrity gaps that must be repaired before Gate 2:
+**Post-merge findings:** Review identified two integrity gaps that required repair before Gate 2:
 
 1. pre-response transient network failures bypassed the declared bounded retry policy;
 2. metadata checksum identity could not be independently recovered after process restart.
 
 ## Gate 1.1 — Acquisition integrity repair and CI evidence hardening
 
-**Status:** `IMPLEMENTED_IN_FOCUSED_PR_PENDING_VALIDATION_REVIEW_AND_MERGE`.
+**Status:** `MERGED_TO_DEV`.
+
+**Merged baseline:** PR #2 merged into `dev` at merge commit `d09b7361a26f61d6cea7c0077d6d22a913548df0`.
 
 ### Scope
 
@@ -36,18 +38,39 @@
 ### Evidence classification
 
 - `MEASURED`: reconstructed targeted candidate execution of compilation and acquisition tests (`17 passed`).
-- `MEASURED`: initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`, GitHub Actions run #12: Python 3.12 compilation/tests/JUnit succeeded; Python 3.11 compilation/tests/JUnit/Ruff succeeded, then Black failed on formatting in `tests/test_acquisition.py`.
-- `MEASURED`: formatting follow-up head `14200bfcf32d037735c9dc1ac08c6b3eff380de3`, GitHub Actions run #13: Python 3.12 compilation/tests/JUnit succeeded; Python 3.11 compilation/tests/JUnit/Ruff/Black succeeded, then Mypy failed in the new test's `Request` type reference.
-- `MEASURED`: type-only follow-up imports `urllib.request.Request` directly for the affected cast/assertion; no functional acquisition behavior is changed by the follow-up.
-- `UNVERIFIED`: type-corrected PR head full workflow result until GitHub Actions reruns.
-- `UNAVAILABLE`: direct mutable local clone/working-tree evidence in this execution environment.
+- `MEASURED`: GitHub Actions `validation` run #14 on corrected PR #2 head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed successfully before Gate 2A began.
+- `UNAVAILABLE`: direct mutable local clone/working-tree evidence in the Gate 2A execution environment because `git clone` failed with DNS resolution for `github.com`.
 
 ### Boundary limit
 
 Checksum-addressed local metadata discovery verifies ordinary persisted-byte consistency. It is not an external signature against an attacker able to replace and rename the full local artifact set.
 
-## Gate 2 — Persistence and audit trail
+## Gate 2A — Append-only research decision audit trail
 
-**Status:** `BLOCKED_PENDING_GATE_1_1_REVIEW_AND_MERGE`.
+**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
 
-Only after Gate 1.1 merges may the next run start from the then-current `dev` and implement the smallest append-only persistence/audit-trail boundary for decisions and rejected evidence. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.
+**Starting baseline:** `dev` merge commit `d09b7361a26f61d6cea7c0077d6d22a913548df0` after Gate 1.1 merge.
+
+### Scope
+
+- Add local append-only JSON audit records for research-only `REJECTED` and `NO_ACTION` outcomes.
+- Require every evidence item to be classified as `MEASURED`, `MODELED`, or `UNAVAILABLE`.
+- Require unavailable evidence to carry a reason and no value/source reference, preserving the rule that unknown execution costs are not zero.
+- Persist checksum-addressed audit filenames plus durable `decision_id.claim` anchors so conflicting records for the same decision identity fail closed.
+- Verify audit readback against payload checksum, filename checksum, claim checksum, UTC timestamp, PAPER-only mode, and evidence provenance.
+
+### Evidence classification
+
+- `MEASURED`: targeted reconstructed local validation before branch publication passed `python -m compileall -q src tests` and `python -m pytest -q tests/test_audit.py` for the initial audit test set (`7 passed`).
+- `UNVERIFIED`: exact Gate 2A branch-head GitHub Actions validation until the PR workflow runs.
+- `UNAVAILABLE`: Ruff, Black, Mypy, full-suite exact-branch local validation, and direct local clean working-tree evidence in this execution environment.
+
+### Boundary limit
+
+Gate 2A is a local file evidence boundary only. It is not a database transaction log, runtime event pipeline, strategy, backtest, risk system, execution-cost model, paper runtime, or readiness certification.
+
+## Gate 2B — Database-backed persistence and audit events
+
+**Status:** `BLOCKED_PENDING_GATE_2A_VALIDATION_REVIEW_AND_MERGE`.
+
+Only after Gate 2A is validated, reviewed, and merged may the next run start from the then-current `dev` and implement the smallest database-backed event persistence boundary. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.
