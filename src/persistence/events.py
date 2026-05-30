@@ -55,9 +55,7 @@ class AuditEventRecord:
                 "decision_id must be a safe non-empty identifier."
             )
         try:
-            moment = datetime.fromisoformat(
-                self.occurred_at_utc.replace("Z", "+00:00")
-            )
+            moment = datetime.fromisoformat(self.occurred_at_utc.replace("Z", "+00:00"))
         except ValueError as exc:
             raise AuditEventIntegrityError(
                 "occurred_at_utc must be an ISO-8601 timestamp."
