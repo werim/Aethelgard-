@@ -1,5 +1,25 @@
 # Version History
 
+## 0.5.0 - 2026-05-30
+
+**Engineering milestone:** Gate 2B database-backed audit-event persistence boundary.
+
+- Reconciled Gate 2A status after PR #3 merged into `dev` at merge commit `5ce82c134656e206ce90c2b93585bb80222ebf71`.
+- Recorded PR #3 head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` GitHub Actions `validation` run #28 as successful remote evidence before Gate 2B began.
+- Added a local SQLite `audit_events` ledger for research-only persistence events in `src/persistence/events.py`.
+- Added immutable audit-event identity, idempotent identical append behavior, and fail-closed conflict detection for changed event identities or repeated decision/type pairs.
+- Added canonical JSON payload storage with SHA-256 readback verification so database payload tampering is detected.
+- Added UTC timestamp, `PAPER_ONLY`, `RESEARCH_ONLY`, schema-version, and deterministic JSON payload validation.
+- Added focused database event tests for schema initialization, readback, idempotency, conflict rejection, checksum tampering, UTC/mode safety, and JSON determinism.
+- Retained the boundary: no strategy, backtest, runtime signal generation, order path, execution model, risk allocation, PAPER runtime, performance analysis, or LIVE trading capability was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #3 Gate 2A final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
+- `UNVERIFIED`: Gate 2B exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+- SQLite audit events provide local database-row checksum verification only. They are not an external notarization layer, multi-writer distributed log, strategy runtime, execution ledger, or readiness certificate.
+
 ## 0.4.0 - 2026-05-30
 
 **Engineering milestone:** Gate 2A append-only research decision audit-trail boundary.
@@ -20,9 +40,9 @@
 - `MEASURED`: PR #3 follow-up head `433dbe6bd8276764e540b6b39c28fa6450d82035` reached Black on Python 3.11 and again failed because `src/persistence/audit.py` still required exact Black line collapsing.
 - `CHANGED`: follow-up head `efc128f8dfb98ccf189b0c896537185a78a44f36` chained the `AuditIntegrityError` from the caught `FileExistsError`; functional audit behavior was unchanged.
 - `CHANGED`: follow-up head `e2ef8ee76995d3261a37a3da23bc0bd47d0ed140` applied partial Black formatting to `src/persistence/audit.py`; functional audit behavior was unchanged.
-- `CHANGED`: follow-up head `818d17bfc255a52b9ed32392d2a48c257640a545` applies the exact local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior is unchanged.
-- `UNVERIFIED`: exact Gate 2A exact-Black follow-up head GitHub Actions evidence until the workflow reruns.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because `git clone` failed with DNS resolution for `github.com`.
+- `CHANGED`: follow-up head `818d17bfc255a52b9ed32392d2a48c257640a545` applied the exact local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior was unchanged.
+- `MEASURED`: PR #3 final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before merge.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
 - Local JSON audit records plus claim files provide local stored-byte and identity consistency only. They are not a database transaction log, external notarization, or protection against an attacker able to replace the complete local evidence set.
 
 ## 0.3.1 - 2026-05-29
