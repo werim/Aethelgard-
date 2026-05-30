@@ -258,12 +258,10 @@ def list_audit_events(database_path: Path) -> tuple[PersistedAuditEvent, ...]:
 
     initialize_audit_event_store(database_path)
     with _connect(database_path) as connection:
-        rows = connection.execute(
-            """
+        rows = connection.execute("""
             SELECT event_id, event_type, occurred_at_utc, decision_id, payload_json,
                    payload_sha256, operating_mode, readiness, schema_version
             FROM audit_events
             ORDER BY occurred_at_utc, event_id
-            """
-        ).fetchall()
+            """).fetchall()
     return tuple(_row_to_persisted(row) for row in rows)
