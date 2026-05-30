@@ -4,16 +4,16 @@
 
 - Operational readiness: `RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 2A append-only research decision audit trail.
+- Active increment: Gate 2B database-backed research audit-event persistence boundary.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD: `d09b7361a26f61d6cea7c0077d6d22a913548df0`, merge commit for PR #2.
-- Gate 1.1 corrected PR head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed GitHub Actions `validation` run #14 successfully before Gate 2A began.
+- Starting HEAD: `5ce82c134656e206ce90c2b93585bb80222ebf71`, merge commit for PR #3.
+- Gate 2A final PR head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
 - No visible open PR affecting `dev` was found before this increment.
-- Direct mutable local clone status is unavailable in this execution environment; `git clone` failed with DNS resolution for `github.com`.
+- Direct mutable local clone status is unavailable in this execution environment; GitHub Contents API operations were used instead of local git operations.
 
 ## Implemented Gate 2A boundary
 
@@ -28,30 +28,40 @@ Gate 2A implements only the smallest local-file persistence and audit-trail boun
 | Readback validation | Verifies payload checksum, filename checksum, claim checksum, UTC timestamp, PAPER-only mode, and evidence provenance. | Does not prove external authenticity or adversarial tamper resistance. |
 | Tests | Added focused audit tests for readback, idempotency, conflicts, claims, tampering, evidence provenance, UTC, and mode safety. | Targeted unit-test evidence only. |
 
+## Implemented Gate 2B boundary
+
+Gate 2B implements only the smallest local SQLite event-ledger boundary for research persistence events.
+
+| Area | Change | Evidence limit |
+| --- | --- | --- |
+| Database store | Added `src/persistence/events.py` with a local SQLite `audit_events` table. | Local SQLite only; not distributed or externally notarized. |
+| Event record | Added `AuditEventRecord` for research-only audit events. | Does not generate decisions, signals, orders, or runtime actions. |
+| Event identity | Uses immutable `event_id` plus repeated decision/type conflict detection. | Single local database identity only. |
+| Payload integrity | Stores canonical JSON payloads and SHA-256 payload digests. | Detects row-level payload drift, not complete database replacement. |
+| Readback validation | Verifies payload checksum, event type, UTC timestamp, PAPER-only mode, RESEARCH-only readiness, schema version, and JSON determinism. | Local row consistency only. |
+| Tests | Added focused database event tests for schema initialization, readback, idempotency, conflicts, tampering, UTC/mode safety, and JSON determinism. | Pending remote CI validation for exact branch head. |
+
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Gate 1.1 corrected-head GitHub Actions | Passed: `validation` run #14 | `MEASURED` remote CI evidence for prior gate |
-| Targeted candidate compilation before branch publication | Passed: `python -m compileall -q src tests` | `MEASURED` for reconstructed candidate source only |
-| Targeted candidate audit tests before branch publication | Passed: `python -m pytest -q tests/test_audit.py` (`7 passed`) | `MEASURED` for initial audit tests only |
-| PR #3 initial head GitHub Actions | Failed at Python 3.11 Ruff with `B904` in `src/persistence/audit.py` | `MEASURED` remote CI failure |
-| Ruff follow-up | Added `raise ... from exc` in the audit claim conflict path; functional audit behavior unchanged | `CHANGED`; later reached Black |
-| Black follow-up evidence | Python 3.11 Black failed because `src/persistence/audit.py` required formatting | `MEASURED` remote CI failure |
-| Partial Black formatting follow-up | Applied a manual formatting guess that still failed Black on the next run | `CHANGED`; superseded |
-| Exact Black formatting follow-up | Applied the local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior unchanged | `CHANGED` pending rerun |
-| Exact Gate 2A exact-Black follow-up head GitHub Actions | Pending until workflow reruns | `UNVERIFIED` |
-| Full exact-branch local suite, Ruff, Black, Mypy | Not available locally in this execution environment | `UNAVAILABLE` |
-| Direct clean working-tree status | Git clone failed with DNS resolution for `github.com` | `UNAVAILABLE` |
+| Gate 2A final-head GitHub Actions | Passed: `validation` run #28 on head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` | `MEASURED` remote CI evidence before Gate 2B |
+| Gate 2B branch creation | Created branch `gate-2b-db-audit-events` from `5ce82c134656e206ce90c2b93585bb80222ebf71` | `MEASURED` connector operation |
+| Gate 2B exact branch-head compilation | Pending until workflow runs | `UNVERIFIED` |
+| Gate 2B exact branch-head tests | Pending until workflow runs | `UNVERIFIED` |
+| Gate 2B Ruff, Black, Mypy | Pending until workflow runs | `UNVERIFIED` |
+| Direct clean working-tree status | Local git status unavailable in this execution environment | `UNAVAILABLE` |
 
 ## Safety boundary and unresolved risks
 
 - No account access, credentials, strategy, signal generation, backtest, fill model, order submission, risk allocation, PAPER runtime, LIVE path, or profitability analysis is introduced.
-- Local JSON audit records and claim files are not database transactions and do not provide multi-process crash recovery beyond fail-closed identity claims.
-- Local checksums and claims are not external notarization and do not protect against an adversary able to replace the complete evidence set.
-- No execution costs, spreads, slippage, latency, funding, orderbook state, or fill quality are estimated by Gate 2A; such evidence must remain `UNAVAILABLE` unless later measured or modeled.
-- Database-backed persistence, lifecycle events, reporting, backtesting, execution realism, and risk controls remain unimplemented.
+- Gate 2A local JSON audit records and claim files are not database transactions and do not provide multi-process crash recovery beyond fail-closed identity claims.
+- Gate 2B local SQLite audit events are not a distributed event bus, external notarization layer, strategy runtime, execution ledger, or readiness certificate.
+- Local checksums and database payload digests do not protect against an adversary able to replace the complete evidence set or database.
+- No execution costs, spreads, slippage, latency, funding, orderbook state, or fill quality are estimated by Gate 2B; such evidence must remain `UNAVAILABLE` unless later measured or modeled.
+- Lifecycle events, reporting, backtesting, execution realism, PAPER runtime, and risk controls remain unimplemented.
 
 ## Next step
 
-Wait for PR #3 exact-Black follow-up GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2B from the then-current `dev`, limited to the smallest database-backed persistence/audit-event boundary.
+Wait for Gate 2B branch GitHub Actions validation. Only after successful review and merge should the next run begin Gate 2C from the then-current `dev`, limited to the smallest integration review between file audit records and database audit events.
