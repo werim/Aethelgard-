@@ -1,5 +1,25 @@
 # Version History
 
+## 0.8.0 - 2026-05-31
+
+**Engineering milestone:** Gate 2E reconciliation report surface.
+
+- Reconciled Gate 2D status after PR #6 merged into `dev` at merge commit `d05f013f0a38f8abe82bedc06a7e83adaecd67f4`.
+- Recorded PR #6 head `68e6a89f788a2aa6fa5081e5116c8aa556478bd6` GitHub Actions `validation` run #56 as successful remote evidence before Gate 2E began.
+- Added deterministic reconciliation reporting helpers to `src/persistence/reconciliation.py`.
+- Added explicit report status values: `CONSISTENT`, `INCONSISTENT`, and `UNAVAILABLE`.
+- Added deterministic JSON-compatible payloads, compact JSON serialization, and Markdown summaries for reconciliation reports.
+- Added issue counts by reconciliation mismatch type and sorted issue details.
+- Added focused reporting tests for consistent, inconsistent, unavailable, JSON, and Markdown report paths.
+- Retained the boundary: no strategy, backtest, runtime signal generation, position management, execution model, risk allocation, PAPER runtime, performance analysis, persistence repair, or LIVE trading capability was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #6 Gate 2D final head `68e6a89f788a2aa6fa5081e5116c8aa556478bd6` completed GitHub Actions `validation` run #56 successfully before Gate 2E began.
+- `UNVERIFIED`: Gate 2E exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+- Gate 2E reports local reconciliation evidence only. It does not repair files or database rows, provide runtime evidence, or approve PAPER/LIVE operation.
+
 ## 0.7.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2D persistence reconciliation scan.
@@ -45,20 +65,13 @@
 **Engineering milestone:** Gate 2B database-backed audit-event persistence boundary.
 
 - Reconciled Gate 2A status after PR #3 merged into `dev` at merge commit `5ce82c134656e206ce90c2b93585bb80222ebf71`.
-- Recorded PR #3 head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` GitHub Actions `validation` run #28 as successful remote evidence before Gate 2B began.
+- Recorded PR #3 head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` as successful remote evidence before Gate 2B began.
 - Added a local SQLite `audit_events` ledger for research-only persistence events in `src/persistence/events.py`.
 - Added immutable audit-event identity, idempotent identical append behavior, and fail-closed conflict detection for changed event identities or repeated decision/type pairs.
 - Added canonical JSON payload storage with SHA-256 readback verification so database payload tampering is detected.
 - Added UTC timestamp, `PAPER_ONLY`, `RESEARCH_ONLY`, schema-version, and deterministic JSON payload validation.
 - Added focused database event tests for schema initialization, readback, idempotency, conflict rejection, checksum tampering, UTC/mode safety, and JSON determinism.
 - Retained the boundary: no strategy, backtest, runtime signal generation, order path, execution model, risk allocation, PAPER runtime, performance analysis, or LIVE trading capability was added.
-
-## Validation evidence
-
-- `MEASURED`: PR #3 Gate 2A final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
-- `UNVERIFIED`: Gate 2B exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
-- SQLite audit events provide local database-row checksum verification only. They are not an external notarization layer, multi-writer distributed log, strategy runtime, execution ledger, or readiness certificate.
 
 ## 0.4.0 - 2026-05-30
 
@@ -71,20 +84,6 @@
 - Advanced project phase metadata to `PERSISTENCE_AUDIT` while retaining `PAPER_ONLY` and `RESEARCH_ONLY` controls.
 - Retained the boundary: no strategy, backtest, runtime signal generation, order path, execution model, database event log, or LIVE trading capability was added.
 
-## Validation evidence
-
-- `MEASURED` before branch publication in a reconstructed targeted workspace: `python -m compileall -q src tests` passed and `python -m pytest -q tests/test_audit.py` passed for the initial audit tests (`7 passed`).
-- `MEASURED`: Gate 1.1 corrected PR head `e8caecc2aa545ea0bacdab79f28220ba21c14343` completed GitHub Actions `validation` run #14 successfully before Gate 2A began.
-- `MEASURED`: PR #3 initial head `a3621feb5f68c2eee8b1273321fe5aa2cfdbc6b2` reached Ruff on Python 3.11 after earlier validation steps, then failed with `B904` in `src/persistence/audit.py` because the audit-claim conflict raise lacked exception chaining.
-- `MEASURED`: PR #3 follow-up head `1a8237635db1c9ee0c3d48db8e6f63aaeffbf939` reached Black on Python 3.11 after Ruff passed, then failed because `src/persistence/audit.py` required formatting.
-- `MEASURED`: PR #3 follow-up head `433dbe6bd8276764e540b6b39c28fa6450d82035` reached Black on Python 3.11 and again failed because `src/persistence/audit.py` still required exact Black line collapsing.
-- `CHANGED`: follow-up head `efc128f8dfb98ccf189b0c896537185a78a44f36` chained the `AuditIntegrityError` from the caught `FileExistsError`; functional audit behavior was unchanged.
-- `CHANGED`: follow-up head `e2ef8ee76995d3261a37a3da23bc0bd47d0ed140` applied partial Black formatting to `src/persistence/audit.py`; functional audit behavior was unchanged.
-- `CHANGED`: follow-up head `818d17bfc255a52b9ed32392d2a48c257640a545` applied the exact local Black 24.10.0 diff to `src/persistence/audit.py`; functional audit behavior was unchanged.
-- `MEASURED`: PR #3 final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` completed GitHub Actions `validation` run #28 successfully before merge.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
-- Local JSON audit records plus claim files provide local stored-byte and identity consistency only. They are not a database transaction log, external notarization, or protection against an attacker able to replace the complete local evidence set.
-
 ## 0.3.1 - 2026-05-29
 
 **Engineering milestone:** Phase 2B.1 acquisition-integrity repair and validation evidence hardening.
@@ -94,15 +93,6 @@
 - Added fail-closed tests for transient transport retry/exhaustion, restart discovery, tampered or missing metadata checksum anchors, retry diagnostics, and GET-only public transport behavior.
 - Hardened GitHub Actions validation with Python 3.11/3.12 compile-and-test coverage plus JUnit artifacts; Ruff, Black, and Mypy remain Python 3.11 gates.
 - Retained `PAPER_ONLY` and `RESEARCH_ONLY`; no backtest, strategy, risk, execution, order, or LIVE trading path was added.
-
-## Validation evidence
-
-- `MEASURED` before PR creation in a reconstructed targeted workspace: `python -m compileall -q src tests` passed and `python -m pytest -q tests/test_acquisition.py` passed (`17 passed`).
-- GitHub Actions `validation` run #12 on initial PR #2 head `90160d31036e5d95ef3bd188404835484c7f9441`: Python 3.12 compilation, tests, and JUnit upload passed; Python 3.11 compilation, tests, JUnit upload, and Ruff passed, then Black failed on formatting in `tests/test_acquisition.py`; Mypy was skipped.
-- GitHub Actions `validation` run #13 on formatting follow-up head `14200bfcf32d037735c9dc1ac08c6b3eff380de3`: Python 3.12 compilation, tests, and JUnit upload passed; Python 3.11 compilation, tests, JUnit upload, Ruff, and Black passed, then Mypy failed in the new transport-boundary test's `Request` type reference.
-- GitHub Actions `validation` run #14 on corrected PR #2 head `e8caecc2aa545ea0bacdab79f28220ba21c14343`: completed successfully.
-- The merged Phase 2B PR repair head `cd7c1e642525da7fc4d47c614b03c9f5e541501d` had a successful GitHub Actions `validation` run #10 before merge.
-- Local checksum-addressed metadata discovery is not an external signature or protection against an adversary able to replace and rename the complete artifact set.
 
 ## 0.3.0 - 2026-05-27
 
