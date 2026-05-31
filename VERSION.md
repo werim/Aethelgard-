@@ -1,5 +1,25 @@
 # Version History
 
+## 0.6.0 - 2026-05-31
+
+**Engineering milestone:** Gate 2C persistence integration review.
+
+- Reconciled Gate 2B status after PR #4 merged into `dev` at merge commit `e37268fe21f5fa46c6e804f059df6a05c38f999f`.
+- Recorded PR #4 head `8746bac98aaa08691c4a26b97f084b5bb9cd6359` GitHub Actions `validation` run #48 as successful remote evidence before Gate 2C began.
+- Added `src/persistence/integration.py` to append a validated decision audit file record and a matching SQLite audit event in one narrow research-only helper.
+- Added deterministic event identity derived from decision identity and decision audit checksum.
+- Added event payload provenance linking decision audit checksum, audit filename, claim filename, dataset checksum, artifact checksum, outcome, reason codes, and evidence classifications.
+- Added preflight conflict detection so an existing database event for the same decision/type but different expected identity fails closed before appending another audit file record.
+- Added focused integration tests for matched file/database persistence, idempotency, non-PAPER rejection, and preflight conflict behavior.
+- Retained the boundary: no strategy, backtest, runtime signal generation, order path, execution model, risk allocation, PAPER runtime, performance analysis, or LIVE trading capability was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #4 Gate 2B final head `8746bac98aaa08691c4a26b97f084b5bb9cd6359` completed GitHub Actions `validation` run #48 successfully before Gate 2C began.
+- `UNVERIFIED`: Gate 2C exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+- Gate 2C links two local persistence evidence boundaries only. It is not a cross-store transaction manager, external notarization layer, runtime event bus, strategy runtime, execution ledger, or readiness certificate.
+
 ## 0.5.0 - 2026-05-30
 
 **Engineering milestone:** Gate 2B database-backed audit-event persistence boundary.
