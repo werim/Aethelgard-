@@ -187,10 +187,14 @@ def assert_decision_audit_events_reconciled(
     return report
 
 
+def _zero_issue_counts() -> dict[str, int]:
+    return {issue_type.value: 0 for issue_type in ReconciliationIssueType}
+
+
 def _issue_counts(
     report: PersistenceReconciliationReport,
 ) -> dict[str, int]:
-    counts = {issue_type.value: 0 for issue_type in ReconciliationIssueType}
+    counts = _zero_issue_counts()
     for issue in report.issues:
         counts[issue.issue_type.value] += 1
     return counts
@@ -204,6 +208,10 @@ def _report_status(
     if report.is_consistent:
         return ReconciliationReportStatus.CONSISTENT
     return ReconciliationReportStatus.INCONSISTENT
+
+
+def _issue_sort_key(issue: ReconciliationIssue) -> tuple[str, str, str]:
+    return (issue.issue_type.value, issue.decision_id, issue.event_id or "")
 
 
 def reconciliation_report_payload(
@@ -226,7 +234,7 @@ def reconciliation_report_payload(
             "matched_count": 0,
             "matched_decision_ids": [],
             "issue_count": 0,
-            "issue_counts": {issue_type.value: 0 for issue_type in ReconciliationIssueType},
+            "issue_counts": _zero_issue_counts(),
             "issues": [],
             "unavailable_reason": reason,
         }
@@ -239,10 +247,7 @@ def reconciliation_report_payload(
             "event_id": issue.event_id,
             "detail": issue.detail,
         }
-        for issue in sorted(
-            report.issues,
-            key=lambda item: (item.issue_type.value, item.decision_id, item.event_id or ""),
-        )
+        for issue in sorted(report.issues, key=_issue_sort_key)
     ]
     return {
         "schema_version": 1,
