@@ -113,8 +113,7 @@ _COMPLETED_GATES = (
         validation="PR #8 head validation run #63 succeeded before Gate 2G.",
         evidence_classification=ClosureEvidenceClassification.MEASURED,
         evidence_limit=(
-            "Local stored-byte evidence only; not adversarial tamper "
-            "protection."
+            "Local stored-byte evidence only; not adversarial tamper " "protection."
         ),
     ),
 )
