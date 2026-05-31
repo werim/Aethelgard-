@@ -108,13 +108,11 @@ def test_reconciliation_reports_database_event_mismatch(tmp_path: Path) -> None:
     )
 
     report = reconcile_decision_audit_events(audit_dir, db)
+    issue = report.issues[0]
 
     assert not report.is_consistent
-    assert (
-        report.issues[0].issue_type
-        is ReconciliationIssueType.DATABASE_EVENT_MISMATCH
-    )
-    assert report.issues[0].event_id == "decision_audit_appended_" + "1" * 32
+    assert issue.issue_type is ReconciliationIssueType.DATABASE_EVENT_MISMATCH
+    assert issue.event_id == "decision_audit_appended_" + "1" * 32
 
 
 def test_reconciliation_assertion_fails_closed_on_mismatch(tmp_path: Path) -> None:
