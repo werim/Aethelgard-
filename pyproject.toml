@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aethelgard"
-version = "0.7.0"
+version = "0.8.0"
 description = "Conservative crypto futures research and PAPER-trading foundation"
 readme = "README.md"
 requires-python = ">=3.11"

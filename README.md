@@ -6,7 +6,7 @@ Aethelgard is a conservative crypto futures **research** and **PAPER-trading** f
 
 - Operating mode remains fixed to **PAPER_ONLY**.
 - Operational readiness remains **RESEARCH_ONLY**.
-- No strategy logic, exchange execution, credentials, live infrastructure, optimizer, or performance claims are included.
+- No strategy logic, exchange connectivity requiring secrets, optimizer, or performance claims are included.
 - Simulated, estimated, measured, unknown, and unverified evidence must remain distinguishable.
 
 ## Implemented scope
@@ -52,7 +52,14 @@ Gate 2D adds only a local persistence-reconciliation scan:
 - exposes a fail-closed assertion helper for callers that require a fully consistent local evidence set,
 - leaves repair, deletion, runtime promotion, and decision generation out of scope.
 
-It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
+Gate 2E adds only a reconciliation reporting surface:
+
+- renders reconciliation reports as deterministic JSON-compatible payloads, deterministic JSON strings, and deterministic Markdown summaries,
+- reports `CONSISTENT`, `INCONSISTENT`, or `UNAVAILABLE` status explicitly,
+- includes mismatch counts by issue type and sorted issue details,
+- preserves unavailable reconciliation evidence as unavailable instead of treating missing reports as clean.
+
+It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
 
 ## Getting started
 
@@ -68,7 +75,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan local persistence consistency. None of these paths approves execution.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan and report local persistence consistency. None of these paths approves runtime use.
 
 ## Repository map
 
@@ -76,7 +83,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
-- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, and reconciliation boundaries.
+- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, and reporting boundaries.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 

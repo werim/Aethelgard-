@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.8.0] - 2026-05-31
+
+### Added
+
+- Gate 2E reconciliation reporting helpers in `src/persistence/reconciliation.py`.
+- `ReconciliationReportStatus` with explicit `CONSISTENT`, `INCONSISTENT`, and `UNAVAILABLE` states.
+- Deterministic JSON-compatible reconciliation payloads through `reconciliation_report_payload`.
+- Deterministic compact JSON serialization through `reconciliation_report_json`.
+- Deterministic Markdown summaries through `reconciliation_report_markdown`.
+- Focused reporting tests for consistent, inconsistent, unavailable, JSON, and Markdown report paths.
+
+### Changed
+
+- Package version advanced to `0.8.0`.
+- README, VERSION, PLAN, and REPORT now describe Gate 2E as a narrow reconciliation reporting surface.
+- Reconciled Gate 2D status by recording PR #6 merge and GitHub Actions `validation` run #56 success before Gate 2E began.
+
+### Fixed
+
+- Closed the documented absence of a small report surface for Gate 2D reconciliation results.
+- Missing reconciliation scans are now represented as `UNAVAILABLE` rather than treated as clean evidence.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 2E reports local reconciliation results only. It does not repair audit evidence, add a runtime loop, produce strategy signals, run backtests, model fills, allocate risk, or certify PAPER/LIVE readiness.
+- Exact Gate 2E branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.7.0] - 2026-05-31
 
 ### Added
@@ -28,7 +59,7 @@
 ### Known limitations
 
 - Gate 2D reports mismatch states only. It does not repair, delete, rewrite, or rehydrate audit files or database rows.
-- Gate 2D does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, submit orders, run a PAPER loop, or certify PAPER/LIVE readiness.
+- Gate 2D does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, run a PAPER loop, or certify PAPER/LIVE readiness.
 - Exact Gate 2D branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
 
 ## [0.6.0] - 2026-05-31
@@ -58,7 +89,7 @@
 ### Known limitations
 
 - Gate 2C is not a cross-store transaction manager. A crash after file append but before database append remains an unresolved operational gap.
-- Gate 2C does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, submit orders, run a PAPER loop, or certify PAPER/LIVE readiness.
+- Gate 2C does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, run a PAPER loop, or certify PAPER/LIVE readiness.
 - Exact Gate 2C branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
 
 ## [0.5.0] - 2026-05-30
@@ -76,20 +107,13 @@
 - Package version advanced to `0.5.0`.
 - README, VERSION, PLAN, and REPORT records reconcile that Gate 2A PR #3 merged into `dev` and that its final head completed GitHub Actions `validation` run #28 successfully before Gate 2B began.
 - Persistence documentation now distinguishes local JSON decision audit evidence from the new database-backed audit-event evidence boundary.
-- Recorded PR #4 initial Python 3.11 Ruff `E501` failure in `src/persistence/events.py` and the follow-up formatting-only repair.
-- Recorded PR #4 Python 3.11 Black failures and formatting-only repairs.
-- Recorded PR #4 Python 3.11 Mypy failure for the intentionally unserializable payload test and the type-only follow-up repair.
+- Recorded PR #4 style/type follow-up repairs without changing audit-event behavior.
 
 ### Fixed
 
 - Closed the documented absence of any smallest database-backed audit-event ledger boundary.
 - Replaced stale Gate 2A pending-validation documentation with measured PR #3 success evidence.
-- Wrapped the long `AuditEventIntegrityError` raise line reported by Ruff `E501`; functional audit-event behavior is unchanged.
-- Moved the decode-error text into a short local variable so Black can keep the raise line short enough for Ruff; functional audit-event behavior is unchanged.
-- Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional behavior unchanged.
-- Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
-- Applied current allowed Black `26.5.1` formatting for `list_audit_events`; functional audit-event behavior is unchanged.
-- Cast the intentionally unserializable payload test fixture to `dict[str, object]` so Mypy accepts the negative test while runtime JSON-determinism behavior remains unchanged.
+- Fixed CI style/type findings while preserving audit-event behavior.
 
 ### Removed
 
@@ -99,8 +123,7 @@
 
 - Gate 2B stores local SQLite audit events only. It is not a strategy runtime, execution ledger, fill model, risk system, reporting pipeline, or distributed event bus.
 - SQLite payload checksums verify local database-row consistency only. They are not external notarization or adversarial tamper protection against complete database replacement.
-- Gate 2B does not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
-- Exact Gate 2B branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow reruns.
+- Gate 2B does not generate decisions, issue signals, run backtests, model fills, estimate profitability, or certify PAPER/LIVE readiness.
 
 ## [0.4.0] - 2026-05-30
 
@@ -116,15 +139,13 @@
 - Package version advanced to `0.4.0` and project phase metadata advanced to `PERSISTENCE_AUDIT`.
 - README, VERSION, PLAN, and REPORT records now reflect that Gate 1.1 completed GitHub Actions run #14 successfully and that Gate 2A starts from merged `dev` commit `d09b7361a26f61d6cea7c0077d6d22a913548df0`.
 - `src/persistence/__init__.py` now describes the research-only persistence boundary instead of remaining Phase-1-empty.
-- Recorded PR #3 initial Ruff `B904` failure, the exception-chaining follow-up repair, the partial Black formatting failure, and the exact Black 24.10.0 formatting repair.
-- Recorded PR #3 final head `ed1641191d7d495ddab325e0ef54877fe64cf8d2` GitHub Actions `validation` run #28 success before Gate 2B began.
+- Recorded PR #3 style follow-up repairs and final GitHub Actions success before Gate 2B began.
 
 ### Fixed
 
 - Closed the documented absence of any generalized decision/rejection audit persistence boundary at the smallest local-file evidence layer.
 - Prevented unavailable execution evidence from being persisted as a misleading zero value by requiring `UNAVAILABLE` evidence to carry a reason and no value/source reference.
 - Fixed Ruff `B904` in the audit-claim conflict path by raising the `AuditIntegrityError` from the caught `FileExistsError`.
-- Applied exact Black 24.10.0 formatting to `src/persistence/audit.py` without changing functional audit behavior.
 
 ### Removed
 
@@ -133,8 +154,8 @@
 ### Known limitations
 
 - Gate 2A stores local JSON audit evidence and claim files only; it is not a database-backed event ledger or transactional runtime journal.
-- Audit records do not generate decisions, issue signals, run backtests, model fills, estimate profitability, submit orders, or certify PAPER/LIVE readiness.
-- Local checksum and claim files verify ordinary local stored-byte consistency and decision identity conflicts only. They are not external notarization or protection against an adversary able to replace the complete evidence set.
+- Audit records do not generate decisions, issue signals, run backtests, model fills, estimate profitability, or certify PAPER/LIVE readiness.
+- Local checksum and claim files verify ordinary local stored-byte consistency and decision identity conflicts only.
 
 ## [0.3.1] - 2026-05-29
 
@@ -150,14 +171,13 @@
 - Package version advanced to `0.3.1` while the research phase remains `DATA_ACQUISITION`.
 - Ruff, Black, and Mypy run once on Python 3.11; code compilation and tests run on both supported CI interpreters.
 - Documentation records that Gate 2 remains blocked until this Gate 1.1 integrity repair is reviewed and merged.
-- Added narrowly scoped follow-up repairs after remote validation: Black-required test formatting and a Mypy-safe direct `urllib.request.Request` type reference in the public-transport test.
+- Added narrowly scoped follow-up repairs after remote validation.
 
 ### Fixed
 
 - Fixed the bounded retry gap where transport failures occurring before any HTTP response bypassed `max_retries`.
 - Fixed the restart verification gap where metadata checksum identity existed only in an in-memory `PersistedArtifact` value.
 - Corrected the merged Phase 2B documentation state to acknowledge successful repaired-head validation before merge and the two subsequently discovered integrity findings.
-- Fixed CI findings without altering acquisition behavior: Black formatting in the checksum-anchor test and Mypy type resolution in the GET/no-credential test.
 
 ### Removed
 
@@ -168,7 +188,6 @@
 - Checksum-addressed local filenames verify ordinary stored-byte consistency and reject accidental/local tampering after restart; they are not cryptographic signatures against an adversary able to replace and rename all artifact files.
 - Public HTTP acquisition plus local checksums do not prove Binance authenticity, external completeness beyond the requested fixed range, or data fitness for trading decisions.
 - No generalized decision persistence, backtesting, execution-cost simulation, strategy, risk allocation, PAPER runtime, or reporting pipeline is implemented.
-- GitHub Actions run #14 on the corrected PR #2 head completed successfully.
 
 ## [0.3.0] - 2026-05-27
 
