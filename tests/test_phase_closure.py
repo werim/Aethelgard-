@@ -35,16 +35,20 @@ def test_persistence_audit_phase_closure_is_research_only() -> None:
 
 def test_phase_closure_payload_blocks_runtime_capabilities() -> None:
     payload = phase_closure_payload()
+    blocked_capabilities = payload["blocked_capabilities"]
+    next_phase = payload["next_phase"]
 
+    assert isinstance(blocked_capabilities, list)
+    assert isinstance(next_phase, str)
     assert payload["status"] == "CLOSED_FOR_RESEARCH_USE"
     assert payload["operating_mode"] == "PAPER_ONLY"
     assert payload["readiness"] == "RESEARCH_ONLY"
-    assert "backtesting" in payload["blocked_capabilities"]
-    assert "execution_simulation" in payload["blocked_capabilities"]
-    assert "paper_runtime_loop" in payload["blocked_capabilities"]
-    assert "live_trading" in payload["blocked_capabilities"]
-    assert "profitability_claims" in payload["blocked_capabilities"]
-    assert "execution realism remains unavailable" in payload["next_phase"]
+    assert "backtesting" in blocked_capabilities
+    assert "execution_simulation" in blocked_capabilities
+    assert "paper_runtime_loop" in blocked_capabilities
+    assert "live_trading" in blocked_capabilities
+    assert "profitability_claims" in blocked_capabilities
+    assert "execution realism remains unavailable" in next_phase
 
 
 def test_phase_closure_json_is_deterministic_and_safe() -> None:
