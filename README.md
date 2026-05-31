@@ -45,7 +45,14 @@ Gate 2C adds only a narrow persistence-integration helper:
 - records measured local evidence linking the audit filename, claim filename, dataset checksum, artifact checksum, reason codes, and evidence classifications,
 - preflights existing database events before writing a new file audit record so conflicting decision/type events fail closed without partial file writes.
 
-It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, or provide PAPER/LIVE readiness.
+Gate 2D adds only a local persistence-reconciliation scan:
+
+- discovers verified decision audit files and verified SQLite audit events,
+- reports missing database events, missing file audit records, and mismatched database event identity or payload,
+- exposes a fail-closed assertion helper for callers that require a fully consistent local evidence set,
+- leaves repair, deletion, runtime promotion, and decision generation out of scope.
+
+It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
 
 ## Getting started
 
@@ -61,7 +68,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries. None of these paths approves execution.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan local persistence consistency. None of these paths approves execution.
 
 ## Repository map
 
@@ -69,7 +76,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
-- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, and narrow integration boundaries.
+- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, and reconciliation boundaries.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 

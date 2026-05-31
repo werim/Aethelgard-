@@ -1,5 +1,25 @@
 # Version History
 
+## 0.7.0 - 2026-05-31
+
+**Engineering milestone:** Gate 2D persistence reconciliation scan.
+
+- Reconciled Gate 2C status after PR #5 merged into `dev` at merge commit `f085b1412d8670058b2e45a02b4590aa40145069`.
+- Recorded PR #5 head `16dfe24c624742729fbab2303b8defbd7eb3a780` GitHub Actions `validation` run #51 as successful remote evidence before Gate 2D began.
+- Added `src/persistence/reconciliation.py` to scan verified decision audit files and verified SQLite audit events for local evidence alignment.
+- Added explicit mismatch states for missing database events, missing file audit records, and database event identity or payload mismatches.
+- Added a fail-closed assertion helper that raises when local persistence evidence is not fully reconciled.
+- Exposed deterministic decision-audit event identity and payload helpers from `src/persistence/integration.py` so reconciliation uses the same canonical event contract as append.
+- Added focused reconciliation tests for consistent evidence, missing database events, missing file audits, database-event mismatch, and fail-closed assertion behavior.
+- Retained the boundary: no strategy, backtest, runtime signal generation, order path, execution model, risk allocation, PAPER runtime, performance analysis, persistence repair, or LIVE trading capability was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #5 Gate 2C final head `16dfe24c624742729fbab2303b8defbd7eb3a780` completed GitHub Actions `validation` run #51 successfully before Gate 2D began.
+- `UNVERIFIED`: Gate 2D exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+- Gate 2D reports local mismatch states only. It does not repair files or database rows, provide cross-store transaction semantics, certify runtime evidence, or approve PAPER/LIVE operation.
+
 ## 0.6.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2C persistence integration review.

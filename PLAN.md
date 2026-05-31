@@ -99,9 +99,11 @@ Gate 2B is a local database persistence boundary only. It is not a strategy runt
 
 ## Gate 2C — Persistence integration review
 
-**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
+**Status:** `MERGED_TO_DEV`.
 
 **Starting baseline:** `dev` merge commit `e37268fe21f5fa46c6e804f059df6a05c38f999f` after Gate 2B merge.
+
+**Merged baseline:** PR #5 merged into `dev` at merge commit `f085b1412d8670058b2e45a02b4590aa40145069`.
 
 ### Scope
 
@@ -114,8 +116,8 @@ Gate 2B is a local database persistence boundary only. It is not a strategy runt
 ### Evidence classification
 
 - `MEASURED`: PR #4 final head GitHub Actions `validation` run #48 passed before Gate 2C began.
-- `UNVERIFIED`: exact Gate 2C branch-head GitHub Actions validation until the PR workflow runs.
-- `UNAVAILABLE`: direct local compilation, full-suite tests, Ruff, Black, Mypy, and clean working-tree evidence in this execution environment.
+- `MEASURED`: PR #5 final head `16dfe24c624742729fbab2303b8defbd7eb3a780` completed GitHub Actions `validation` run #51 successfully before merge.
+- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
 
 ### Boundary limit
 
@@ -123,6 +125,30 @@ Gate 2C links local file and SQLite evidence boundaries only. It is not a cross-
 
 ## Gate 2D — Persistence reconciliation scan
 
-**Status:** `BLOCKED_PENDING_GATE_2C_VALIDATION_REVIEW_AND_MERGE`.
+**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
 
-Only after Gate 2C is validated, reviewed, and merged may the next run start from the then-current `dev` and perform the smallest reconciliation scan for file/database mismatch states. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.
+**Starting baseline:** `dev` merge commit `f085b1412d8670058b2e45a02b4590aa40145069` after Gate 2C merge.
+
+### Scope
+
+- Add the smallest read-only scanner that compares verified local decision audit files against verified SQLite audit events.
+- Report missing database events, missing file audit records, and database event identity or payload mismatches.
+- Add a fail-closed assertion helper for callers that require fully reconciled local persistence evidence.
+- Add focused tests for consistent evidence and all admitted mismatch states.
+- Do not repair, delete, rewrite, or promote evidence. Do not add runtime, strategy, backtest, risk, or execution behavior.
+
+### Evidence classification
+
+- `MEASURED`: PR #5 final head GitHub Actions `validation` run #51 passed before Gate 2D began.
+- `UNVERIFIED`: exact Gate 2D branch-head GitHub Actions validation until the PR workflow runs.
+- `UNAVAILABLE`: direct local compilation, full-suite tests, Ruff, Black, Mypy, and clean working-tree evidence in this execution environment.
+
+### Boundary limit
+
+Gate 2D is a local reconciliation report boundary only. It is not a repair tool, transaction manager, runtime event bus, strategy runtime, execution ledger, fill model, cost model, risk allocator, reporting system, paper runtime, live path, or readiness certification.
+
+## Gate 2E — Reconciliation report surface
+
+**Status:** `BLOCKED_PENDING_GATE_2D_VALIDATION_REVIEW_AND_MERGE`.
+
+Only after Gate 2D is validated, reviewed, and merged may the next run start from the then-current `dev` and expose the reconciliation result in the smallest safe reporting surface. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked.

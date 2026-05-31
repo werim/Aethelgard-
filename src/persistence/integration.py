@@ -41,16 +41,20 @@ def _record_digest(record: DecisionAuditRecord) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def _event_id_for_decision_audit(
+def decision_audit_event_id(
     decision_id: str,
     decision_audit_sha256: str,
 ) -> str:
+    """Return deterministic event identity for one decision audit append."""
+
     identity = f"{decision_id}:{decision_audit_sha256}"
     digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:32]
     return f"decision_audit_appended_{digest}"
 
 
-def _event_payload(audit: PersistedAuditRecord) -> dict[str, object]:
+def decision_audit_event_payload(audit: PersistedAuditRecord) -> dict[str, object]:
+    """Return the canonical database-event payload for a persisted audit file."""
+
     record = audit.record
     return {
         "decision_audit_sha256": audit.record_sha256,
@@ -106,7 +110,7 @@ def append_decision_audit_event(
     """
 
     record_digest = _record_digest(record)
-    event_id = _event_id_for_decision_audit(record.decision_id, record_digest)
+    event_id = decision_audit_event_id(record.decision_id, record_digest)
     _preflight_event_identity(record, database_path, event_id)
     persisted_audit = append_decision_audit(record, audit_directory)
     event = AuditEventRecord(
@@ -114,7 +118,7 @@ def append_decision_audit_event(
         event_type=AuditEventType.DECISION_AUDIT_APPENDED,
         occurred_at_utc=occurred_at_utc or record.recorded_at_utc,
         decision_id=record.decision_id,
-        payload=_event_payload(persisted_audit),
+        payload=decision_audit_event_payload(persisted_audit),
     )
     persisted_event = append_audit_event(database_path, event)
     return PersistedDecisionAuditEvent(audit=persisted_audit, event=persisted_event)

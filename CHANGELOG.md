@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.7.0] - 2026-05-31
+
+### Added
+
+- Gate 2D persistence reconciliation scanner in `src/persistence/reconciliation.py`.
+- Explicit reconciliation issue states for missing database events, missing file audit records, and mismatched database-event identity or payload.
+- Fail-closed reconciliation assertion helper for callers that require fully aligned local persistence evidence.
+- Focused reconciliation tests for consistent file/database evidence, missing database event, missing file audit, database-event mismatch, and assertion failure.
+
+### Changed
+
+- Package version advanced to `0.7.0`.
+- `src/persistence/integration.py` now exposes deterministic decision-audit event identity and payload helpers so append and reconciliation share one canonical event contract.
+- README, VERSION, PLAN, and REPORT now describe Gate 2D as a narrow persistence reconciliation boundary.
+- Reconciled Gate 2C status by recording PR #5 merge and GitHub Actions `validation` run #51 success before Gate 2D began.
+
+### Fixed
+
+- Closed the documented absence of a read-only file/database reconciliation scan after Gate 2C.
+- Added fail-closed reporting for partial persistence states that Gate 2C explicitly did not make transactional.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 2D reports mismatch states only. It does not repair, delete, rewrite, or rehydrate audit files or database rows.
+- Gate 2D does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, submit orders, run a PAPER loop, or certify PAPER/LIVE readiness.
+- Exact Gate 2D branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.6.0] - 2026-05-31
 
 ### Added
@@ -55,7 +86,7 @@
 - Replaced stale Gate 2A pending-validation documentation with measured PR #3 success evidence.
 - Wrapped the long `AuditEventIntegrityError` raise line reported by Ruff `E501`; functional audit-event behavior is unchanged.
 - Moved the decode-error text into a short local variable so Black can keep the raise line short enough for Ruff; functional audit-event behavior is unchanged.
-- Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional audit-event behavior is unchanged.
+- Broke likely Black-reformatted boundary lines and shortened the schema-version error path; functional behavior unchanged.
 - Applied the local Black 24.10.0 diff to collapse the `datetime.fromisoformat(...)` line to exactly 88 characters; functional audit-event behavior is unchanged.
 - Applied current allowed Black `26.5.1` formatting for `list_audit_events`; functional audit-event behavior is unchanged.
 - Cast the intentionally unserializable payload test fixture to `dict[str, object]` so Mypy accepts the negative test while runtime JSON-determinism behavior remains unchanged.
