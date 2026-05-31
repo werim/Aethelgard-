@@ -57,19 +57,20 @@ def test_decision_audit_append_records_matching_database_event(
     integrated = append_decision_audit_event(record(), audit_dir, db)
     discovered_audits = discover_decision_audits(audit_dir)
     listed_events = list_audit_events(db)
+    payload = integrated.event.event.payload
 
     assert discovered_audits == (integrated.audit,)
     assert listed_events == (integrated.event,)
     assert integrated.event.event.decision_id == integrated.audit.record.decision_id
-    assert integrated.event.event.payload["decision_audit_sha256"] == integrated.audit.record_sha256
-    assert integrated.event.event.payload["decision_audit_filename"] == integrated.audit.path.name
-    assert integrated.event.event.payload["decision_claim_filename"] == integrated.audit.claim_path.name
-    assert integrated.event.event.payload["artifact_sha256"] == DIGEST_B
-    assert integrated.event.event.payload["evidence_classifications"] == [
+    assert payload["decision_audit_sha256"] == integrated.audit.record_sha256
+    assert payload["decision_audit_filename"] == integrated.audit.path.name
+    assert payload["decision_claim_filename"] == integrated.audit.claim_path.name
+    assert payload["artifact_sha256"] == DIGEST_B
+    assert payload["evidence_classifications"] == [
         "MEASURED",
         "UNAVAILABLE",
     ]
-    assert integrated.event.event.payload["unavailable_evidence"] == ["spread_bps"]
+    assert payload["unavailable_evidence"] == ["spread_bps"]
 
 
 def test_decision_audit_event_append_is_idempotent(tmp_path: Path) -> None:
