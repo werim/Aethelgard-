@@ -125,7 +125,10 @@ def reconcile_decision_audit_events(
                     issue_type=ReconciliationIssueType.MISSING_DATABASE_EVENT,
                     decision_id=decision_id,
                     event_id=expected_event_id,
-                    detail="Verified decision audit file has no matching database event.",
+                    detail=(
+                        "Verified decision audit file has no matching "
+                        "database event."
+                    ),
                 )
             )
             continue
@@ -151,7 +154,10 @@ def reconcile_decision_audit_events(
                     issue_type=ReconciliationIssueType.MISSING_FILE_AUDIT,
                     decision_id=decision_id,
                     event_id=event.event.event_id,
-                    detail="Database event has no matching verified decision audit file.",
+                    detail=(
+                        "Database event has no matching verified decision "
+                        "audit file."
+                    ),
                 )
             )
 
