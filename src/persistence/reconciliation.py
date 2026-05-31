@@ -7,10 +7,12 @@ run backtests, approve execution, submit orders, or certify readiness.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
+from typing import Any
 
 from src.persistence.audit import PersistedAuditRecord, discover_decision_audits
 from src.persistence.events import (
@@ -75,6 +77,34 @@ class PersistenceReconciliationReport:
             raise PersistenceReconciliationError(
                 "Persistence reconciliation found mismatch states: " + issue_names
             )
+
+
+@dataclass(frozen=True)
+class PersistedReconciliationReportArtifact:
+    """Verified persisted reconciliation report artifact paths and checksums."""
+
+    metadata_path: Path
+    json_path: Path
+    markdown_path: Path
+    metadata_sha256: str
+    json_sha256: str
+    markdown_sha256: str
+    status: ReconciliationReportStatus
+
+
+def _sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def _write_text_idempotent(path: Path, content: str) -> None:
+    if path.exists():
+        existing = path.read_text(encoding="utf-8")
+        if existing != content:
+            raise PersistenceReconciliationError(
+                f"Refusing to overwrite conflicting artifact: {path.name}"
+            )
+        return
+    path.write_text(content, encoding="utf-8")
 
 
 def _decision_audit_events(
@@ -323,3 +353,143 @@ def reconciliation_report_markdown(
                 ]
             )
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _metadata_content(
+    *,
+    status: ReconciliationReportStatus,
+    json_path: Path,
+    markdown_path: Path,
+    json_sha256: str,
+    markdown_sha256: str,
+) -> str:
+    metadata = {
+        "schema_version": 1,
+        "artifact_type": "persistence_reconciliation_report",
+        "operating_mode": "PAPER_ONLY",
+        "readiness": "RESEARCH_ONLY",
+        "status": status.value,
+        "json_filename": json_path.name,
+        "markdown_filename": markdown_path.name,
+        "json_sha256": json_sha256,
+        "markdown_sha256": markdown_sha256,
+    }
+    return json.dumps(metadata, sort_keys=True, separators=(",", ":"))
+
+
+def _artifact_status(json_text: str) -> ReconciliationReportStatus:
+    try:
+        payload: Any = json.loads(json_text)
+    except json.JSONDecodeError as exc:
+        raise PersistenceReconciliationError("Invalid reconciliation JSON.") from exc
+    if not isinstance(payload, dict):
+        raise PersistenceReconciliationError("Reconciliation JSON must be an object.")
+    raw_status = payload.get("status")
+    if not isinstance(raw_status, str):
+        raise PersistenceReconciliationError("Reconciliation JSON status is missing.")
+    try:
+        return ReconciliationReportStatus(raw_status)
+    except ValueError as exc:
+        raise PersistenceReconciliationError("Unknown reconciliation status.") from exc
+
+
+def persist_reconciliation_report_artifact(
+    output_directory: Path,
+    report: PersistenceReconciliationReport | None,
+    *,
+    unavailable_reason: str | None = None,
+) -> PersistedReconciliationReportArtifact:
+    """Persist JSON, Markdown, and checksum metadata for a report.
+
+    This is a local artifact persistence helper only. Existing identical files
+    are accepted as idempotent; conflicting files fail closed.
+    """
+
+    output_directory.mkdir(parents=True, exist_ok=True)
+    json_text = reconciliation_report_json(
+        report,
+        unavailable_reason=unavailable_reason,
+    )
+    markdown_text = reconciliation_report_markdown(
+        report,
+        unavailable_reason=unavailable_reason,
+    )
+    status = _artifact_status(json_text)
+    json_sha256 = _sha256_text(json_text)
+    markdown_sha256 = _sha256_text(markdown_text)
+    json_path = output_directory / f"reconciliation-report-{json_sha256}.json"
+    markdown_path = output_directory / f"reconciliation-report-{json_sha256}.md"
+    metadata_text = _metadata_content(
+        status=status,
+        json_path=json_path,
+        markdown_path=markdown_path,
+        json_sha256=json_sha256,
+        markdown_sha256=markdown_sha256,
+    )
+    metadata_sha256 = _sha256_text(metadata_text)
+    metadata_path = output_directory / (
+        f"reconciliation-report-{json_sha256}-{metadata_sha256}.metadata.json"
+    )
+    _write_text_idempotent(json_path, json_text)
+    _write_text_idempotent(markdown_path, markdown_text)
+    _write_text_idempotent(metadata_path, metadata_text)
+    return read_reconciliation_report_artifact(metadata_path)
+
+
+def read_reconciliation_report_artifact(
+    metadata_path: Path,
+) -> PersistedReconciliationReportArtifact:
+    """Read and verify a persisted reconciliation report artifact."""
+
+    metadata_text = metadata_path.read_text(encoding="utf-8")
+    metadata_sha256 = _sha256_text(metadata_text)
+    if metadata_sha256 not in metadata_path.name:
+        raise PersistenceReconciliationError("Metadata checksum anchor mismatch.")
+    try:
+        metadata: Any = json.loads(metadata_text)
+    except json.JSONDecodeError as exc:
+        raise PersistenceReconciliationError("Invalid reconciliation metadata.") from exc
+    if not isinstance(metadata, dict):
+        raise PersistenceReconciliationError("Reconciliation metadata must be an object.")
+    if metadata.get("schema_version") != 1:
+        raise PersistenceReconciliationError("Unsupported reconciliation metadata schema.")
+    if metadata.get("artifact_type") != "persistence_reconciliation_report":
+        raise PersistenceReconciliationError("Unexpected reconciliation artifact type.")
+    if metadata.get("operating_mode") != "PAPER_ONLY":
+        raise PersistenceReconciliationError("Unsafe reconciliation artifact mode.")
+    if metadata.get("readiness") != "RESEARCH_ONLY":
+        raise PersistenceReconciliationError("Unsafe reconciliation artifact readiness.")
+    raw_status = metadata.get("status")
+    if not isinstance(raw_status, str):
+        raise PersistenceReconciliationError("Missing reconciliation artifact status.")
+    status = ReconciliationReportStatus(raw_status)
+    json_filename = metadata.get("json_filename")
+    markdown_filename = metadata.get("markdown_filename")
+    json_sha256 = metadata.get("json_sha256")
+    markdown_sha256 = metadata.get("markdown_sha256")
+    if not all(
+        isinstance(item, str)
+        for item in (json_filename, markdown_filename, json_sha256, markdown_sha256)
+    ):
+        raise PersistenceReconciliationError("Incomplete reconciliation metadata.")
+    json_path = metadata_path.parent / json_filename
+    markdown_path = metadata_path.parent / markdown_filename
+    json_text = json_path.read_text(encoding="utf-8")
+    markdown_text = markdown_path.read_text(encoding="utf-8")
+    if _sha256_text(json_text) != json_sha256:
+        raise PersistenceReconciliationError("Reconciliation JSON checksum mismatch.")
+    if _sha256_text(markdown_text) != markdown_sha256:
+        raise PersistenceReconciliationError("Reconciliation Markdown checksum mismatch.")
+    if json_sha256 not in json_path.name or json_sha256 not in markdown_path.name:
+        raise PersistenceReconciliationError("Report artifact filename anchor mismatch.")
+    if _artifact_status(json_text) is not status:
+        raise PersistenceReconciliationError("Report status mismatch between metadata and JSON.")
+    return PersistedReconciliationReportArtifact(
+        metadata_path=metadata_path,
+        json_path=json_path,
+        markdown_path=markdown_path,
+        metadata_sha256=metadata_sha256,
+        json_sha256=json_sha256,
+        markdown_sha256=markdown_sha256,
+        status=status,
+    )
