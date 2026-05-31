@@ -82,7 +82,10 @@ _COMPLETED_GATES = (
         boundary="Controlled file-audit to database-event append helper.",
         validation="PR #5 final-head validation run #51 succeeded before Gate 2D.",
         evidence_classification=ClosureEvidenceClassification.MEASURED,
-        evidence_limit="Narrows partial-write risk but is not a cross-store transaction manager.",
+        evidence_limit=(
+            "Narrows partial-write risk but is not a cross-store transaction "
+            "manager."
+        ),
     ),
     GateClosureEvidence(
         gate="2D",
@@ -93,17 +96,26 @@ _COMPLETED_GATES = (
     ),
     GateClosureEvidence(
         gate="2E",
-        boundary="Deterministic reconciliation report payload, JSON, and Markdown surface.",
+        boundary=(
+            "Deterministic reconciliation report payload, JSON, and Markdown "
+            "surface."
+        ),
         validation="PR #7 final-head validation run #60 succeeded before Gate 2F.",
         evidence_classification=ClosureEvidenceClassification.MEASURED,
         evidence_limit="Report surface only; does not add operational readiness.",
     ),
     GateClosureEvidence(
         gate="2F",
-        boundary="Local reconciliation report artifact persistence and readback verification.",
+        boundary=(
+            "Local reconciliation report artifact persistence and readback "
+            "verification."
+        ),
         validation="PR #8 head validation run #63 succeeded before Gate 2G.",
         evidence_classification=ClosureEvidenceClassification.MEASURED,
-        evidence_limit="Local stored-byte evidence only; not adversarial tamper protection.",
+        evidence_limit=(
+            "Local stored-byte evidence only; not adversarial tamper "
+            "protection."
+        ),
     ),
 )
 
@@ -119,10 +131,14 @@ _BLOCKED_CAPABILITIES = (
 )
 
 _UNRESOLVED_RISKS = (
-    "Execution costs, spreads, slippage, latency, funding, orderbook state, and fill quality remain unavailable.",
-    "Local checksums and SQLite digests do not protect against complete evidence-set replacement.",
-    "File and database evidence boundaries do not provide atomic cross-store commit semantics.",
-    "Market-data completeness, exchange authenticity, strategy expectancy, and operational readiness are not proven.",
+    "Execution costs, spreads, slippage, latency, funding, orderbook state, "
+    "and fill quality remain unavailable.",
+    "Local checksums and SQLite digests do not protect against complete "
+    "evidence-set replacement.",
+    "File and database evidence boundaries do not provide atomic cross-store "
+    "commit semantics.",
+    "Market-data completeness, exchange authenticity, strategy expectancy, "
+    "and operational readiness are not proven.",
 )
 
 
@@ -178,7 +194,11 @@ def phase_closure_json(
 ) -> str:
     """Serialize the phase-closure payload as deterministic compact JSON."""
 
-    return json.dumps(phase_closure_payload(closure), sort_keys=True, separators=(",", ":"))
+    return json.dumps(
+        phase_closure_payload(closure),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
 
 
 def phase_closure_markdown(
