@@ -1,1 +1,1 @@
-"""Aethelgard reporting boundary; intentionally empty in Phase 1."""
+"""Aethelgard reporting boundaries for research-only evidence ledgers."""
