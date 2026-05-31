@@ -59,6 +59,13 @@ Gate 2E adds only a reconciliation reporting surface:
 - includes mismatch counts by issue type and sorted issue details,
 - preserves unavailable reconciliation evidence as unavailable instead of treating missing reports as clean.
 
+Gate 2F adds only local reconciliation report artifact persistence:
+
+- writes reconciliation report JSON, Markdown, and metadata artifacts,
+- anchors artifact filenames with checksums,
+- validates readback checksums, mode, readiness, schema, and status consistency,
+- detects local tampering and conflicting idempotent writes fail closed.
+
 It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
 
 ## Getting started
@@ -75,7 +82,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan and report local persistence consistency. None of these paths approves runtime use.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan, report, and persist local reconciliation report artifacts. None of these paths approves runtime use.
 
 ## Repository map
 
@@ -83,7 +90,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
-- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, and reporting boundaries.
+- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, reporting, and report-artifact boundaries.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 
