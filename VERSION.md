@@ -1,5 +1,26 @@
 # Version History
 
+## 0.10.0 - 2026-06-01
+
+**Engineering milestone:** Gate 2G persistence/audit phase closure review.
+
+- Reconciled Gate 2F status after PR #8 merged into `dev` at merge commit `a6f56cdd266937aabf7ce20faf90e84dd36e5992`.
+- Recorded PR #8 head `d24e73e873a16ddeb311f8637a6f2cae56a91cab` GitHub Actions `validation` run #63 as successful remote evidence before Gate 2G began.
+- Added `src/reporting/phase_closure.py` with a deterministic persistence/audit phase closure ledger.
+- Added explicit completed-gate evidence rows for Gates 2A through 2F, each with measured validation evidence and local evidence limits.
+- Added explicit blocked capability entries for strategy signal generation, backtesting, execution simulation, fill modeling, risk allocation, PAPER runtime, LIVE trading, and profitability claims.
+- Added deterministic JSON and Markdown renderers for the closure ledger.
+- Added fail-closed closure checks for unsafe operating mode, unsafe readiness, or blocked phase status.
+- Added focused tests for safe closure status, blocked runtime capabilities, deterministic JSON, Markdown limits, unsafe mode rejection, and blocked status rejection.
+- Retained the boundary: no strategy, backtest, runtime signal generation, execution model, risk allocation, PAPER runtime, performance analysis, persistence repair, or LIVE trading capability was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #8 Gate 2F head `d24e73e873a16ddeb311f8637a6f2cae56a91cab` completed GitHub Actions `validation` run #63 successfully before Gate 2G began.
+- `UNVERIFIED`: Gate 2G exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+- Gate 2G closes only the local persistence/audit research phase. It does not provide execution realism, strategy expectancy, PAPER runtime approval, LIVE readiness, or profitability evidence.
+
 ## 0.9.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2F reconciliation report artifact persistence.
@@ -15,8 +36,6 @@
 ## Validation evidence
 
 - `MEASURED`: PR #7 Gate 2E final head `d05c6230be42c3301a43ca5cf9ec7bbbe8ac195e` completed GitHub Actions `validation` run #60 successfully before Gate 2F began.
-- `UNVERIFIED`: Gate 2F exact branch-head compilation, tests, Ruff, Black, and Mypy until the PR workflow runs.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
 - Gate 2F persists local report artifacts only. It does not provide external notarization, runtime evidence, or PAPER/LIVE approval.
 
 ## 0.8.0 - 2026-05-31

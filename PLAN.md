@@ -53,38 +53,44 @@
 
 **Merged baseline:** PR #7 merged into `dev` at merge commit `80545452e5caa9197f7ac42b9aa9cae30e1d9ae3`.
 
+## Gate 2F — Reconciliation report artifact persistence
+
+**Status:** `MERGED_TO_DEV`.
+
+**Merged baseline:** PR #8 merged into `dev` at merge commit `a6f56cdd266937aabf7ce20faf90e84dd36e5992`.
+
 ### Evidence classification
 
-- `MEASURED`: PR #7 final head `d05c6230be42c3301a43ca5cf9ec7bbbe8ac195e` completed GitHub Actions `validation` run #60 successfully before merge.
+- `MEASURED`: PR #8 head `d24e73e873a16ddeb311f8637a6f2cae56a91cab` completed GitHub Actions `validation` run #63 successfully before Gate 2G began.
 - `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
 
-## Gate 2F — Reconciliation report artifact persistence
+## Gate 2G — Persistence and audit phase closure review
 
 **Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
 
-**Starting baseline:** `dev` merge commit `80545452e5caa9197f7ac42b9aa9cae30e1d9ae3` after Gate 2E merge.
+**Starting baseline:** `dev` merge commit `a6f56cdd266937aabf7ce20faf90e84dd36e5992` after Gate 2F merge.
 
 ### Scope
 
-- Persist reconciliation report JSON, Markdown, and metadata artifacts locally.
-- Anchor JSON and metadata artifact filenames with checksums.
-- Verify artifact readback checksums, filename anchors, schema, type, mode, readiness, and status consistency.
-- Accept identical existing files as idempotent and reject conflicting existing files.
-- Preserve unavailable reconciliation reports explicitly as unavailable artifacts.
+- Add a deterministic closure ledger for Gates 2A through 2F.
+- Record measured validation evidence and explicit evidence limits for each completed persistence/audit gate.
+- Keep strategy generation, backtesting, execution simulation, fill modeling, risk allocation, PAPER runtime, LIVE trading, and profitability claims explicitly blocked.
+- Render closure status as deterministic JSON and Markdown.
+- Fail closed if closure status, operating mode, or readiness is unsafe.
 - Do not repair evidence, add runtime behavior, add strategy behavior, or make readiness claims.
 
 ### Evidence classification
 
-- `MEASURED`: PR #7 final head GitHub Actions `validation` run #60 passed before Gate 2F began.
-- `UNVERIFIED`: exact Gate 2F branch-head GitHub Actions validation until the PR workflow runs.
+- `MEASURED`: PR #8 head GitHub Actions `validation` run #63 passed before Gate 2G began.
+- `UNVERIFIED`: exact Gate 2G branch-head GitHub Actions validation until the PR workflow runs.
 - `UNAVAILABLE`: direct local compilation, full-suite tests, Ruff, Black, Mypy, and clean working-tree evidence in this execution environment.
 
 ### Boundary limit
 
-Gate 2F is a local report-artifact persistence layer only. It is not a repair workflow, transaction manager, runtime event bus, strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, live path, or readiness certification.
+Gate 2G closes only the local persistence/audit research phase. It is not a backtesting framework, execution simulator, strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, live path, or readiness certification.
 
-## Gate 2G — Persistence and audit phase closure review
+## Gate 3 — Conservative backtest foundation
 
-**Status:** `BLOCKED_PENDING_GATE_2F_VALIDATION_REVIEW_AND_MERGE`.
+**Status:** `BLOCKED_PENDING_GATE_2G_VALIDATION_REVIEW_AND_MERGE`.
 
-Only after Gate 2F is validated, reviewed, and merged may the next run start from the then-current `dev` and perform a final persistence/audit phase closure review. Backtesting, strategies, risk, execution simulation, PAPER runtime, and any performance analysis remain blocked until that review is complete.
+Only after Gate 2G is validated, reviewed, and merged may the next run start from the then-current `dev` and begin the smallest conservative research backtest foundation. Execution realism inputs such as fees, slippage, spreads, latency, funding, orderbook state, and fill quality must remain explicitly unavailable until measured or modeled. Strategies, PAPER runtime, optimizer loops, and performance claims remain blocked.
