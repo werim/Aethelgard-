@@ -38,6 +38,13 @@ Gate 2B adds only the smallest database-backed audit-event boundary:
 - UTC timestamp, `PAPER_ONLY`, and `RESEARCH_ONLY` validation,
 - focused tests for schema initialization, idempotency, conflicts, checksum tampering, UTC mode safety, and deterministic JSON payload requirements.
 
+Gate 2C adds only a narrow persistence-integration helper:
+
+- appends a validated decision audit record and a matching SQLite audit event,
+- derives deterministic event identity from the decision identity and audit checksum,
+- records measured local evidence linking the audit filename, claim filename, dataset checksum, artifact checksum, reason codes, and evidence classifications,
+- preflights existing database events before writing a new file audit record so conflicting decision/type events fail closed without partial file writes.
+
 It does **not** run backtests, issue signals, execute orders, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, or provide PAPER/LIVE readiness.
 
 ## Getting started
@@ -54,7 +61,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`. Neither path approves execution.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate or execute trades. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries. None of these paths approves execution.
 
 ## Repository map
 
@@ -62,7 +69,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
-- `src/persistence/`: research-only decision audit evidence and database audit-event persistence boundaries.
+- `src/persistence/`: research-only decision audit evidence, database audit-event persistence, and narrow integration boundaries.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
 - `tests/`: validation and safety boundary tests.
 
