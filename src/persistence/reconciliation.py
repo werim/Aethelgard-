@@ -304,10 +304,12 @@ def reconciliation_report_markdown(
     reason = payload["unavailable_reason"]
     if reason is not None:
         lines.extend(["", "## Unavailable evidence", "", str(reason)])
-    issues = payload["issues"]
-    if issues:
+    raw_issues = payload["issues"]
+    if raw_issues:
+        if not isinstance(raw_issues, list):
+            raise AssertionError("Issues payload must be a list.")
         lines.extend(["", "## Issues", ""])
-        for raw_issue in issues:
+        for raw_issue in raw_issues:
             if not isinstance(raw_issue, dict):
                 raise AssertionError("Issue payload must be a mapping.")
             lines.extend(
