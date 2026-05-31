@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.6.0] - 2026-05-31
+
+### Added
+
+- Gate 2C persistence integration helper in `src/persistence/integration.py` linking decision audit files to SQLite audit events.
+- Deterministic audit-event identity derived from decision identity and decision-audit checksum.
+- Event payload provenance for audit filename, claim filename, dataset checksum, artifact checksum, reason codes, outcome, and evidence classifications.
+- Focused integration tests for matched file/database persistence, idempotency, non-PAPER rejection, and preflight conflict handling.
+
+### Changed
+
+- Package version advanced to `0.6.0`.
+- README, VERSION, PLAN, and REPORT now describe Gate 2C as a narrow persistence integration boundary.
+- Reconciled Gate 2B status by recording PR #4 merge and GitHub Actions `validation` run #48 success before Gate 2C began.
+
+### Fixed
+
+- Closed the documented gap between local JSON decision audit records and database audit events with a controlled append helper.
+- Added database-event preflight detection so an already-recorded decision/type event with a different expected identity fails closed before another file audit record is appended.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 2C is not a cross-store transaction manager. A crash after file append but before database append remains an unresolved operational gap.
+- Gate 2C does not generate decisions, issue signals, run backtests, model fills, estimate costs, allocate risk, submit orders, run a PAPER loop, or certify PAPER/LIVE readiness.
+- Exact Gate 2C branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.5.0] - 2026-05-30
 
 ### Added
