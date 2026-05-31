@@ -12,7 +12,11 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from src.persistence.audit import DecisionAuditRecord, PersistedAuditRecord, append_decision_audit
+from src.persistence.audit import (
+    DecisionAuditRecord,
+    PersistedAuditRecord,
+    append_decision_audit,
+)
 from src.persistence.events import (
     AuditEventIntegrityError,
     AuditEventRecord,
@@ -60,7 +64,9 @@ def _event_payload(audit: PersistedAuditRecord) -> dict[str, object]:
             item.classification.value for item in record.evidence
         ],
         "unavailable_evidence": [
-            item.name for item in record.evidence if item.classification.value == "UNAVAILABLE"
+            item.name
+            for item in record.evidence
+            if item.classification.value == "UNAVAILABLE"
         ],
     }
 
