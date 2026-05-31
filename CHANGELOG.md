@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.10.0] - 2026-06-01
+
+### Added
+
+- Gate 2G persistence/audit phase closure ledger in `src/reporting/phase_closure.py`.
+- Deterministic completed-gate evidence rows for Gates 2A through 2F.
+- Explicit blocked-capability list for strategy generation, backtesting, execution simulation, fill modeling, risk allocation, PAPER runtime, LIVE trading, and profitability claims.
+- Deterministic JSON and Markdown renderers for the phase closure ledger.
+- Focused closure tests for safe status, blocked runtime capabilities, JSON determinism, Markdown limits, unsafe mode rejection, and blocked status rejection.
+
+### Changed
+
+- Package version advanced to `0.10.0`.
+- README, VERSION, PLAN, and REPORT now describe Gate 2G as a persistence/audit phase closure review, not a trading-runtime milestone.
+- Reconciled Gate 2F status by recording PR #8 merge and GitHub Actions `validation` run #63 success before Gate 2G began.
+- Updated the reporting package description from Phase-1-empty to research-only evidence ledgers.
+
+### Fixed
+
+- Closed the documented Gate 2G gap by adding a deterministic closure ledger that keeps backtesting, strategies, execution simulation, and PAPER runtime explicitly blocked.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 2G closes only the local persistence/audit research phase.
+- It does not prove execution realism, strategy expectancy, market-data completeness, PAPER runtime readiness, LIVE readiness, or profitability.
+- Exact Gate 2G branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.9.0] - 2026-05-31
 
 ### Added
@@ -30,7 +61,6 @@
 
 - Gate 2F persists local report artifacts only.
 - Artifact checksums detect local stored-byte changes but are not external notarization or protection against full evidence-set replacement.
-- Exact Gate 2F branch-head compilation, tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
 
 ## [0.8.0] - 2026-05-31
 
