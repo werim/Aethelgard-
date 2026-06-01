@@ -38,6 +38,15 @@ Gate 3 adds only a pre-runtime stale tick data-quality guard:
 - selects the first validated tick rather than blindly accepting the first arriving tick,
 - keeps strategy generation, backtesting, execution simulation, fill modeling, risk allocation, PAPER runtime, LIVE trading, and profitability claims explicitly blocked.
 
+Gate 4A adds only a conservative backtest metadata foundation:
+
+- records immutable backtest run metadata for future research runs,
+- records dataset fingerprint, symbol, timeframe, timestamp range, seed, config hash, code version, and creation timestamp,
+- records execution-assumption evidence as `MEASURED`, `MODELED`, or `UNAVAILABLE`,
+- keeps unknown fees, slippage, spreads, latency, funding, fill quality, and orderbook state explicitly unavailable,
+- fails closed before performance output when any required execution evidence is unavailable,
+- serializes metadata deterministically for auditability.
+
 It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond configured public data boundaries, establish market-data completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
 
 ## Getting started
@@ -54,7 +63,7 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Stale tick validation is an explicit research data-quality action through `src/data/stale_tick_guard.py`; it rejects questionable ticks before downstream research use but does not approve runtime use. Persistence and reporting helpers remain research evidence boundaries only.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Stale tick validation is an explicit research data-quality action through `src/data/stale_tick_guard.py`; it rejects questionable ticks before downstream research use but does not approve runtime use. Backtest foundation helpers in `src/backtest/foundation.py` record metadata and execution-evidence availability only; they do not replay candles or produce performance evidence. Persistence and reporting helpers remain research evidence boundaries only.
 
 ## Repository map
 
@@ -62,6 +71,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation, read-only public acquisition, immutable raw-artifact evidence, and stale tick data-quality guards.
+- `src/backtest/`: research-only metadata and execution-evidence availability foundation; no replay, strategy, or performance engine yet.
 - `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, reporting, and report-artifact boundaries.
 - `src/reporting/`: research-only reporting and phase-closure ledgers.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
