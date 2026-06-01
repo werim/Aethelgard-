@@ -8,14 +8,14 @@ fills, run a PAPER loop, or prove execution readiness.
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
-from enum import Enum
+from enum import StrEnum
 from statistics import median
 from time import monotonic, time
-from typing import Iterable
 
 
-class StaleTickReason(str, Enum):
+class StaleTickReason(StrEnum):
     """Canonical validation reasons emitted by the stale tick guard."""
 
     PASS = "STALE_TICK_GATE_PASS"
@@ -219,7 +219,12 @@ class StaleTickGuard:
         if self.config.reject_duplicate_sequence_ids and tick.sequence_id is not None:
             identity = tick.identity()
             if identity in self._seen_set:
-                return self._reject(tick, StaleTickReason.DUPLICATE_TICK, decided_at, {})
+                return self._reject(
+                    tick,
+                    StaleTickReason.DUPLICATE_TICK,
+                    decided_at,
+                    {},
+                )
             self._remember_identity(identity)
 
         age_seconds = now_monotonic - tick.observed_monotonic
