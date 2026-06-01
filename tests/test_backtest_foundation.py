@@ -1,4 +1,5 @@
 import json
+from dataclasses import replace
 
 import pytest
 
@@ -71,11 +72,9 @@ def test_unavailable_execution_evidence_blocks_results() -> None:
 
 def test_all_required_modeled_or_measured_evidence_passes_guard() -> None:
     metadata = metadata_with_unavailable_execution()
-    complete_metadata = BacktestRunMetadata(
-        **{
-            **metadata.__dict__,
-            "execution_assumptions": measured_or_modeled_execution(),
-        }
+    complete_metadata = replace(
+        metadata,
+        execution_assumptions=measured_or_modeled_execution(),
     )
     assert_can_produce_performance_results(complete_metadata)
 
@@ -83,11 +82,9 @@ def test_all_required_modeled_or_measured_evidence_passes_guard() -> None:
 def test_missing_execution_assumption_fails_closed() -> None:
     assumptions = unavailable_execution_assumptions("missing one for test")
     del assumptions[ExecutionAssumption.FEES]
-    metadata = BacktestRunMetadata(
-        **{
-            **metadata_with_unavailable_execution().__dict__,
-            "execution_assumptions": assumptions,
-        }
+    metadata = replace(
+        metadata_with_unavailable_execution(),
+        execution_assumptions=assumptions,
     )
     with pytest.raises(BacktestFoundationError, match="missing"):
         metadata.validate()
@@ -115,34 +112,28 @@ def test_measured_evidence_requires_source() -> None:
 
 
 def test_invalid_hash_fails_closed() -> None:
-    metadata = BacktestRunMetadata(
-        **{
-            **metadata_with_unavailable_execution().__dict__,
-            "dataset_fingerprint": "not-a-sha",
-        }
+    metadata = replace(
+        metadata_with_unavailable_execution(),
+        dataset_fingerprint="not-a-sha",
     )
     with pytest.raises(BacktestFoundationError, match="dataset_fingerprint"):
         metadata.validate()
 
 
 def test_non_utc_timestamp_fails_closed() -> None:
-    metadata = BacktestRunMetadata(
-        **{
-            **metadata_with_unavailable_execution().__dict__,
-            "start_ts": "2026-01-01T00:00:00+03:00",
-        }
+    metadata = replace(
+        metadata_with_unavailable_execution(),
+        start_ts="2026-01-01T00:00:00+03:00",
     )
     with pytest.raises(BacktestFoundationError, match="UTC"):
         metadata.validate()
 
 
 def test_start_must_precede_end() -> None:
-    metadata = BacktestRunMetadata(
-        **{
-            **metadata_with_unavailable_execution().__dict__,
-            "start_ts": "2026-02-01T00:00:00Z",
-            "end_ts": "2026-01-01T00:00:00Z",
-        }
+    metadata = replace(
+        metadata_with_unavailable_execution(),
+        start_ts="2026-02-01T00:00:00Z",
+        end_ts="2026-01-01T00:00:00Z",
     )
     with pytest.raises(BacktestFoundationError, match="before"):
         metadata.validate()
