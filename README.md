@@ -23,57 +23,22 @@ Phase 2B added only a read-only acquisition evidence boundary:
 - immutable local raw artifact and checksummed metadata storage with persisted fetch diagnostics and verified readback,
 - stale or future-dated acquisition-evidence rejection during artifact readback.
 
-Gate 2A adds only a research decision audit-trail boundary:
+Gate 2A through Gate 2G established and closed the local persistence/audit research phase:
 
-- append-only local JSON audit records for `REJECTED` and `NO_ACTION` outcomes,
-- explicit `MEASURED`, `MODELED`, and `UNAVAILABLE` evidence classification,
-- checksum-addressed audit filenames plus `decision_id.claim` conflict anchors,
-- fail-closed readback when record bytes, claims, UTC timestamps, PAPER-only mode, or evidence provenance are invalid.
+- append-only local JSON decision audit records and claim anchors,
+- local SQLite audit-event persistence,
+- controlled file/database append integration,
+- reconciliation scans, reports, and persisted reconciliation artifacts,
+- deterministic phase-closure ledger with explicit blocked capabilities.
 
-Gate 2B adds only the smallest database-backed audit-event boundary:
+Gate 3 adds only a pre-runtime stale tick data-quality guard:
 
-- a local SQLite `audit_events` ledger for research audit events,
-- append-only event identity with idempotent identical appends and fail-closed conflicts,
-- canonical JSON payload storage with SHA-256 readback verification,
-- UTC timestamp, `PAPER_ONLY`, and `RESEARCH_ONLY` validation,
-- focused tests for schema initialization, idempotency, conflicts, checksum tampering, UTC mode safety, and deterministic JSON payload requirements.
-
-Gate 2C adds only a narrow persistence-integration helper:
-
-- appends a validated decision audit record and a matching SQLite audit event,
-- derives deterministic event identity from the decision identity and audit checksum,
-- records measured local evidence linking the audit filename, claim filename, dataset checksum, artifact checksum, reason codes, and evidence classifications,
-- preflights existing database events before writing a new file audit record so conflicting decision/type events fail closed without partial file writes.
-
-Gate 2D adds only a local persistence-reconciliation scan:
-
-- discovers verified decision audit files and verified SQLite audit events,
-- reports missing database events, missing file audit records, and mismatched database event identity or payload,
-- exposes a fail-closed assertion helper for callers that require a fully consistent local evidence set,
-- leaves repair, deletion, runtime promotion, and decision generation out of scope.
-
-Gate 2E adds only a reconciliation reporting surface:
-
-- renders reconciliation reports as deterministic JSON-compatible payloads, deterministic JSON strings, and deterministic Markdown summaries,
-- reports `CONSISTENT`, `INCONSISTENT`, or `UNAVAILABLE` status explicitly,
-- includes mismatch counts by issue type and sorted issue details,
-- preserves unavailable reconciliation evidence as unavailable instead of treating missing reports as clean.
-
-Gate 2F adds only local reconciliation report artifact persistence:
-
-- writes reconciliation report JSON, Markdown, and metadata artifacts,
-- anchors artifact filenames with checksums,
-- validates readback checksums, mode, readiness, schema, and status consistency,
-- detects local tampering and conflicting idempotent writes fail closed.
-
-Gate 2G adds only a persistence/audit phase closure ledger:
-
-- records Gates 2A through 2F with measured validation evidence and explicit evidence limits,
-- renders closure status as deterministic JSON and Markdown,
-- fails closed on unsafe status, mode, or readiness,
+- validates symbol, price bounds, receive age, exchange timestamp future skew, warmup drift, peer confirmation, peer-median drift, and duplicate sequence IDs,
+- emits auditable pass/reject decisions with canonical reason codes and diagnostics,
+- selects the first validated tick rather than blindly accepting the first arriving tick,
 - keeps strategy generation, backtesting, execution simulation, fill modeling, risk allocation, PAPER runtime, LIVE trading, and profitability claims explicitly blocked.
 
-It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond the configured public endpoint, establish long-horizon exchange completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
+It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond configured public data boundaries, establish market-data completeness, model fills or costs, repair persistence stores, or provide PAPER/LIVE readiness.
 
 ## Getting started
 
@@ -89,14 +54,14 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Decision audit persistence is an explicit research evidence action through `src/persistence/audit.py`; database audit events are explicit persistence evidence through `src/persistence/events.py`; integration helpers in `src/persistence/integration.py` link those persistence evidence boundaries; reconciliation helpers in `src/persistence/reconciliation.py` scan, report, and persist local reconciliation report artifacts; phase-closure helpers in `src/reporting/phase_closure.py` summarize persistence/audit research closure only. None of these paths approves runtime use.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Stale tick validation is an explicit research data-quality action through `src/data/stale_tick_guard.py`; it rejects questionable ticks before downstream research use but does not approve runtime use. Persistence and reporting helpers remain research evidence boundaries only.
 
 ## Repository map
 
 - `config/`: validated research configuration and declared symbol candidates.
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
-- `src/data/`: supplied-row kline validation plus read-only public acquisition and immutable raw-artifact evidence boundary.
+- `src/data/`: supplied-row kline validation, read-only public acquisition, immutable raw-artifact evidence, and stale tick data-quality guards.
 - `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, reporting, and report-artifact boundaries.
 - `src/reporting/`: research-only reporting and phase-closure ledgers.
 - `src/`: separated engineering domains plus configuration/runtime/logging foundation.
