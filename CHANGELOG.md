@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.12.0] - 2026-06-02
+
+### Added
+
+- Gate 4A conservative backtest foundation skeleton in `src/backtest/foundation.py`.
+- Immutable `BacktestRunMetadata` for run ID, dataset fingerprint, symbol, timeframe, timestamp range, seed, config hash, code version, creation timestamp, and execution assumptions.
+- Explicit `EvidenceClassification` values: `MEASURED`, `MODELED`, and `UNAVAILABLE`.
+- Required execution assumption keys for fees, slippage, spreads, latency, funding, fill quality, and orderbook state.
+- `unavailable_execution_assumptions(...)` helper that preserves unknown execution evidence as unavailable.
+- Fail-closed performance-result guard that raises while any required execution evidence remains unavailable.
+- Deterministic metadata JSON serialization.
+- Focused tests for metadata determinism, unavailable-evidence blocking, required assumption coverage, UTC timestamps, hashes, and unavailable evidence integrity.
+
+### Changed
+
+- Package version advanced to `0.12.0`.
+- README, VERSION, PLAN, and REPORT now describe Gate 4A as a metadata/evidence foundation only.
+- Reconciled Gate 3 status by recording PR #10 merge into `dev` at commit `f546959764281a92942e63ca0587be83d67c6057` and PR-head validation run #70 success.
+
+### Fixed
+
+- Closed the absence of a minimal reproducible backtest-run metadata boundary before any replay or performance work.
+- Prevented unavailable execution assumptions from being treated as zero-cost evidence.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 4A does not replay candles, generate signals, simulate trades, calculate PnL, win rate, Sharpe, expectancy, drawdown, or alpha.
+- Gate 4A does not model fills, fees, slippage, spreads, latency, funding, fill quality, or orderbook state.
+- Exact Gate 4A branch-head full-suite tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.11.0] - 2026-06-01
 
 ### Added
