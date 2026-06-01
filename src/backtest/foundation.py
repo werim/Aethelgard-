@@ -73,7 +73,9 @@ class ExecutionEvidence:
             if self.value is not None:
                 raise BacktestFoundationError("unavailable evidence cannot carry value")
             if self.source is not None:
-                raise BacktestFoundationError("unavailable evidence cannot carry source")
+                raise BacktestFoundationError(
+                    "unavailable evidence cannot carry source"
+                )
             if not self.unavailable_reason or not self.unavailable_reason.strip():
                 raise BacktestFoundationError("unavailable evidence requires a reason")
             return
@@ -161,7 +163,9 @@ def unavailable_execution_assumptions(
     """Build explicit unavailable evidence for all required execution inputs."""
 
     if not reason.strip():
-        raise BacktestFoundationError("unavailable execution assumption reason required")
+        raise BacktestFoundationError(
+            "unavailable execution assumption reason required"
+        )
     return {
         assumption: ExecutionEvidence(
             classification=EvidenceClassification.UNAVAILABLE,
