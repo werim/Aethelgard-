@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.11.0] - 2026-06-01
+
+### Added
+
+- Gate 3 stale tick data-quality guard in `src/data/stale_tick_guard.py`.
+- Auditable `MarketTick`, `StaleTickDecision`, `StaleTickGuardConfig`, and `TickBuffer` models.
+- Canonical reject reasons for invalid symbols, price bounds, stale local receive age, exchange timestamp future skew, missing warmup evidence, warmup drift, insufficient peer confirmation, peer-median drift, and duplicate tick sequence IDs.
+- `select_first_valid_tick(...)` helper that returns the first validated tick rather than blindly accepting the first arriving tick.
+- Focused tests covering pass, fail-closed rejection modes, duplicate protection, first-valid selection, and unsafe configuration handling.
+
+### Changed
+
+- Package version advanced to `0.11.0`.
+- README, VERSION, PLAN, and REPORT now describe Gate 3 as a narrow data-quality guard, not a strategy, runtime, execution, or profitability milestone.
+- Reconciled Gate 2G status by recording PR #9 merge into `dev` at commit `a5822ea66bfdbd403f18b7bd32599439a7580ce2`.
+
+### Fixed
+
+- Closed the absence of a reusable fail-closed pre-runtime stale tick validation boundary for research data streams.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 3 validates tick freshness and peer consistency only.
+- It does not prove exchange authenticity, market-data completeness, execution realism, fill quality, latency edge, strategy expectancy, PAPER readiness, LIVE readiness, or profitability.
+- Exact Gate 3 branch-head full-suite tests, Ruff, Black, and Mypy remain `UNVERIFIED` until the PR workflow runs.
+
 ## [0.10.0] - 2026-06-01
 
 ### Added
