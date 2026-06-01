@@ -1,5 +1,27 @@
 # Version History
 
+## 0.12.0 - 2026-06-02
+
+**Engineering milestone:** Gate 4A conservative backtest foundation skeleton.
+
+- Reconciled Gate 3 status after PR #10 merged into `dev` at merge commit `f546959764281a92942e63ca0587be83d67c6057`.
+- Recorded PR #10 head `aa9cfb83ef382dba02e41cabb1d75d1d2e51f457` GitHub Actions `validation` run #70 as successful remote evidence before Gate 4A began.
+- Added `src/backtest/foundation.py` with immutable backtest run metadata and execution evidence records.
+- Added explicit evidence classifications: `MEASURED`, `MODELED`, and `UNAVAILABLE`.
+- Added required execution assumptions for fees, slippage, spreads, latency, funding, fill quality, and orderbook state.
+- Added fail-closed validation so performance results cannot be produced while any required execution evidence is unavailable.
+- Added deterministic metadata JSON serialization.
+- Added focused tests for metadata determinism, unavailable execution evidence blocking, required assumption coverage, UTC timestamp validation, digest validation, and unavailable-evidence integrity.
+- Retained the boundary: no strategy, signal generation, candle replay, trade simulation, fill model, performance metric, risk allocation, PAPER runtime, readiness certification, or live order path was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #10 Gate 3 head `aa9cfb83ef382dba02e41cabb1d75d1d2e51f457` completed GitHub Actions `validation` run #70 successfully before Gate 4A began.
+- `MEASURED`: local isolated Gate 4A compile check passed with exit code `0`.
+- `MEASURED`: local isolated Gate 4A focused tests passed with `10 passed in 0.10s`.
+- `UNVERIFIED`: exact Gate 4A branch-head full repository tests, Ruff, Black, and Mypy until the PR workflow runs.
+- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
+
 ## 0.11.0 - 2026-06-01
 
 **Engineering milestone:** Gate 3 market tick data-quality guard.
