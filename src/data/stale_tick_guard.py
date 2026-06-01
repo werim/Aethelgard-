@@ -32,7 +32,11 @@ class StaleTickReason(str, Enum):
 
 @dataclass(frozen=True)
 class MarketTick:
-    """A single observed market-data tick from one source connection."""
+    """A single observed market-data tick from one source connection.
+
+    `exchange_timestamp`, when present, is expected to use wall-clock seconds.
+    `observed_monotonic` is intentionally separate for local receive-age checks.
+    """
 
     symbol: str
     price: float
@@ -233,7 +237,7 @@ class StaleTickGuard:
         if (
             tick.exchange_timestamp is not None
             and tick.exchange_timestamp
-            > tick.observed_monotonic + self.config.max_exchange_future_skew_seconds
+            > decided_at + self.config.max_exchange_future_skew_seconds
         ):
             return self._reject(
                 tick,
@@ -241,8 +245,10 @@ class StaleTickGuard:
                 decided_at,
                 {
                     "exchange_timestamp": tick.exchange_timestamp,
-                    "observed_monotonic": tick.observed_monotonic,
-                    "max_exchange_future_skew_seconds": self.config.max_exchange_future_skew_seconds,
+                    "decided_at": decided_at,
+                    "max_exchange_future_skew_seconds": (
+                        self.config.max_exchange_future_skew_seconds
+                    ),
                 },
             )
 
