@@ -96,10 +96,13 @@ def test_rejects_exchange_timestamp_in_future() -> None:
         100.0,
         "fast-1",
         "x1",
-        exchange_timestamp=100.7,
+        exchange_timestamp=1_700_000_000.7,
     )
     decision = guard.validate_tick(
-        tick, warmup_reference_price=50_000.0, now_monotonic=100.1
+        tick,
+        warmup_reference_price=50_000.0,
+        now_monotonic=100.1,
+        wall_clock_now=1_700_000_000.0,
     )
     assert decision.passed is False
     assert decision.reason == StaleTickReason.EXCHANGE_TS_IN_FUTURE
