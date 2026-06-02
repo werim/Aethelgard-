@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.15.0] - 2026-06-02
+
+### Added
+
+- Increment 4D read-only paper runtime DB audit pack in `src/reporting/paper_db_audit.py`.
+- `PaperDbAuditReport`, `PaperDbAuditIssue`, `PaperDbAuditStatus`, and `PaperDbAuditError` models.
+- `audit_paper_runtime_database(...)` read-only SQLite inspection helper.
+- Deterministic `paper_db_audit_json(...)` and `render_paper_db_audit_markdown(...)` report renderers.
+- `assert_paper_db_audit_clean(...)` fail-closed guard for diagnostic consumers.
+- Diagnostics for missing schema, empty DBs, orphan lifecycle events, decisions without lifecycle entries, lifecycle entries without decisions, duplicate event IDs, duplicate conflicting decision IDs, missing checksums, checksum mismatches, corrupted JSON payloads, missing symbol/side/reason fields, UNKNOWN rejection reasons, audit events without decisions, lifecycle ordering issues, and inconsistent accepted/rejected transitions.
+- Optional local audit artifact checksum/link diagnostics.
+- Focused tests for clean DB, empty DB, missing schema, orphan lifecycle event, missing decision event, duplicate event ID, duplicate conflicting decision ID, checksum mismatch, unknown reject reason, corrupted JSON payload, and report output stability.
+
+### Changed
+
+- Package version advanced to `0.15.0`.
+- README, VERSION, PLAN, and REPORT now describe Increment 4D as a read-only DB audit/reporting pack only.
+- `src/reporting/__init__.py` now exports the paper DB audit helpers.
+
+### Fixed
+
+- Closed the absence of a read-only paper runtime DB audit/reporting surface before later paper runtime work.
+- Explicitly reports unavailable evidence instead of repairing, inventing, deleting, or rewriting DB rows.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Increment 4D does not repair databases, delete rows, rewrite historical rows, create runtime events, simulate fills, add PAPER runtime behavior, enable live execution, add strategy logic, or certify readiness.
+- Remote CI remains the source of truth for branch-head full-suite and Mypy checks.
+
 ## [0.14.0] - 2026-06-02
 
 ### Added

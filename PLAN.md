@@ -61,31 +61,34 @@
 
 ## Increment 4C — Execution context population
 
+**Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
+
+## Increment 4D — Paper runtime DB audit pack
+
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add explicit execution context snapshots for accepted and rejected decisions.
-- Preserve symbol, side, timestamp, price source, entry, stop, take-profit, market-input status, and execution-cost assumption provenance.
-- Keep spread, fee, slippage, latency, and funding unavailable when unmeasured rather than zero.
-- Fail closed on missing timestamp, missing price references, stale market input, or unavailable critical market input.
-- Project the snapshot into audit evidence.
-- Do not simulate fills, assume execution quality, add paper runtime behavior, or enable live execution.
+- Add a read-only paper runtime DB audit/reporting pack.
+- Detect missing schema, empty DB, orphan lifecycle events, missing decision/lifecycle links, duplicate event IDs, duplicate conflicting decision IDs, checksum problems, corrupted JSON payloads, UNKNOWN rejection reasons, missing symbol/side/reason fields, lifecycle ordering issues, and inconsistent accepted/rejected state transitions.
+- Optionally inspect local audit artifacts for checksum and decision-link consistency.
+- Produce deterministic JSON and Markdown reports.
+- Do not repair DBs, delete rows, rewrite historical evidence, invent missing fields, simulate fills, add paper runtime behavior, or enable live execution.
 
 ### Evidence classification
 
-- `MEASURED`: local isolated Increment 4C focused tests passed with `15 passed in 0.30s`.
-- `MEASURED`: local isolated compile check passed with exit code `0`.
+- `MEASURED`: local isolated Increment 4D focused tests passed with `11 passed in 0.28s`.
 - `MEASURED`: local isolated Ruff check passed with `All checks passed!`.
-- `UNAVAILABLE`: Black and Mypy executables were unavailable in this execution environment.
+- `MEASURED`: local isolated Black check passed.
+- `UNAVAILABLE`: Mypy module was unavailable in this execution environment.
 - `UNVERIFIED`: exact branch-head full repository tests until CI runs.
 
 ### Boundary limit
 
-Increment 4C records execution-context evidence only. It is not a strategy runtime, signal generator, candle replay engine, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, or readiness certification.
+Increment 4D reports database integrity diagnostics only. It is not a repair tool, migration, strategy runtime, signal generator, execution ledger, fill model, risk allocator, paper runtime, order path, or readiness certification.
 
-## Increment 4D — Paper runtime DB audit pack
+## Increment 4E — Symbol selection hardening
 
-**Status:** `BLOCKED_PENDING_INCREMENT_4C_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
+**Status:** `BLOCKED_PENDING_INCREMENT_4D_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
 
-Only after Increment 4C is validated, reviewed, and green may the next run begin the read-only paper runtime DB audit pack. Repairing or rewriting historical DB rows remains blocked.
+Only after Increment 4D is validated, reviewed, and green may the next run harden symbol selection. Alpha ranking, performance optimization, and new exchange integration remain blocked.

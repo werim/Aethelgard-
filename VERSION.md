@@ -1,5 +1,25 @@
 # Version History
 
+## 0.15.0 - 2026-06-02
+
+**Engineering milestone:** Increment 4D paper runtime DB audit pack.
+
+- Started from green Increment 4C `dev` head `743dbfa7fafb47c22630908275e67a235c22aa0a` after validation #80 passed by user screenshot/report.
+- Added `src/reporting/paper_db_audit.py` with a read-only SQLite paper runtime database integrity audit pack.
+- Added deterministic `PaperDbAuditReport` and `PaperDbAuditIssue` payloads plus JSON and Markdown renderers.
+- Added diagnostics for empty DBs, missing schema, orphan lifecycle events, decisions without lifecycle entries, lifecycle entries without decisions, duplicate event IDs, duplicate conflicting decision IDs, missing checksums, checksum mismatches, missing symbol/side/reason fields, UNKNOWN rejection reasons, corrupted JSON payloads, audit events without decisions, lifecycle ordering issues, and inconsistent accepted/rejected transitions.
+- Added optional local audit artifact checksum/link diagnostics without repair or rewrite behavior.
+- Added focused tests covering clean DB, empty DB, missing schema, orphan lifecycle event, missing decision event, duplicate event ID, duplicate conflicting decision ID, checksum mismatch, unknown reject reason, corrupted JSON payload, and report output stability.
+- Retained the boundary: no DB repair, row deletion, historical rewrite, synthetic field invention, strategy logic, PAPER runtime behavior, readiness certification, or live order path was added.
+
+## Validation evidence
+
+- `MEASURED`: local isolated Increment 4D focused tests passed with `11 passed in 0.28s`.
+- `MEASURED`: local isolated Increment 4D Ruff check passed with `All checks passed!`.
+- `MEASURED`: local isolated Increment 4D Black check passed with `2 files would be left unchanged`.
+- `UNAVAILABLE`: Mypy module was not installed in this execution environment.
+- `UNVERIFIED`: remote CI for this commit until GitHub Actions reports.
+
 ## 0.14.0 - 2026-06-02
 
 **Engineering milestone:** Increment 4C execution context population.

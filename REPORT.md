@@ -4,48 +4,48 @@
 
 - Operational readiness: `RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Increment 4C execution context population.
+- Active increment: Increment 4D paper runtime DB audit pack.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting green head: `74c1ebb73ecae2ef9a7cff5afcb585e945b34a57`, 4B Ruff repair commit.
-- User reported CI passed before 4C began.
+- Starting green head: `743dbfa7fafb47c22630908275e67a235c22aa0a`, 4C Black/changelog repair commit.
+- User reported validation #80 passed before 4D began.
 - Direct mutable local clone status is unavailable in this execution environment; GitHub API operations were used.
 
-## Implemented Increment 4C boundary
+## Implemented Increment 4D boundary
 
-Increment 4C implements only explicit execution context snapshots for accepted or rejected research decisions.
+Increment 4D implements only a read-only paper runtime DB audit/reporting pack.
 
 | Area | Change | Evidence limit |
 | --- | --- | --- |
-| Context model | Added `ExecutionContextInput` and `ExecutionContextSnapshot`. | Stores caller-provided context only. |
-| Required fields | Records symbol, side, timestamp, price source, entry, stop, take-profit, market input status, and assumptions. | Does not synthesize missing market data. |
-| Assumption model | Tracks spread, fee, slippage, latency, and funding as explicit values or unavailable reasons. | Does not measure or model costs. |
-| Fail-closed behavior | Missing timestamp, missing critical prices, stale input, or unavailable market input become `INVALID`. | No execution approval is produced. |
-| Audit projection | Adds `execution_context_audit_evidence(...)`. | Emits evidence records only. |
-| Tests | Covers full, missing/unavailable, stale, rejected, and audit round-trip paths. | Full repository CI pending. |
+| DB audit model | Added `PaperDbAuditReport` and `PaperDbAuditIssue`. | Reports diagnostics only. |
+| SQLite inspection | Opens DB through read-only URI mode. | Does not repair, delete, or rewrite rows. |
+| Integrity checks | Detects missing schema, empty DBs, orphan lifecycle events, missing links, duplicate IDs, checksums, corrupted JSON, UNKNOWN reasons, missing fields, lifecycle order, and state inconsistencies. | Heuristic across known paper-runtime table/column names. |
+| Artifact checks | Optionally compares local audit artifacts to DB decisions and verifies artifact checksums. | Local artifacts may be unavailable and remain explicitly reported. |
+| Report surface | Adds deterministic JSON and Markdown reports plus fail-closed clean assertion. | Reporting is not readiness certification. |
+| Tests | Covers clean, empty, missing schema, orphan, missing event, duplicate/conflict, checksum, unknown reason, corrupted JSON, and stable output paths. | Full repository CI pending. |
 
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
-| Increment 4B CI | Passed by user report before 4C | `MEASURED` user-provided remote evidence |
-| Local isolated Increment 4C focused tests | `15 passed in 0.30s` | `MEASURED` isolated evidence |
-| Local isolated Increment 4C compile check | exit code `0` | `MEASURED` isolated evidence |
-| Local isolated Increment 4C Ruff check | `All checks passed!` | `MEASURED` isolated evidence |
-| Black, Mypy | Executables unavailable locally | `UNAVAILABLE` |
+| Increment 4C CI | Passed by user screenshot/report, validation #80 | `MEASURED` user-provided remote evidence |
+| Local isolated Increment 4D focused tests | `11 passed in 0.28s` | `MEASURED` isolated evidence |
+| Local isolated Increment 4D Ruff check | `All checks passed!` | `MEASURED` isolated evidence |
+| Local isolated Increment 4D Black check | `2 files would be left unchanged` | `MEASURED` isolated evidence |
+| Mypy | Module unavailable locally | `UNAVAILABLE` |
 | Exact branch-head full test suite | Pending CI | `UNVERIFIED` |
 | Current-head workflow for this commit | Pending or unavailable until GitHub Actions runs | `UNVERIFIED` |
 
 ## Safety boundary and unresolved risks
 
-- No account access, credentials, strategy, signal generation, candle replay, trade simulation, fill model, risk allocation, PAPER runtime, real order path, or profitability analysis is introduced.
-- Increment 4C records execution context evidence only from explicit caller-provided references.
-- Market-data completeness, upstream authenticity, execution costs, spreads, slippage, latency, funding, orderbook state, fill quality, strategy expectancy, readiness, and profitability remain unproven.
-- Execution context validity is not a trading signal and does not approve execution.
+- No account access, credentials, strategy, signal generation, candle replay, trade simulation, fill model, risk allocation, PAPER runtime, real order path, DB repair, or profitability analysis is introduced.
+- Increment 4D reports paper DB integrity diagnostics only.
+- The audit pack does not certify paper runtime readiness, exchange authenticity, execution realism, or profitability.
+- Existing historical DB rows, if corrupt or incomplete, are not modified by this increment.
 
 ## Next step
 
-Proceed to Increment 4D paper runtime DB audit pack only after this commit is validated, reviewed, and green.
+Proceed to Increment 4E symbol selection hardening only after this commit is validated, reviewed, and green.
