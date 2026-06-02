@@ -47,51 +47,45 @@
 
 **Status:** `MERGED_TO_DEV`.
 
-**Merged baseline:** PR #9 merged into `dev` at merge commit `a5822ea66bfdbd403f18b7bd32599439a7580ce2`.
-
 ## Gate 3 — Market tick data-quality guard
 
 **Status:** `MERGED_TO_DEV`.
-
-**Merged baseline:** PR #10 merged into `dev` at merge commit `f546959764281a92942e63ca0587be83d67c6057`.
 
 ## Gate 4A — Conservative backtest foundation skeleton
 
 **Status:** `MERGED_TO_DEV`.
 
-**Merged baseline:** PR #11 merged into `dev` at merge commit `25ebe9e9f0a51baa05c9af9f36ad4792bbccde84`.
-
-### Evidence classification
-
-- `MEASURED`: PR #11 head `605159418e9a7551754812675358728449f5743f` completed GitHub Actions `validation` run #73 successfully before 4B began.
-- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
-
 ## Increment 4B — Canonical effective RR finalization
+
+**Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
+
+## Increment 4C — Execution context population
 
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add one canonical effective RR calculation path from explicit entry, stop, and take-profit references.
-- Preserve raw expected RR separately from canonical `effective_rr`.
-- Fail closed on invalid, missing, non-finite, zero/negative, or contradictory RR inputs.
-- Project the canonical result into audit evidence and report rows.
-- Do not add optimizer logic, strategy logic, risk allocation, candle replay, fill simulation, PAPER runtime behavior, or live execution.
+- Add explicit execution context snapshots for accepted and rejected decisions.
+- Preserve symbol, side, timestamp, price source, entry, stop, take-profit, market-input status, and execution-cost assumption provenance.
+- Keep spread, fee, slippage, latency, and funding unavailable when unmeasured rather than zero.
+- Fail closed on missing timestamp, missing price references, stale market input, or unavailable critical market input.
+- Project the snapshot into audit evidence.
+- Do not simulate fills, assume execution quality, add paper runtime behavior, or enable live execution.
 
 ### Evidence classification
 
-- `MEASURED`: local isolated Increment 4B focused tests passed with `13 passed in 0.25s`.
+- `MEASURED`: local isolated Increment 4C focused tests passed with `15 passed in 0.30s`.
 - `MEASURED`: local isolated compile check passed with exit code `0`.
-- `MEASURED`: local isolated generated-boundary all-available tests passed with `13 passed in 0.18s`.
-- `UNAVAILABLE`: Ruff, Black, and Mypy modules were not installed in this execution environment.
-- `UNAVAILABLE`: exact branch-head full repository tests could not be executed because direct repository checkout/network clone was unavailable.
+- `MEASURED`: local isolated Ruff check passed with `All checks passed!`.
+- `UNAVAILABLE`: Black and Mypy executables were unavailable in this execution environment.
+- `UNVERIFIED`: exact branch-head full repository tests until CI runs.
 
 ### Boundary limit
 
-Increment 4B validates RR evidence only. It is not a strategy runtime, signal generator, candle replay engine, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, or readiness certification.
+Increment 4C records execution-context evidence only. It is not a strategy runtime, signal generator, candle replay engine, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, or readiness certification.
 
-## Increment 4C — Execution context population
+## Increment 4D — Paper runtime DB audit pack
 
-**Status:** `BLOCKED_PENDING_INCREMENT_4B_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
+**Status:** `BLOCKED_PENDING_INCREMENT_4C_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
 
-Only after Increment 4B is validated, reviewed, and green may the next run begin execution context population. Fill simulation, execution quality assumptions, paper runtime behavior, and live execution remain blocked.
+Only after Increment 4C is validated, reviewed, and green may the next run begin the read-only paper runtime DB audit pack. Repairing or rewriting historical DB rows remains blocked.

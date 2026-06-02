@@ -1,5 +1,28 @@
 # Version History
 
+## 0.14.0 - 2026-06-02
+
+**Engineering milestone:** Increment 4C execution context population.
+
+- Started from green Increment 4B `dev` head `74c1ebb73ecae2ef9a7cff5afcb585e945b34a57` after the Ruff repair commit passed CI by user report.
+- Added `src/execution/context.py` with explicit execution context snapshot records.
+- Added required execution context fields for decision ID, outcome, symbol, side, timestamp, price source, entry reference, stop reference, take-profit reference, market-input state, and execution-cost assumptions.
+- Added explicit spread, fee, slippage, latency, and funding assumption snapshots.
+- Missing execution-cost assumptions remain `UNAVAILABLE` and cannot carry zero values.
+- Missing timestamp, missing critical price references, unavailable market input, and stale market input fail closed as `INVALID`.
+- Added deterministic JSON serialization and decision-audit evidence projection from the same snapshot.
+- Added focused tests covering fully populated context, missing spread, missing fee, missing slippage, missing latency/funding, missing timestamp, stale market input, unavailable market input, rejected-decision diagnostics, missing price references, unavailable zero-value rejection, and audit evidence round-trip.
+- Retained the boundary: no fill simulation, execution-quality assumptions, strategy logic, backtest replay, risk allocation, PAPER runtime, readiness certification, or live order path was added.
+
+## Validation evidence
+
+- `MEASURED`: local isolated Increment 4C focused tests passed with `15 passed in 0.30s`.
+- `MEASURED`: local isolated Increment 4C compile check passed with exit code `0`.
+- `MEASURED`: local isolated Increment 4C Ruff check passed with `All checks passed!`.
+- `UNAVAILABLE`: Black and Mypy executables were not available in this execution environment.
+- `UNAVAILABLE`: exact branch-head full repository tests before commit because direct mutable checkout/network clone is unavailable here.
+- `UNVERIFIED`: remote CI for this commit until GitHub Actions reports.
+
 ## 0.13.0 - 2026-06-02
 
 **Engineering milestone:** Increment 4B canonical effective RR finalization.
@@ -14,122 +37,61 @@
 - Added focused tests covering valid LONG, valid SHORT, invalid stop/reward distance, non-finite prices, missing references, raw RR mismatch, raw source validation, and persistence/reporting consistency.
 - Retained the boundary: no optimizer, strategy logic, risk allocation, backtest replay, fill simulation, PAPER runtime, readiness certification, or live order path was added.
 
-## Validation evidence
-
-- `MEASURED`: PR #11 Gate 4A head `605159418e9a7551754812675358728449f5743f` completed GitHub Actions `validation` run #73 successfully before 4B began.
-- `MEASURED`: local isolated Increment 4B focused tests passed with `13 passed in 0.25s`.
-- `MEASURED`: local isolated Increment 4B compile check passed with exit code `0`.
-- `MEASURED`: local isolated all-available generated tests passed with `13 passed in 0.18s`.
-- `UNAVAILABLE`: Ruff, Black, and Mypy modules were not installed in this execution environment.
-- `UNAVAILABLE`: exact branch-head full repository tests could not be executed because direct network clone was unavailable.
-- `UNAVAILABLE`: direct mutable local repository checkout evidence in this execution environment.
-
 ## 0.12.0 - 2026-06-02
 
 **Engineering milestone:** Gate 4A conservative backtest foundation skeleton.
 
-- Reconciled Gate 3 status after PR #10 merged into `dev` at merge commit `f546959764281a92942e63ca0587be83d67c6057`.
-- Recorded PR #10 head `aa9cfb83ef382dba02e41cabb1d75d1d2e51f457` GitHub Actions `validation` run #70 as successful remote evidence before Gate 4A began.
-- Added `src/backtest/foundation.py` with immutable backtest run metadata and execution evidence records.
-- Added explicit evidence classifications: `MEASURED`, `MODELED`, and `UNAVAILABLE`.
-- Added required execution assumptions for fees, slippage, spreads, latency, funding, fill quality, and orderbook state.
+- Added immutable backtest run metadata and execution evidence records.
 - Added fail-closed validation so performance results cannot be produced while any required execution evidence is unavailable.
-- Added deterministic metadata JSON serialization.
-- Added focused tests for metadata determinism, unavailable execution evidence blocking, required assumption coverage, UTC timestamp validation, digest validation, and unavailable-evidence integrity.
-- Retained the boundary: no strategy, signal generation, candle replay, trade simulation, fill model, performance metric, risk allocation, PAPER runtime, readiness certification, or live order path was added.
-
-## Validation evidence
-
-- `MEASURED`: PR #10 Gate 3 head `aa9cfb83ef382dba02e41cabb1d75d1d2e51f457` completed GitHub Actions `validation` run #70 successfully before Gate 4A began.
-- `MEASURED`: local isolated Gate 4A compile check passed with exit code `0`.
-- `MEASURED`: local isolated Gate 4A focused tests passed with `10 passed in 0.10s`.
-- `UNVERIFIED`: exact Gate 4A branch-head full repository tests, Ruff, Black, and Mypy until the PR workflow runs.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment because direct local git operations were unavailable.
 
 ## 0.11.0 - 2026-06-01
 
 **Engineering milestone:** Gate 3 market tick data-quality guard.
 
-- Started from `dev` merge commit `a5822ea66bfdbd403f18b7bd32599439a7580ce2` after Gate 2G merged.
-- Added `src/data/stale_tick_guard.py`.
-- Added auditable market tick, guard configuration, decision, and bounded tick buffer models.
-- Added fail-closed checks for symbol validity, price bounds, local receive age, exchange timestamp skew, warmup drift, peer confirmation, peer-median drift, and duplicate sequence IDs.
-- Added `select_first_valid_tick(...)` so research callers can skip rejected ticks and consume the first validated tick.
-- Added focused tests for pass behavior, rejection paths, duplicate protection, first-valid selection, and unsafe configuration.
-- Scope remains data quality only. This increment does not add strategy logic, backtesting, execution modeling, risk allocation, runtime loops, readiness certification, or performance claims.
-
-## Validation evidence
-
-- `MEASURED`: isolated stale tick guard tests passed with `14 passed in 0.13s`.
-- `MEASURED`: isolated compile check returned exit code `0`.
-- `UNVERIFIED`: exact branch-head full repository tests and static checks until the pull-request workflow runs.
-- `UNAVAILABLE`: direct mutable local clone evidence in this execution environment.
+- Added pre-runtime stale tick validation and first-valid tick selection.
 
 ## 0.10.0 - 2026-06-01
 
 **Engineering milestone:** Gate 2G persistence/audit phase closure review.
 
-- Added deterministic persistence/audit phase closure reporting in `src/reporting/phase_closure.py`.
-- Recorded completed Gates 2A through 2F with evidence limits.
-- Kept runtime, strategy, backtesting, execution modeling, and performance claims outside the implemented boundary.
+- Added deterministic persistence/audit phase closure reporting.
 
 ## 0.9.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2F reconciliation report artifact persistence.
 
-- Added local reconciliation report artifact persistence to `src/persistence/reconciliation.py`.
-- Added JSON, Markdown, and metadata artifact write helpers with checksum readback checks.
-
 ## 0.8.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2E reconciliation report surface.
-
-- Added deterministic reconciliation report payloads, JSON serialization, and Markdown summaries.
 
 ## 0.7.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2D persistence reconciliation scan.
 
-- Added local file/database reconciliation checks and mismatch states.
-
 ## 0.6.0 - 2026-05-31
 
 **Engineering milestone:** Gate 2C persistence integration review.
-
-- Added controlled file audit to database event append helpers.
 
 ## 0.5.0 - 2026-05-30
 
 **Engineering milestone:** Gate 2B database-backed audit-event persistence boundary.
 
-- Added a local SQLite audit-event ledger and payload checksum validation.
-
 ## 0.4.0 - 2026-05-30
 
 **Engineering milestone:** Gate 2A append-only research decision audit-trail boundary.
-
-- Added local decision audit records and explicit evidence classification.
 
 ## 0.3.1 - 2026-05-29
 
 **Engineering milestone:** Phase 2B.1 acquisition-integrity repair and validation evidence hardening.
 
-- Repaired acquisition retry and restart readback evidence handling.
-
 ## 0.3.0 - 2026-05-27
 
 **Engineering milestone:** Phase 2B read-only historical kline acquisition and immutable raw-artifact evidence boundary.
-
-- Added public kline acquisition and immutable raw-artifact evidence handling.
 
 ## 0.2.0 - 2026-05-25
 
 **Engineering milestone:** Phase 2 validated historical kline ingestion boundary.
 
-- Added fixed-interval historical kline normalization and integrity checks.
-
 ## 0.1.0 - 2026-05-25
 
 **Engineering milestone:** Phase 1 foundation initialized.
-
-- Established the research foundation, validation tooling, deterministic metadata, and JSON logging.
