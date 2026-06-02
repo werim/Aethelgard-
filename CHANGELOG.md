@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.13.0] - 2026-06-02
+
+### Added
+
+- Increment 4B canonical effective RR boundary in `src/execution/effective_rr.py`.
+- `EffectiveRRInput`, `EffectiveRRResult`, `EffectiveRRStatus`, and `TradeSide` models.
+- `canonical_effective_rr(...)` as the single canonical calculation path for caller-provided entry, stop, and take-profit references.
+- `assert_effective_rr_valid(...)` fail-closed guard.
+- `effective_rr_audit_evidence(...)` and `effective_rr_report_row(...)` projections derived only from the canonical result.
+- Focused tests for valid LONG RR, valid SHORT RR, zero/negative/invalid distances, non-finite values, missing references, raw/canonical mismatch, source validation, and persistence/reporting consistency.
+
+### Changed
+
+- Package version advanced to `0.13.0`.
+- README, VERSION, PLAN, and REPORT now describe Increment 4B as a canonical RR evidence boundary only.
+- `src/execution/__init__.py` now exports research-only effective RR helpers.
+
+### Fixed
+
+- Closed the absence of a single canonical effective RR calculation path before later decision/context work.
+- Prevented raw expected RR from silently overriding or replacing canonical effective RR.
+- Missing RR inputs remain explicitly unavailable rather than being guessed or converted to zero.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Increment 4B does not add strategy logic, signal generation, candle replay, trade simulation, fill modeling, execution-cost modeling, risk allocation, PAPER runtime behavior, readiness certification, or profitability claims.
+- Exact branch-head full repository tests, Ruff, Black, and Mypy remain `UNAVAILABLE` in this execution environment until CI or a direct checkout can run them.
+
 ## [0.12.0] - 2026-06-02
 
 ### Added
@@ -97,97 +129,33 @@
 
 ## [0.9.0] - 2026-05-31
 
-### Added
-
-- Gate 2F reconciliation report artifact persistence in `src/persistence/reconciliation.py`.
-- `PersistedReconciliationReportArtifact` for verified local artifact paths and checksums.
-- Local persistence helper for reconciliation report JSON, Markdown, and metadata files.
-- Checksum-anchored report artifact filenames and metadata filenames.
-- Readback verification for metadata schema, artifact type, mode, readiness, checksums, filename anchors, and status consistency.
-- Focused artifact tests for round-trip verification, idempotency, unavailable report persistence, JSON tampering, Markdown tampering, metadata tampering, and conflicting local files.
-
-### Changed
-
+- Added Gate 2F reconciliation report artifact persistence in `src/persistence/reconciliation.py`.
 - Package version advanced to `0.9.0`.
-- README, VERSION, PLAN, and REPORT now describe Gate 2F as a narrow local reconciliation report artifact persistence boundary.
-- Reconciled Gate 2E status by recording PR #7 merge and GitHub Actions `validation` run #60 success before Gate 2F began.
-
-### Fixed
-
-- Closed the documented absence of checksum/readback persistence for reconciliation report artifacts.
-- Conflicting existing local report artifacts now fail closed instead of being overwritten.
-
-### Removed
-
-- None.
-
-### Known limitations
-
-- Gate 2F persists local report artifacts only.
-- Artifact checksums detect local stored-byte changes but are not external notarization or protection against full evidence-set replacement.
 
 ## [0.8.0] - 2026-05-31
 
-### Added
-
-- Gate 2E reconciliation reporting helpers in `src/persistence/reconciliation.py`.
-- Explicit `CONSISTENT`, `INCONSISTENT`, and `UNAVAILABLE` report states.
-- Deterministic JSON-compatible payloads, compact JSON serialization, and Markdown summaries.
-- Focused reporting tests for consistent, inconsistent, unavailable, JSON, and Markdown report paths.
-
-### Changed
-
+- Added Gate 2E reconciliation reporting helpers in `src/persistence/reconciliation.py`.
 - Package version advanced to `0.8.0`.
-- README, VERSION, PLAN, and REPORT now describe Gate 2E as a narrow reconciliation reporting surface.
-- Reconciled Gate 2D status by recording PR #6 merge and GitHub Actions `validation` run #56 success before Gate 2E began.
-
-### Fixed
-
-- Missing reconciliation scans are now represented as `UNAVAILABLE` rather than treated as clean evidence.
-
-### Known limitations
-
-- Gate 2E reports local reconciliation results only.
 
 ## [0.7.0] - 2026-05-31
 
-### Added
-
-- Gate 2D persistence reconciliation scanner in `src/persistence/reconciliation.py`.
-- Explicit reconciliation issue states for missing database events, missing file audit records, and mismatched database-event identity or payload.
-- Fail-closed reconciliation assertion helper.
-- Focused reconciliation tests for consistent file/database evidence and mismatch cases.
-
-### Changed
-
+- Added Gate 2D persistence reconciliation scanner in `src/persistence/reconciliation.py`.
 - Package version advanced to `0.7.0`.
-- Reconciled Gate 2C status by recording PR #5 merge and GitHub Actions `validation` run #51 success before Gate 2D began.
-
-### Fixed
-
-- Closed the documented absence of a read-only file/database reconciliation scan after Gate 2C.
-
-### Known limitations
-
-- Gate 2D reports mismatch states only and does not repair evidence.
 
 ## [0.6.0] - 2026-05-31
 
 - Added Gate 2C persistence integration helper linking decision audit files to SQLite audit events.
 - Package version advanced to `0.6.0`.
-- Reconciled Gate 2B status by recording PR #4 merge and GitHub Actions `validation` run #48 success before Gate 2C began.
 
 ## [0.5.0] - 2026-05-30
 
 - Added database-backed research audit-event persistence in `src/persistence/events.py`.
 - Package version advanced to `0.5.0`.
-- Added focused audit-event tests and local payload checksum validation.
 
 ## [0.4.0] - 2026-05-30
 
 - Added research-only append audit persistence in `src/persistence/audit.py`.
 - Package version advanced to `0.4.0`.
-- Added focused audit tests and explicit evidence classification.
 
 ## [0.3.1] - 2026-05-29
 

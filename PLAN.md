@@ -55,40 +55,43 @@
 
 **Merged baseline:** PR #10 merged into `dev` at merge commit `f546959764281a92942e63ca0587be83d67c6057`.
 
-### Evidence classification
-
-- `MEASURED`: PR #10 head `aa9cfb83ef382dba02e41cabb1d75d1d2e51f457` completed GitHub Actions `validation` run #70 successfully before Gate 4A began.
-- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
-
 ## Gate 4A — Conservative backtest foundation skeleton
 
-**Status:** `IMPLEMENTED_IN_FOCUSED_BRANCH_PENDING_PR_VALIDATION`.
+**Status:** `MERGED_TO_DEV`.
 
-**Starting baseline:** `dev` merge commit `f546959764281a92942e63ca0587be83d67c6057` after Gate 3 merge.
+**Merged baseline:** PR #11 merged into `dev` at merge commit `25ebe9e9f0a51baa05c9af9f36ad4792bbccde84`.
+
+### Evidence classification
+
+- `MEASURED`: PR #11 head `605159418e9a7551754812675358728449f5743f` completed GitHub Actions `validation` run #73 successfully before 4B began.
+- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
+
+## Increment 4B — Canonical effective RR finalization
+
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add immutable metadata for future conservative backtest runs.
-- Record dataset fingerprint, symbol, timeframe, timestamp range, seed, config hash, code version, creation timestamp, and execution-assumption availability.
-- Define explicit evidence classifications: `MEASURED`, `MODELED`, and `UNAVAILABLE`.
-- Keep fees, slippage, spreads, latency, funding, fill quality, and orderbook state unavailable until measured or modeled.
-- Fail closed before performance output if any required execution evidence is unavailable.
-- Serialize metadata deterministically.
-- Do not generate signals, replay candles, simulate trades, model fills, allocate risk, run a PAPER loop, or make readiness claims.
+- Add one canonical effective RR calculation path from explicit entry, stop, and take-profit references.
+- Preserve raw expected RR separately from canonical `effective_rr`.
+- Fail closed on invalid, missing, non-finite, zero/negative, or contradictory RR inputs.
+- Project the canonical result into audit evidence and report rows.
+- Do not add optimizer logic, strategy logic, risk allocation, candle replay, fill simulation, PAPER runtime behavior, or live execution.
 
 ### Evidence classification
 
-- `MEASURED`: isolated Gate 4A focused tests passed locally with `10 passed in 0.10s`.
-- `MEASURED`: isolated compile check passed locally with exit code `0`.
-- `UNVERIFIED`: exact branch-head full-suite tests, Ruff, Black, and Mypy until the PR workflow runs.
-- `UNAVAILABLE`: direct local clean working-tree evidence in this execution environment.
+- `MEASURED`: local isolated Increment 4B focused tests passed with `13 passed in 0.25s`.
+- `MEASURED`: local isolated compile check passed with exit code `0`.
+- `MEASURED`: local isolated generated-boundary all-available tests passed with `13 passed in 0.18s`.
+- `UNAVAILABLE`: Ruff, Black, and Mypy modules were not installed in this execution environment.
+- `UNAVAILABLE`: exact branch-head full repository tests could not be executed because direct repository checkout/network clone was unavailable.
 
 ### Boundary limit
 
-Gate 4A records metadata and evidence availability only. It is not a candle replay engine, strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, or readiness certification.
+Increment 4B validates RR evidence only. It is not a strategy runtime, signal generator, candle replay engine, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, or readiness certification.
 
-## Gate 4B — Candle replay boundary
+## Increment 4C — Execution context population
 
-**Status:** `BLOCKED_PENDING_GATE_4A_VALIDATION_REVIEW_AND_MERGE`.
+**Status:** `BLOCKED_PENDING_INCREMENT_4B_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
 
-Only after Gate 4A is validated, reviewed, and merged may the next run begin a deterministic candle replay boundary. Strategies, optimizer loops, runtime behavior, trade simulation, and performance claims remain blocked.
+Only after Increment 4B is validated, reviewed, and green may the next run begin execution context population. Fill simulation, execution quality assumptions, paper runtime behavior, and live execution remain blocked.

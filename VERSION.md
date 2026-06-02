@@ -1,5 +1,29 @@
 # Version History
 
+## 0.13.0 - 2026-06-02
+
+**Engineering milestone:** Increment 4B canonical effective RR finalization.
+
+- Reconciled Gate 4A status after PR #11 merged into `dev` at merge commit `25ebe9e9f0a51baa05c9af9f36ad4792bbccde84`.
+- Recorded PR #11 head `605159418e9a7551754812675358728449f5743f` GitHub Actions `validation` run #73 as successful remote evidence before 4B began.
+- Added `src/execution/effective_rr.py` with a single canonical effective RR calculation path.
+- Preserved raw expected RR separately from canonical `effective_rr`.
+- Added explicit `VALID`, `INVALID`, and `UNAVAILABLE` RR states.
+- Added fail-closed validation for missing entry, stop, and take-profit references, non-finite values, zero or negative distances, invalid raw expected RR, and raw/canonical mismatch.
+- Added audit-evidence and report-row projection helpers that derive from the canonical result only.
+- Added focused tests covering valid LONG, valid SHORT, invalid stop/reward distance, non-finite prices, missing references, raw RR mismatch, raw source validation, and persistence/reporting consistency.
+- Retained the boundary: no optimizer, strategy logic, risk allocation, backtest replay, fill simulation, PAPER runtime, readiness certification, or live order path was added.
+
+## Validation evidence
+
+- `MEASURED`: PR #11 Gate 4A head `605159418e9a7551754812675358728449f5743f` completed GitHub Actions `validation` run #73 successfully before 4B began.
+- `MEASURED`: local isolated Increment 4B focused tests passed with `13 passed in 0.25s`.
+- `MEASURED`: local isolated Increment 4B compile check passed with exit code `0`.
+- `MEASURED`: local isolated all-available generated tests passed with `13 passed in 0.18s`.
+- `UNAVAILABLE`: Ruff, Black, and Mypy modules were not installed in this execution environment.
+- `UNAVAILABLE`: exact branch-head full repository tests could not be executed because direct network clone was unavailable.
+- `UNAVAILABLE`: direct mutable local repository checkout evidence in this execution environment.
+
 ## 0.12.0 - 2026-06-02
 
 **Engineering milestone:** Gate 4A conservative backtest foundation skeleton.
