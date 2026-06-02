@@ -14,6 +14,8 @@ from enum import StrEnum
 
 from src.persistence.audit import (
     AuditEvidenceItem,
+)
+from src.persistence.audit import (
     EvidenceClassification as AuditEvidenceClassification,
 )
 
@@ -114,7 +116,13 @@ def canonical_effective_rr(inputs: EffectiveRRInput) -> EffectiveRRResult:
     if reward_distance <= 0:
         invalid_reasons.append("INVALID_REWARD_DISTANCE")
     if invalid_reasons:
-        return _invalid(inputs, tuple(invalid_reasons), risk_distance, reward_distance, None)
+        return _invalid(
+            inputs,
+            tuple(invalid_reasons),
+            risk_distance,
+            reward_distance,
+            None,
+        )
     effective_rr = reward_distance / risk_distance
     if not math.isfinite(effective_rr) or effective_rr <= 0:
         return _invalid(
@@ -157,7 +165,9 @@ def assert_effective_rr_valid(result: EffectiveRRResult) -> None:
         raise EffectiveRRError(f"effective RR is not valid: {joined}")
 
 
-def effective_rr_audit_evidence(result: EffectiveRRResult) -> tuple[AuditEvidenceItem, ...]:
+def effective_rr_audit_evidence(
+    result: EffectiveRRResult,
+) -> tuple[AuditEvidenceItem, ...]:
     """Build decision-audit evidence from the canonical effective RR result."""
 
     if result.status is EffectiveRRStatus.VALID:
@@ -243,7 +253,10 @@ def _distances(inputs: EffectiveRRInput) -> tuple[float, float]:
     )
 
 
-def _unavailable(inputs: EffectiveRRInput, reasons: tuple[str, ...]) -> EffectiveRRResult:
+def _unavailable(
+    inputs: EffectiveRRInput,
+    reasons: tuple[str, ...],
+) -> EffectiveRRResult:
     return EffectiveRRResult(
         status=EffectiveRRStatus.UNAVAILABLE,
         side=inputs.side,
