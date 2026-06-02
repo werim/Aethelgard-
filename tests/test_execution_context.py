@@ -99,12 +99,14 @@ def test_missing_execution_cost_assumption_remains_unavailable(
     reason: str,
 ) -> None:
     assumptions = tuple(
-        ExecutionAssumptionSnapshot(
-            name=item.name,
-            unavailable_reason="not measured",
+        (
+            ExecutionAssumptionSnapshot(
+                name=item.name,
+                unavailable_reason="not measured",
+            )
+            if item.name is assumption
+            else item
         )
-        if item.name is assumption
-        else item
         for item in available_assumptions()
     )
     snapshot = build_execution_context_snapshot(
