@@ -280,7 +280,7 @@ def _rows_or_empty(
 
 
 def _row_to_mapping(row: sqlite3.Row) -> dict[str, object]:
-    return {key: cast(object, row[key]) for key in row.keys()}
+    return {key: cast(object, row[key]) for key in row}
 
 
 def _inspect_decision_rows(
@@ -647,7 +647,10 @@ def _canonical_object_digest(payload: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def _optional_text(row: Mapping[str, object], candidates: tuple[str, ...]) -> str | None:
+def _optional_text(
+    row: Mapping[str, object],
+    candidates: tuple[str, ...],
+) -> str | None:
     for candidate in candidates:
         if candidate not in row:
             continue
