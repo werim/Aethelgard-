@@ -11,11 +11,10 @@ import hashlib
 import json
 import sqlite3
 from collections import Counter, defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
-from typing import cast
 
 
 class PaperDbAuditError(ValueError):
@@ -69,18 +68,7 @@ class PaperDbAuditReport:
             "table_row_counts": {
                 key: self.table_row_counts[key] for key in sorted(self.table_row_counts)
             },
-            "issues": [
-                issue.payload()
-                for issue in sorted(
-                    self.issues,
-                    key=lambda item: (
-                        item.code,
-                        item.table,
-                        item.record_id,
-                        item.detail,
-                    ),
-                )
-            ],
+            "issues": [issue.payload() for issue in _sorted_issues(self.issues)],
         }
 
 
@@ -107,64 +95,45 @@ def audit_paper_runtime_database(
 ) -> PaperDbAuditReport:
     """Inspect a paper runtime SQLite database without mutating it."""
 
+    artifact_directory = _artifact_directory_text(audit_artifact_directory)
     if not database_path.exists():
-        return PaperDbAuditReport(
-            database_path=str(database_path),
-            artifact_directory=_artifact_directory_text(audit_artifact_directory),
-            status=PaperDbAuditStatus.UNAVAILABLE,
-            table_row_counts={},
-            issues=(
-                PaperDbAuditIssue(
-                    code="DATABASE_FILE_MISSING",
-                    table="sqlite",
-                    record_id="database",
-                    detail="database file is unavailable",
+        return _report(
+            database_path,
+            PaperDbAuditStatus.UNAVAILABLE,
+            {},
+            (
+                _issue(
+                    "DATABASE_FILE_MISSING",
+                    "sqlite",
+                    "database",
                     evidence="UNAVAILABLE",
                 ),
             ),
+            artifact_directory,
         )
 
     issues: list[PaperDbAuditIssue] = []
     table_row_counts: dict[str, int] = {}
-
     with _connect_read_only(database_path) as connection:
         tables = _table_names(connection)
         if not tables:
-            return PaperDbAuditReport(
-                database_path=str(database_path),
-                artifact_directory=_artifact_directory_text(audit_artifact_directory),
-                status=PaperDbAuditStatus.EMPTY,
-                table_row_counts={},
-                issues=(
-                    PaperDbAuditIssue(
-                        code="EMPTY_DATABASE",
-                        table="sqlite",
-                        record_id="database",
-                        detail="database contains no tables",
-                        evidence="UNAVAILABLE",
+            return _report(
+                database_path,
+                PaperDbAuditStatus.EMPTY,
+                {},
+                (
+                    _issue(
+                        "EMPTY_DATABASE", "sqlite", "database", evidence="UNAVAILABLE"
                     ),
                 ),
+                artifact_directory,
             )
-
         for table in sorted(tables):
             table_row_counts[table] = _row_count(connection, table)
-
-        for required_table in _REQUIRED_TABLES:
-            if required_table not in tables:
-                issues.append(
-                    PaperDbAuditIssue(
-                        code="MISSING_TABLE",
-                        table=required_table,
-                        record_id="schema",
-                        detail=f"required table {required_table} is unavailable",
-                        evidence="UNAVAILABLE",
-                    )
-                )
-
+        issues.extend(_missing_table_issues(tables))
         decision_rows = _rows_or_empty(connection, tables, "order_decisions")
         lifecycle_rows = _rows_or_empty(connection, tables, "trade_lifecycle_events")
         audit_event_rows = _rows_or_empty(connection, tables, "audit_events")
-
         issues.extend(_inspect_decision_rows(decision_rows))
         issues.extend(_inspect_lifecycle_rows(lifecycle_rows))
         issues.extend(_inspect_checksum_rows("order_decisions", decision_rows))
@@ -176,14 +145,9 @@ def audit_paper_runtime_database(
 
     if audit_artifact_directory is not None:
         issues.extend(_inspect_audit_artifacts(audit_artifact_directory, decision_rows))
-
     status = PaperDbAuditStatus.CLEAN if not issues else PaperDbAuditStatus.ISSUES_FOUND
-    return PaperDbAuditReport(
-        database_path=str(database_path),
-        artifact_directory=_artifact_directory_text(audit_artifact_directory),
-        status=status,
-        table_row_counts=table_row_counts,
-        issues=tuple(issues),
+    return _report(
+        database_path, status, table_row_counts, tuple(issues), artifact_directory
     )
 
 
@@ -196,30 +160,25 @@ def paper_db_audit_json(report: PaperDbAuditReport) -> str:
 def render_paper_db_audit_markdown(report: PaperDbAuditReport) -> str:
     """Render a stable human-readable paper DB audit report."""
 
-    lines = [
-        "# Paper Runtime DB Audit",
-        "",
-        f"- Status: `{report.status.value}`",
-        f"- Database: `{report.database_path}`",
-    ]
+    lines = ["# Paper Runtime DB Audit", "", f"- Status: `{report.status.value}`"]
+    lines.append(f"- Database: `{report.database_path}`")
     if report.artifact_directory is not None:
         lines.append(f"- Artifact directory: `{report.artifact_directory}`")
     lines.extend(["", "## Table row counts", ""])
     if report.table_row_counts:
-        for table, count in sorted(report.table_row_counts.items()):
-            lines.append(f"- `{table}`: {count}")
+        lines.extend(
+            f"- `{table}`: {count}"
+            for table, count in sorted(report.table_row_counts.items())
+        )
     else:
         lines.append("- `UNAVAILABLE`: no table counts")
     lines.extend(["", "## Issues", ""])
     if report.issues:
-        for issue in sorted(
-            report.issues,
-            key=lambda item: (item.code, item.table, item.record_id, item.detail),
-        ):
-            lines.append(
-                f"- `{issue.code}` `{issue.table}` `{issue.record_id}`: "
-                f"{issue.detail} ({issue.evidence})"
-            )
+        lines.extend(
+            f"- `{issue.code}` `{issue.table}` `{issue.record_id}`: "
+            f"{issue.detail} ({issue.evidence})"
+            for issue in _sorted_issues(report.issues)
+        )
     else:
         lines.append("- None")
     return "\n".join(lines) + "\n"
@@ -233,9 +192,24 @@ def assert_paper_db_audit_clean(report: PaperDbAuditReport) -> None:
         raise PaperDbAuditError(f"paper DB audit is not clean: {codes}")
 
 
+def _report(
+    database_path: Path,
+    status: PaperDbAuditStatus,
+    table_row_counts: Mapping[str, int],
+    issues: tuple[PaperDbAuditIssue, ...],
+    artifact_directory: str | None,
+) -> PaperDbAuditReport:
+    return PaperDbAuditReport(
+        database_path=str(database_path),
+        artifact_directory=artifact_directory,
+        status=status,
+        table_row_counts=table_row_counts,
+        issues=issues,
+    )
+
+
 def _connect_read_only(database_path: Path) -> sqlite3.Connection:
-    uri = f"file:{database_path.resolve()}?mode=ro"
-    connection = sqlite3.connect(uri, uri=True)
+    connection = sqlite3.connect(f"file:{database_path.resolve()}?mode=ro", uri=True)
     connection.row_factory = sqlite3.Row
     return connection
 
@@ -280,23 +254,31 @@ def _rows_or_empty(
 
 
 def _row_to_mapping(row: sqlite3.Row) -> dict[str, object]:
-    return {key: cast(object, row[key]) for key in tuple(row.keys())}
+    return {key: row[key] for key in tuple(row.keys())}
+
+
+def _missing_table_issues(tables: set[str]) -> tuple[PaperDbAuditIssue, ...]:
+    return tuple(
+        _issue("MISSING_TABLE", table, "schema", evidence="UNAVAILABLE")
+        for table in _REQUIRED_TABLES
+        if table not in tables
+    )
 
 
 def _inspect_decision_rows(
-    decision_rows: tuple[dict[str, object], ...],
+    rows: Sequence[Mapping[str, object]]
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
-    decision_counter: Counter[str] = Counter()
-    decision_fingerprints: dict[str, set[str]] = defaultdict(set)
-    for row in decision_rows:
+    counter: Counter[str] = Counter()
+    fingerprints: dict[str, set[str]] = defaultdict(set)
+    for row in rows:
         row_id = _record_id(row, ("decision_id", "signal_id"))
         decision_id = _optional_text(row, ("decision_id",))
         if decision_id is None:
             issues.append(_issue("MISSING_DECISION_ID", "order_decisions", row_id))
         else:
-            decision_counter[decision_id] += 1
-            decision_fingerprints[decision_id].add(_row_fingerprint(row))
+            counter[decision_id] += 1
+            fingerprints[decision_id].add(_row_fingerprint(row))
         if _optional_text(row, ("symbol",)) is None:
             issues.append(_issue("MISSING_SYMBOL", "order_decisions", row_id))
         if _optional_text(row, ("side", "direction")) is None:
@@ -308,212 +290,143 @@ def _inspect_decision_rows(
         if reason is None:
             issues.append(_issue("MISSING_REASON", "order_decisions", row_id))
         elif _contains_unknown_reason(reason):
+            issues.append(_issue("UNKNOWN_REJECTION_REASON", "order_decisions", row_id))
+    for decision_id, count in sorted(counter.items()):
+        if count > 1 and len(fingerprints[decision_id]) > 1:
             issues.append(
                 _issue(
-                    "UNKNOWN_REJECTION_REASON",
-                    "order_decisions",
-                    row_id,
-                    detail="UNKNOWN rejection reason leaked into decision row",
-                )
-            )
-    for decision_id, count in sorted(decision_counter.items()):
-        if count > 1 and len(decision_fingerprints[decision_id]) > 1:
-            issues.append(
-                _issue(
-                    "DUPLICATE_CONFLICTING_DECISION_ID",
-                    "order_decisions",
-                    decision_id,
-                    detail="decision_id appears with conflicting row content",
+                    "DUPLICATE_CONFLICTING_DECISION_ID", "order_decisions", decision_id
                 )
             )
     return tuple(issues)
 
 
 def _inspect_lifecycle_rows(
-    lifecycle_rows: tuple[dict[str, object], ...],
+    rows: Sequence[Mapping[str, object]]
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
-    event_counter: Counter[str] = Counter()
-    for row in lifecycle_rows:
+    counter: Counter[str] = Counter()
+    for row in rows:
         row_id = _record_id(row, ("event_id", "decision_id", "signal_id"))
         event_id = _optional_text(row, ("event_id",))
         if event_id is None:
             issues.append(_issue("MISSING_EVENT_ID", "trade_lifecycle_events", row_id))
         else:
-            event_counter[event_id] += 1
+            counter[event_id] += 1
         if _optional_text(row, ("decision_id", "signal_id")) is None:
             issues.append(
                 _issue("MISSING_DECISION_REFERENCE", "trade_lifecycle_events", row_id)
             )
-    for event_id, count in sorted(event_counter.items()):
+    for event_id, count in sorted(counter.items()):
         if count > 1:
             issues.append(
-                _issue(
-                    "DUPLICATE_EVENT_ID",
-                    "trade_lifecycle_events",
-                    event_id,
-                    detail=f"event_id appears {count} times",
-                )
+                _issue("DUPLICATE_EVENT_ID", "trade_lifecycle_events", event_id)
             )
     return tuple(issues)
 
 
 def _inspect_checksum_rows(
     table: str,
-    rows: tuple[dict[str, object], ...],
+    rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
     for row in rows:
         row_id = _record_id(row, ("event_id", "decision_id", "signal_id"))
         payload_json = _optional_text(row, ("payload_json", "payload"))
         checksum = _optional_text(
-            row,
-            ("payload_sha256", "checksum", "record_sha256", "decision_sha256"),
+            row, ("payload_sha256", "checksum", "record_sha256", "decision_sha256")
         )
         if checksum is None:
-            issues.append(
-                _issue(
-                    "MISSING_CHECKSUM",
-                    table,
-                    row_id,
-                    detail="row lacks checksum evidence",
-                )
-            )
+            issues.append(_issue("MISSING_CHECKSUM", table, row_id))
             continue
         if payload_json is None:
-            issues.append(
-                _issue(
-                    "CORRUPTED_JSON_PAYLOAD",
-                    table,
-                    row_id,
-                    detail="row lacks JSON payload for checksum verification",
-                )
-            )
+            issues.append(_issue("CORRUPTED_JSON_PAYLOAD", table, row_id))
             continue
         try:
             digest = _canonical_json_digest(payload_json)
-        except (TypeError, ValueError) as exc:
-            issues.append(
-                _issue(
-                    "CORRUPTED_JSON_PAYLOAD",
-                    table,
-                    row_id,
-                    detail=f"payload is not deterministic JSON: {exc}",
-                )
-            )
+        except (TypeError, ValueError):
+            issues.append(_issue("CORRUPTED_JSON_PAYLOAD", table, row_id))
             continue
         if digest != checksum:
-            issues.append(
-                _issue(
-                    "CHECKSUM_MISMATCH",
-                    table,
-                    row_id,
-                    detail="payload checksum does not match stored checksum",
-                )
-            )
+            issues.append(_issue("CHECKSUM_MISMATCH", table, row_id))
     return tuple(issues)
 
 
 def _inspect_decision_lifecycle_links(
-    decision_rows: tuple[dict[str, object], ...],
-    lifecycle_rows: tuple[dict[str, object], ...],
+    decision_rows: Sequence[Mapping[str, object]],
+    lifecycle_rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
-    decision_ids = {
-        decision_id
-        for row in decision_rows
-        if (decision_id := _optional_text(row, ("decision_id",))) is not None
-    }
-    lifecycle_decision_ids = {
-        decision_id
-        for row in lifecycle_rows
-        if (decision_id := _optional_text(row, ("decision_id", "signal_id")))
-        is not None
-    }
+    decision_ids = _ids(decision_rows, ("decision_id",))
+    lifecycle_decision_ids = _ids(lifecycle_rows, ("decision_id", "signal_id"))
     for decision_id in sorted(decision_ids - lifecycle_decision_ids):
         issues.append(
-            _issue(
-                "DECISION_WITHOUT_LIFECYCLE_ENTRY",
-                "order_decisions",
-                decision_id,
-                detail="decision has no matching lifecycle event",
-            )
+            _issue("DECISION_WITHOUT_LIFECYCLE_ENTRY", "order_decisions", decision_id)
         )
     for decision_id in sorted(lifecycle_decision_ids - decision_ids):
         issues.append(
-            _issue(
-                "LIFECYCLE_WITHOUT_DECISION",
-                "trade_lifecycle_events",
-                decision_id,
-                detail="lifecycle event has no matching decision row",
-            )
+            _issue("LIFECYCLE_WITHOUT_DECISION", "trade_lifecycle_events", decision_id)
         )
         issues.append(
-            _issue(
-                "ORPHAN_LIFECYCLE_EVENT",
-                "trade_lifecycle_events",
-                decision_id,
-                detail="lifecycle event is orphaned from decision evidence",
-            )
+            _issue("ORPHAN_LIFECYCLE_EVENT", "trade_lifecycle_events", decision_id)
         )
-    lifecycle_events_by_decision: dict[str, set[str]] = defaultdict(set)
+    issues.extend(_transition_issues(decision_rows, lifecycle_rows))
+    return tuple(issues)
+
+
+def _transition_issues(
+    decision_rows: Sequence[Mapping[str, object]],
+    lifecycle_rows: Sequence[Mapping[str, object]],
+) -> tuple[PaperDbAuditIssue, ...]:
+    events_by_decision: dict[str, set[str]] = defaultdict(set)
+    issues: list[PaperDbAuditIssue] = []
     for row in lifecycle_rows:
         decision_id = _optional_text(row, ("decision_id", "signal_id"))
         event_type = _event_type(row)
         if decision_id is not None and event_type is not None:
-            lifecycle_events_by_decision[decision_id].add(event_type)
+            events_by_decision[decision_id].add(event_type)
     for row in decision_rows:
         decision_id = _optional_text(row, ("decision_id",))
         if decision_id is None:
             continue
-        outcome = _decision_outcome(row)
-        event_types = lifecycle_events_by_decision.get(decision_id, set())
-        if outcome == "REJECTED" and event_types & _ACTIVE_EVENTS:
+        event_types = events_by_decision.get(decision_id, set())
+        if _decision_outcome(row) == "REJECTED" and event_types & _ACTIVE_EVENTS:
             issues.append(
                 _issue(
                     "INCONSISTENT_REJECTED_STATE_TRANSITION",
                     "trade_lifecycle_events",
                     decision_id,
-                    detail="rejected decision has active lifecycle event",
                 )
             )
-        if outcome == "ACCEPTED" and event_types & _TERMINAL_REJECT_EVENTS:
+        if (
+            _decision_outcome(row) == "ACCEPTED"
+            and event_types & _TERMINAL_REJECT_EVENTS
+        ):
             issues.append(
                 _issue(
                     "INCONSISTENT_ACCEPTED_STATE_TRANSITION",
                     "trade_lifecycle_events",
                     decision_id,
-                    detail="accepted decision has reject lifecycle event",
                 )
             )
     return tuple(issues)
 
 
 def _inspect_lifecycle_order(
-    lifecycle_rows: tuple[dict[str, object], ...],
+    lifecycle_rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
-    grouped: dict[str, list[dict[str, object]]] = defaultdict(list)
+    grouped: dict[str, list[Mapping[str, object]]] = defaultdict(list)
     for row in lifecycle_rows:
-        decision_id = _optional_text(row, ("decision_id", "signal_id"))
-        if decision_id is not None:
+        if (
+            decision_id := _optional_text(row, ("decision_id", "signal_id"))
+        ) is not None:
             grouped[decision_id].append(row)
-
     issues: list[PaperDbAuditIssue] = []
     for decision_id, rows in grouped.items():
-        ordered_rows = sorted(
-            rows,
-            key=lambda row: (
-                _optional_text(row, ("occurred_at_utc", "event_ts", "timestamp_utc"))
-                or "",
-                _optional_text(row, ("event_id",)) or "",
-            ),
-        )
         previous = -1
-        for row in ordered_rows:
+        for row in sorted(rows, key=_lifecycle_sort_key):
             event_type = _event_type(row)
-            if event_type is None:
-                continue
-            current = _EVENT_ORDER.get(event_type)
+            current = None if event_type is None else _EVENT_ORDER.get(event_type)
             if current is None:
                 continue
             if current < previous:
@@ -522,7 +435,6 @@ def _inspect_lifecycle_order(
                         "LIFECYCLE_EVENT_ORDERING",
                         "trade_lifecycle_events",
                         decision_id,
-                        detail="lifecycle event order decreases by timestamp",
                     )
                 )
                 break
@@ -531,119 +443,91 @@ def _inspect_lifecycle_order(
 
 
 def _inspect_audit_event_links(
-    decision_rows: tuple[dict[str, object], ...],
-    audit_event_rows: tuple[dict[str, object], ...],
+    decision_rows: Sequence[Mapping[str, object]],
+    audit_event_rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
-    if not audit_event_rows:
-        return ()
-    issues: list[PaperDbAuditIssue] = []
-    decision_ids = {
-        decision_id
-        for row in decision_rows
+    decision_ids = _ids(decision_rows, ("decision_id",))
+    return tuple(
+        _issue(
+            "AUDIT_EVENT_WITHOUT_DECISION",
+            "audit_events",
+            _record_id(row, ("event_id", "decision_id")),
+        )
+        for row in audit_event_rows
         if (decision_id := _optional_text(row, ("decision_id",))) is not None
-    }
-    for row in audit_event_rows:
-        decision_id = _optional_text(row, ("decision_id",))
-        row_id = _record_id(row, ("event_id", "decision_id"))
-        if decision_id is not None and decision_id not in decision_ids:
-            issues.append(
-                _issue(
-                    "AUDIT_EVENT_WITHOUT_DECISION",
-                    "audit_events",
-                    row_id,
-                    detail="audit event references missing decision row",
-                )
-            )
-    return tuple(issues)
+        and decision_id not in decision_ids
+    )
 
 
 def _inspect_audit_artifacts(
     audit_artifact_directory: Path,
-    decision_rows: tuple[dict[str, object], ...],
+    decision_rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
     if not audit_artifact_directory.exists():
         return (
-            PaperDbAuditIssue(
-                code="AUDIT_ARTIFACT_DIRECTORY_UNAVAILABLE",
-                table="audit_artifacts",
-                record_id=str(audit_artifact_directory),
-                detail="artifact directory is unavailable",
+            _issue(
+                "AUDIT_ARTIFACT_DIRECTORY_UNAVAILABLE",
+                "audit_artifacts",
+                str(audit_artifact_directory),
                 evidence="UNAVAILABLE",
             ),
         )
-    decision_ids = {
-        decision_id
-        for row in decision_rows
-        if (decision_id := _optional_text(row, ("decision_id",))) is not None
-    }
-    artifact_decisions: set[str] = set()
+    decision_ids = _ids(decision_rows, ("decision_id",))
+    artifact_decision_ids: set[str] = set()
     issues: list[PaperDbAuditIssue] = []
     for path in sorted(audit_artifact_directory.glob("*.audit.json")):
-        try:
-            decoded = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
-            issues.append(
-                _issue(
-                    "CORRUPTED_JSON_PAYLOAD",
-                    "audit_artifacts",
-                    path.name,
-                    detail=f"artifact cannot be decoded: {exc}",
-                )
-            )
-            continue
-        if not isinstance(decoded, dict):
-            issues.append(
-                _issue(
-                    "CORRUPTED_JSON_PAYLOAD",
-                    "audit_artifacts",
-                    path.name,
-                    detail="artifact envelope is not a mapping",
-                )
-            )
-            continue
-        record = decoded.get("record")
-        if not isinstance(record, dict):
-            issues.append(
-                _issue(
-                    "CORRUPTED_JSON_PAYLOAD",
-                    "audit_artifacts",
-                    path.name,
-                    detail="artifact lacks record mapping",
-                )
-            )
-            continue
-        declared = decoded.get("record_sha256")
-        if not isinstance(declared, str) or not declared.strip():
-            issues.append(_issue("MISSING_CHECKSUM", "audit_artifacts", path.name))
-            continue
-        digest = _canonical_object_digest(record)
-        if digest != declared:
-            issues.append(_issue("CHECKSUM_MISMATCH", "audit_artifacts", path.name))
-        raw_decision_id = record.get("decision_id")
-        if isinstance(raw_decision_id, str) and raw_decision_id.strip():
-            artifact_decisions.add(raw_decision_id)
-    for decision_id in sorted(decision_ids - artifact_decisions):
+        issues.extend(_inspect_audit_artifact(path, artifact_decision_ids))
+    for decision_id in sorted(decision_ids - artifact_decision_ids):
         issues.append(
             _issue(
                 "DECISION_WITHOUT_AUDIT_ARTIFACT",
                 "audit_artifacts",
                 decision_id,
-                detail="decision row has no matching audit artifact",
                 evidence="UNAVAILABLE",
             )
         )
     return tuple(issues)
 
 
+def _inspect_audit_artifact(
+    path: Path,
+    artifact_decision_ids: set[str],
+) -> tuple[PaperDbAuditIssue, ...]:
+    try:
+        decoded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return (_issue("CORRUPTED_JSON_PAYLOAD", "audit_artifacts", path.name),)
+    if not isinstance(decoded, dict) or not isinstance(decoded.get("record"), dict):
+        return (_issue("CORRUPTED_JSON_PAYLOAD", "audit_artifacts", path.name),)
+    record = decoded["record"]
+    declared = decoded.get("record_sha256")
+    if not isinstance(declared, str) or not declared.strip():
+        return (_issue("MISSING_CHECKSUM", "audit_artifacts", path.name),)
+    issues = []
+    if _canonical_object_digest(record) != declared:
+        issues.append(_issue("CHECKSUM_MISMATCH", "audit_artifacts", path.name))
+    if isinstance(record.get("decision_id"), str) and record["decision_id"].strip():
+        artifact_decision_ids.add(record["decision_id"])
+    return tuple(issues)
+
+
+def _ids(rows: Sequence[Mapping[str, object]], candidates: tuple[str, ...]) -> set[str]:
+    return {
+        value for row in rows if (value := _optional_text(row, candidates)) is not None
+    }
+
+
+def _lifecycle_sort_key(row: Mapping[str, object]) -> tuple[str, str]:
+    timestamp = _optional_text(row, ("occurred_at_utc", "event_ts", "timestamp_utc"))
+    return (timestamp or "", _optional_text(row, ("event_id",)) or "")
+
+
 def _canonical_json_digest(payload_json: str) -> str:
-    decoded = json.loads(payload_json)
-    return _canonical_object_digest(cast(object, decoded))
+    return _canonical_object_digest(json.loads(payload_json))
 
 
 def _canonical_object_digest(payload: object) -> str:
-    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode(
-        "utf-8"
-    )
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -652,9 +536,7 @@ def _optional_text(
     candidates: tuple[str, ...],
 ) -> str | None:
     for candidate in candidates:
-        if candidate not in row:
-            continue
-        value = row[candidate]
+        value = row.get(candidate)
         if value is None:
             continue
         text = str(value).strip()
@@ -686,8 +568,7 @@ def _decision_outcome(row: Mapping[str, object]) -> str | None:
 
 def _event_type(row: Mapping[str, object]) -> str | None:
     event_type = _optional_text(
-        row,
-        ("event_type", "lifecycle_state", "state", "status"),
+        row, ("event_type", "lifecycle_state", "state", "status")
     )
     if event_type is None:
         return None
@@ -708,4 +589,15 @@ def _issue(
         record_id=record_id,
         detail=detail or code.lower().replace("_", " "),
         evidence=evidence,
+    )
+
+
+def _sorted_issues(
+    issues: Sequence[PaperDbAuditIssue],
+) -> tuple[PaperDbAuditIssue, ...]:
+    return tuple(
+        sorted(
+            issues,
+            key=lambda issue: (issue.code, issue.table, issue.record_id, issue.detail),
+        )
     )
