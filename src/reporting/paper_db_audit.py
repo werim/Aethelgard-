@@ -280,7 +280,7 @@ def _rows_or_empty(
 
 
 def _row_to_mapping(row: sqlite3.Row) -> dict[str, object]:
-    return {key: cast(object, row[key]) for key in row}
+    return {key: cast(object, row[key]) for key in tuple(row.keys())}
 
 
 def _inspect_decision_rows(
