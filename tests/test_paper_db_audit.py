@@ -20,8 +20,7 @@ def digest(payload_json: str) -> str:
 
 def init_schema(database_path: Path) -> None:
     with sqlite3.connect(database_path) as connection:
-        connection.execute(
-            """
+        connection.execute("""
             CREATE TABLE order_decisions (
                 decision_id TEXT,
                 signal_id TEXT,
@@ -32,10 +31,8 @@ def init_schema(database_path: Path) -> None:
                 payload_json TEXT,
                 payload_sha256 TEXT
             )
-            """
-        )
-        connection.execute(
-            """
+            """)
+        connection.execute("""
             CREATE TABLE trade_lifecycle_events (
                 event_id TEXT,
                 decision_id TEXT,
@@ -44,8 +41,7 @@ def init_schema(database_path: Path) -> None:
                 payload_json TEXT,
                 payload_sha256 TEXT
             )
-            """
-        )
+            """)
 
 
 def insert_decision(
