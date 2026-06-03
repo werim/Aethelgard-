@@ -266,7 +266,7 @@ def _missing_table_issues(tables: set[str]) -> tuple[PaperDbAuditIssue, ...]:
 
 
 def _inspect_decision_rows(
-    rows: Sequence[Mapping[str, object]]
+    rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
     counter: Counter[str] = Counter()
@@ -302,7 +302,7 @@ def _inspect_decision_rows(
 
 
 def _inspect_lifecycle_rows(
-    rows: Sequence[Mapping[str, object]]
+    rows: Sequence[Mapping[str, object]],
 ) -> tuple[PaperDbAuditIssue, ...]:
     issues: list[PaperDbAuditIssue] = []
     counter: Counter[str] = Counter()
