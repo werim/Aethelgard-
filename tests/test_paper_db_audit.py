@@ -14,9 +14,7 @@ from src.reporting.paper_db_audit import (
 
 def digest(payload_json: str) -> str:
     decoded = json.loads(payload_json)
-    encoded = json.dumps(decoded, sort_keys=True, separators=(",", ":")).encode(
-        "utf-8"
-    )
+    encoded = json.dumps(decoded, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
 
