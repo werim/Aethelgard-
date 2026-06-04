@@ -4,48 +4,52 @@
 
 - Operational readiness: `RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Increment 4D paper runtime DB audit pack.
+- Active increment: Increment 4E symbol selection hardening.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting green head: `743dbfa7fafb47c22630908275e67a235c22aa0a`, 4C Black/changelog repair commit.
-- User reported validation #80 passed before 4D began.
-- Direct mutable local clone status is unavailable in this execution environment; GitHub API operations were used.
+- Starting green head: `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499`, user-provided green Increment 4D head.
+- Connector comparison showed `dev` was identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` before Increment 4E began.
+- Combined status and workflow runs for the exact starting SHA were not visible through the connector.
+- Direct mutable local clone status is unavailable in this execution environment because container DNS could not resolve `github.com`; GitHub API operations were used.
 
-## Implemented Increment 4D boundary
+## Implemented Increment 4E boundary
 
-Increment 4D implements only a read-only paper runtime DB audit/reporting pack.
+Increment 4E implements only deterministic research symbol-selection hardening.
 
 | Area | Change | Evidence limit |
 | --- | --- | --- |
-| DB audit model | Added `PaperDbAuditReport` and `PaperDbAuditIssue`. | Reports diagnostics only. |
-| SQLite inspection | Opens DB through read-only URI mode. | Does not repair, delete, or rewrite rows. |
-| Integrity checks | Detects missing schema, empty DBs, orphan lifecycle events, missing links, duplicate IDs, checksums, corrupted JSON, UNKNOWN reasons, missing fields, lifecycle order, and state inconsistencies. | Heuristic across known paper-runtime table/column names. |
-| Artifact checks | Optionally compares local audit artifacts to DB decisions and verifies artifact checksums. | Local artifacts may be unavailable and remain explicitly reported. |
-| Report surface | Adds deterministic JSON and Markdown reports plus fail-closed clean assertion. | Reporting is not readiness certification. |
-| Tests | Covers clean, empty, missing schema, orphan, missing event, duplicate/conflict, checksum, unknown reason, corrupted JSON, and stable output paths. | Full repository CI pending. |
+| Candidate model | Added configured `SymbolCandidate` records. | Uses caller-provided candidates only. |
+| Exchange evidence | Added `ExchangeSymbolEvidence` for status, contract type, quote asset, filters, notional, and source. | Does not fetch or refresh exchange metadata. |
+| Liquidity evidence | Added `SymbolMarketStats` with caller-provided 24h quote volume. | Does not measure liquidity itself. |
+| Policy | Added `SymbolSelectionPolicy` for market, quote asset, contract type, volume floor, max symbols, and symbol regex. | Policy is conservative static gating, not alpha ranking. |
+| Decisions | Emits `SELECTED`, `REJECTED`, or `UNAVAILABLE` with canonical reason codes. | Unavailable evidence blocks selection rather than being guessed. |
+| Determinism | Preserves configured input order and serializes JSON deterministically. | Determinism is not profitability evidence. |
+| Tests | Covers valid selection, missing metadata, disabled symbols, duplicates, exchange status, filters, volume, caps, stable payloads, and invalid policy. | Full repository CI pending. |
 
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
-| Increment 4C CI | Passed by user screenshot/report, validation #80 | `MEASURED` user-provided remote evidence |
-| Local isolated Increment 4D focused tests | `11 passed in 0.28s` | `MEASURED` isolated evidence |
-| Local isolated Increment 4D Ruff check | `All checks passed!` | `MEASURED` isolated evidence |
-| Local isolated Increment 4D Black check | `2 files would be left unchanged` | `MEASURED` isolated evidence |
-| Mypy | Module unavailable locally | `UNAVAILABLE` |
-| Exact branch-head full test suite | Pending CI | `UNVERIFIED` |
-| Current-head workflow for this commit | Pending or unavailable until GitHub Actions runs | `UNVERIFIED` |
+| Starting `dev` comparison | `dev` identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` | `MEASURED` connector evidence |
+| Local isolated Increment 4E focused tests | `10 passed in 0.09s` | `MEASURED` isolated evidence |
+| Local isolated compile check | exit code `0` | `MEASURED` isolated evidence |
+| New-file line-length spot check | no lines above 88 chars | `MEASURED` isolated evidence |
+| Direct local clone | failed DNS resolution for `github.com` | `UNAVAILABLE` |
+| Ruff, Black, Mypy | modules unavailable in scratch environment | `UNAVAILABLE` |
+| Exact final branch-head full test suite | Pending CI | `UNVERIFIED` |
+| Current-head workflow for this commit chain | Pending or unavailable until GitHub Actions runs | `UNVERIFIED` |
 
 ## Safety boundary and unresolved risks
 
-- No account access, credentials, strategy, signal generation, candle replay, trade simulation, fill model, risk allocation, PAPER runtime, real order path, DB repair, or profitability analysis is introduced.
-- Increment 4D reports paper DB integrity diagnostics only.
-- The audit pack does not certify paper runtime readiness, exchange authenticity, execution realism, or profitability.
-- Existing historical DB rows, if corrupt or incomplete, are not modified by this increment.
+- No account access, credentials, exchange fetch, strategy generation, alpha ranking, backtest replay, trade simulation, fill model, risk allocation, PAPER runtime behavior, real order path, DB repair, or profitability analysis is introduced.
+- Increment 4E hardens configured symbol selection only.
+- Missing exchange metadata, missing filters, missing market stats, or invalid policy fail closed.
+- Selected symbols are research candidates only and do not imply trade eligibility, liquidity sufficiency under stress, execution realism, or readiness.
+- API-backed writes created a sequence of small commits rather than one atomic local git commit because a mutable local clone was unavailable.
 
 ## Next step
 
-Proceed to Increment 4E symbol selection hardening only after this commit is validated, reviewed, and green.
+After Increment 4E is validated, reviewed, and green, the next smallest safe increment is Increment 4F paper/live parity guard scaffolding only. It should not enable LIVE trading, order placement, alpha ranking, optimizer behavior, or execution claims.
