@@ -184,9 +184,7 @@ def candle_replay_metadata_json(metadata: CandleReplayMetadata) -> str:
     return dumps(metadata.payload(), sort_keys=True, separators=(",", ":"))
 
 
-def candle_replay_rows_json(
-    rows: Iterable[CandleReplayRow],
-) -> str:
+def candle_replay_rows_json(rows: Iterable[CandleReplayRow]) -> str:
     """Serialize replay rows deterministically."""
 
     return dumps(
