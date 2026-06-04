@@ -65,30 +65,39 @@
 
 ## Increment 4D — Paper runtime DB audit pack
 
+**Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
+
+**Green head:** `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499`.
+
+## Increment 4E — Symbol selection hardening
+
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add a read-only paper runtime DB audit/reporting pack.
-- Detect missing schema, empty DB, orphan lifecycle events, missing decision/lifecycle links, duplicate event IDs, duplicate conflicting decision IDs, checksum problems, corrupted JSON payloads, UNKNOWN rejection reasons, missing symbol/side/reason fields, lifecycle ordering issues, and inconsistent accepted/rejected state transitions.
-- Optionally inspect local audit artifacts for checksum and decision-link consistency.
-- Produce deterministic JSON and Markdown reports.
-- Do not repair DBs, delete rows, rewrite historical evidence, invent missing fields, simulate fills, add paper runtime behavior, or enable live execution.
+- Add deterministic hardening for configured research symbol candidates.
+- Require caller-provided exchange metadata evidence before a symbol can be selected.
+- Require caller-provided market-liquidity evidence before a symbol can be selected.
+- Validate market, quote asset, contract type, exchange status, price/lot/notional filters, 24h quote volume, duplicates, disabled candidates, symbol format, and max-symbol caps.
+- Produce deterministic `SELECTED`, `REJECTED`, or `UNAVAILABLE` decisions with canonical reason codes.
+- Do not fetch exchange data, rank alpha, optimize symbols, generate signals, run backtests, simulate fills, add PAPER runtime behavior, or enable live execution.
 
 ### Evidence classification
 
-- `MEASURED`: local isolated Increment 4D focused tests passed with `11 passed in 0.28s`.
-- `MEASURED`: local isolated Ruff check passed with `All checks passed!`.
-- `MEASURED`: local isolated Black check passed.
-- `UNAVAILABLE`: Mypy module was unavailable in this execution environment.
-- `UNVERIFIED`: exact branch-head full repository tests until CI runs.
+- `MEASURED`: starting `dev` was identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` through connector comparison.
+- `MEASURED`: local isolated Increment 4E focused tests passed with `10 passed in 0.09s`.
+- `MEASURED`: local isolated compile check passed.
+- `MEASURED`: local isolated new-file line-length spot check passed.
+- `UNAVAILABLE`: Ruff, Black, and Mypy modules were unavailable in the scratch environment.
+- `UNAVAILABLE`: direct mutable local clone evidence because container DNS could not resolve `github.com`.
+- `UNVERIFIED`: exact final branch-head full repository tests until CI runs.
 
 ### Boundary limit
 
-Increment 4D reports database integrity diagnostics only. It is not a repair tool, migration, strategy runtime, signal generator, execution ledger, fill model, risk allocator, paper runtime, order path, or readiness certification.
+Increment 4E hardens configured research symbol selection only. It is not an exchange data fetcher, alpha model, optimizer, strategy runtime, execution ledger, fill model, risk allocator, paper runtime, order path, or readiness certification.
 
-## Increment 4E — Symbol selection hardening
+## Increment 4F — Paper/live parity guard scaffolding
 
-**Status:** `BLOCKED_PENDING_INCREMENT_4D_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
+**Status:** `BLOCKED_PENDING_INCREMENT_4E_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
 
-Only after Increment 4D is validated, reviewed, and green may the next run harden symbol selection. Alpha ranking, performance optimization, and new exchange integration remain blocked.
+Only after Increment 4E is validated, reviewed, and green may the next run add parity guard scaffolding. LIVE trading, order placement, exchange secrets, alpha ranking, performance optimization, and new exchange integration remain blocked.
