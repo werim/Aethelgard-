@@ -55,37 +55,43 @@
 
 **Status:** `MERGED_TO_DEV`.
 
-## Increment 4B — Canonical effective RR finalization
+## Prior Increment 4B — Canonical effective RR finalization
 
 **Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
 
-## Increment 4C — Execution context population
+This was not the missing deterministic candle replay boundary requested by the recovery sequence.
+
+## Prior Increment 4C — Execution context population
 
 **Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
 
-## Increment 4D — Paper runtime DB audit pack
+## Prior Increment 4D — Paper runtime DB audit pack
 
 **Status:** `MERGED_TO_DEV_AND_GREEN_BY_USER_REPORT`.
 
 **Green head:** `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499`.
 
-## Increment 4E — Symbol selection hardening
+## Prior Increment 4E — Symbol selection hardening
+
+**Status:** `MERGED_TO_DEV_PENDING_REMOTE_VALIDATION_EVIDENCE`.
+
+## Recovery Gate 4B — Deterministic candle replay boundary
 
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add deterministic hardening for configured research symbol candidates.
-- Require caller-provided exchange metadata evidence before a symbol can be selected.
-- Require caller-provided market-liquidity evidence before a symbol can be selected.
-- Validate market, quote asset, contract type, exchange status, price/lot/notional filters, 24h quote volume, duplicates, disabled candidates, symbol format, and max-symbol caps.
-- Produce deterministic `SELECTED`, `REJECTED`, or `UNAVAILABLE` decisions with canonical reason codes.
-- Do not fetch exchange data, rank alpha, optimize symbols, generate signals, run backtests, simulate fills, add PAPER runtime behavior, or enable live execution.
+- Add deterministic replay over caller-supplied candle rows.
+- Preserve replay row order only after UTC timestamps are strictly increasing.
+- Validate UTC timestamps, duplicate candles, missing intervals, malformed OHLCV rows, non-positive prices, invalid volume, symbol consistency, and timeframe consistency.
+- Produce dataset fingerprint, symbol, timeframe, start/end timestamp, row count, missing interval count, duplicate count, validation status, and deterministic hash.
+- Fail closed on corrupted, duplicate, unsorted, or incomplete data unless explicitly configured for read-only diagnostics.
+- Do not add strategy, signal generation, trade simulation, position state, PnL, win rate, Sharpe, expectancy, drawdown, optimizer, PAPER runtime, LIVE runtime, or readiness claims.
 
 ### Evidence classification
 
-- `MEASURED`: starting `dev` was identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` through connector comparison.
-- `MEASURED`: local isolated Increment 4E focused tests passed with `10 passed in 0.09s`.
+- `MEASURED`: starting `dev` was identical to `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7` through connector comparison.
+- `MEASURED`: local isolated Gate 4B focused tests passed with `10 passed in 0.55s`.
 - `MEASURED`: local isolated compile check passed.
 - `MEASURED`: local isolated new-file line-length spot check passed.
 - `UNAVAILABLE`: Ruff, Black, and Mypy modules were unavailable in the scratch environment.
@@ -94,10 +100,10 @@
 
 ### Boundary limit
 
-Increment 4E hardens configured research symbol selection only. It is not an exchange data fetcher, alpha model, optimizer, strategy runtime, execution ledger, fill model, risk allocator, paper runtime, order path, or readiness certification.
+Recovery Gate 4B validates and packages candle replay data only. It is not a strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, performance report, or readiness certification.
 
-## Increment 4F — Paper/live parity guard scaffolding
+## Recovery Gate 4C — Conservative trade lifecycle simulation boundary
 
-**Status:** `BLOCKED_PENDING_INCREMENT_4E_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
+**Status:** `BLOCKED_PENDING_GATE_4B_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
 
-Only after Increment 4E is validated, reviewed, and green may the next run add parity guard scaffolding. LIVE trading, order placement, exchange secrets, alpha ranking, performance optimization, and new exchange integration remain blocked.
+Only after Recovery Gate 4B is validated, reviewed, and green may the next run add conservative lifecycle simulation. Strategy optimization, live order placement, exchange secrets, performance claims, and readiness approval remain blocked.
