@@ -97,6 +97,7 @@ class CandleReplay:
         return self.rows
 
 
+# fmt: off
 def build_candle_replay(
     rows: Iterable[Mapping[str, Any]],
     *,
@@ -104,6 +105,7 @@ def build_candle_replay(
     timeframe: str | None = None,
     allow_read_only_diagnostics: bool = False,
 ) -> CandleReplay:
+# fmt: on
     """Validate and package deterministic replay rows.
 
     Invalid input fails closed by default. When read-only diagnostics are
@@ -194,6 +196,7 @@ def candle_replay_rows_json(rows: Iterable[CandleReplayRow]) -> str:
     )
 
 
+# fmt: off
 def _metadata_for(
     *,
     rows: tuple[CandleReplayRow, ...],
@@ -203,6 +206,7 @@ def _metadata_for(
     fallback_symbol: str,
     fallback_timeframe: str,
 ) -> CandleReplayMetadata:
+# fmt: on
     row_payload = candle_replay_rows_json(rows)
     dataset_fingerprint = sha256(row_payload.encode("utf-8")).hexdigest()
     symbol = rows[0].symbol if rows else fallback_symbol
@@ -237,6 +241,7 @@ def _metadata_for(
     )
 
 
+# fmt: off
 def _normalize_row(
     row: Mapping[str, Any],
     *,
@@ -244,6 +249,7 @@ def _normalize_row(
     expected_symbol: str | None,
     expected_timeframe: str | None,
 ) -> CandleReplayRow:
+# fmt: on
     symbol = _required_text(row, "symbol", index)
     timeframe = _required_text(row, "timeframe", index)
     open_time = _required_text(row, "open_time", index)
