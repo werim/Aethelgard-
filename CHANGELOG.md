@@ -1,28 +1,52 @@
 # Changelog
 
+## [0.17.0] - 2026-06-04
+
+### Added
+
+- Gate 4B deterministic candle replay recovery boundary in `src/backtest/replay.py`.
+- `CandleReplayRow`, `CandleReplayMetadata`, `CandleReplay`, and `CandleReplayError` models.
+- `build_candle_replay(...)` for fail-closed validation and deterministic replay packaging over caller-supplied candle rows.
+- Deterministic replay metadata and row JSON serialization helpers.
+- Focused tests for valid ordering/metadata, deterministic metadata JSON, duplicate candles, unsorted candles, missing intervals, UTC timestamp enforcement, malformed OHLCV rows, non-positive prices, negative volume, and symbol/timeframe consistency.
+
+### Changed
+
+- Package version advanced to `0.17.0`.
+- `src/backtest/__init__.py` now exports replay helpers while preserving Gate 4A foundation exports.
+- README, VERSION, PLAN, and REPORT now describe the Gate 4B replay recovery boundary.
+
+### Fixed
+
+- Closed the absence of a deterministic candle replay boundary in the recovered Gate 4B–4F sequence.
+- Corrupted, duplicate, unsorted, incomplete, malformed, or inconsistent candle rows now fail closed before replay unless explicitly requested as read-only diagnostics.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 4B replay does not generate strategy signals, simulate trades, model fills, calculate PnL, compute win rate, Sharpe, expectancy, or drawdown, run optimizers, add PAPER runtime behavior, enable live execution, or certify readiness.
+- Local Ruff, Black, and Mypy were unavailable in the scratch environment.
+- Exact final branch-head full-suite validation and remote CI are unverified until GitHub Actions reports.
+- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+
 ## [0.16.0] - 2026-06-04
 
 ### Added
 
 - Increment 4E deterministic symbol-selection hardening in `src/data/symbol_selection.py`.
-- `SymbolCandidate`, `ExchangeSymbolEvidence`, `SymbolMarketStats`, `SymbolSelectionPolicy`, `SymbolSelectionDecision`, and `SymbolSelectionReport` models.
-- Explicit `SymbolSelectionStatus` states: `SELECTED`, `REJECTED`, and `UNAVAILABLE`.
-- Canonical symbol-selection reason codes for invalid format, duplicate candidates, disabled research, market mismatch, quote-asset mismatch, unavailable exchange metadata, non-trading status, disallowed contract type, unavailable price/lot/notional filters, unavailable market stats, low volume, and max-symbol caps.
-- Deterministic `symbol_selection_json(...)` report serialization.
-- `assert_symbol_selection_has_candidates(...)` fail-closed guard.
-- `src/data/__init__.py` exports for the new research-only symbol-selection helpers.
-- Focused tests for deterministic valid selection, missing metadata, disabled candidates, duplicate candidates, non-trading status, missing filters, low volume, max-symbol caps, stable payloads, and invalid policy.
+- Explicit symbol-selection states and canonical reason codes.
+- Deterministic symbol-selection report serialization.
 
 ### Changed
 
 - Package version advanced to `0.16.0`.
-- README, VERSION, PLAN, and REPORT now describe Increment 4E as symbol-selection hardening only.
-- Increment 4D status is recorded as green by user report at `dev` head `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499`.
 
 ### Fixed
 
-- Closed the absence of a deterministic, fail-closed research symbol-selection boundary before later paper/live parity work.
-- Missing exchange metadata, missing filters, missing market stats, disabled candidates, duplicate candidates, and policy violations no longer flow into selected research symbols.
+- Missing exchange metadata, filters, market stats, disabled candidates, duplicate candidates, and policy violations no longer flow into selected research symbols.
 
 ### Removed
 
@@ -31,8 +55,6 @@
 ### Known limitations
 
 - Increment 4E does not fetch exchange data, rank alpha, optimize symbols, generate signals, run backtests, simulate fills, add PAPER runtime behavior, enable live execution, add exchange credentials, or certify readiness.
-- Local Ruff, Black, and Mypy were unavailable in the scratch environment.
-- Remote CI remains the source of truth for exact final branch-head full-suite validation.
 
 ## [0.15.0] - 2026-06-02
 
@@ -45,7 +67,6 @@
 ### Changed
 
 - Package version advanced to `0.15.0`.
-- README, VERSION, PLAN, and REPORT described Increment 4D as a read-only DB audit/reporting pack only.
 
 ### Fixed
 
