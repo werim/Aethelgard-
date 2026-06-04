@@ -1,5 +1,31 @@
 # Version History
 
+## 0.16.0 - 2026-06-04
+
+**Engineering milestone:** Increment 4E symbol selection hardening.
+
+- Started from user-reported green `dev` head `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` after Increment 4D.
+- Connector verification showed `dev` was identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` before Increment 4E began.
+- Added `src/data/symbol_selection.py` with deterministic research-only symbol-selection hardening.
+- Added `SymbolCandidate`, `ExchangeSymbolEvidence`, `SymbolMarketStats`, `SymbolSelectionPolicy`, `SymbolSelectionDecision`, and `SymbolSelectionReport` models.
+- Added explicit `SELECTED`, `REJECTED`, and `UNAVAILABLE` symbol-selection states.
+- Added canonical reason codes for duplicate candidates, disabled research symbols, invalid symbol format, market mismatch, disallowed quote asset, unavailable exchange metadata, non-trading exchange status, disallowed contract type, unavailable filters, unavailable market stats, low volume, and max-symbol caps.
+- Required caller-provided exchange metadata and market-liquidity evidence; missing evidence remains `UNAVAILABLE` and is not silently converted into a selected symbol.
+- Added deterministic JSON serialization and a fail-closed assertion that rejects empty hardened symbol sets.
+- Exported symbol-selection helpers from `src/data/__init__.py`.
+- Added focused tests for deterministic selection, unavailable metadata, disabled candidates, duplicate candidates, exchange status, missing filters, low volume, max-symbol caps, stable payloads, and invalid policies.
+- Retained the boundary: no exchange fetch, alpha ranking, optimizer, strategy logic, backtest replay, fill simulation, PAPER runtime behavior, readiness certification, or live order path was added.
+
+## Validation evidence
+
+- `MEASURED`: connector comparison showed starting `dev` was identical to `47d4ddc863c7e06aebb4a13e2d9a4ace9ba8b499` before 4E began.
+- `MEASURED`: local isolated Increment 4E focused tests passed with `10 passed in 0.09s`.
+- `MEASURED`: local isolated compile check passed with exit code `0`.
+- `MEASURED`: local isolated line-length spot check found no lines above 88 characters in the new 4E source/test files.
+- `UNAVAILABLE`: direct mutable local clone evidence because container network DNS could not resolve `github.com`.
+- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
+- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
+
 ## 0.15.0 - 2026-06-02
 
 **Engineering milestone:** Increment 4D paper runtime DB audit pack.
