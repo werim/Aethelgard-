@@ -1,5 +1,27 @@
 # Version History
 
+## 0.19.0 - 2026-06-05
+
+**Engineering milestone:** Gate 4D execution-cost evidence boundary.
+
+- Added `src/backtest/cost_evidence.py` with explicit execution-cost evidence records for fees, slippage, spread, funding, and latency.
+- Added `CostEvidenceClassification` values `MEASURED`, `MODELED`, and `UNAVAILABLE` plus deterministic gate/report serialization helpers.
+- Added `evaluate_cost_evidence_gate(...)` and `assert_can_publish_net_metrics(...)` so net PnL, expectancy, profitability ranking, optimizer input, and readiness approval remain blocked while required costs are unavailable.
+- Enforced that `UNAVAILABLE` execution-cost evidence cannot carry a value or unit, so unknown costs cannot become zero.
+- Allowed modeled-cost metrics only when assumptions are present and the result is labeled `NET_MODELED_COST_METRICS`.
+- Added markdown reporting for cost evidence diagnostics and focused tests covering missing fees, slippage, spread, funding, latency, unavailable-not-zero behavior, modeled assumptions, measured pass behavior, report visibility, and readiness blocking.
+- Exported Gate 4D helpers from `src/backtest/__init__.py` and advanced package version to `0.19.0`.
+- Retained the Gate 4D boundary: no optimizer, no strategy tuning, no alpha generation, no live trading, no exchange order placement, no PAPER runtime behavior, no profitability claim, and no readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: local isolated Gate 4D focused tests passed with `12 passed in 0.14s` after the final line-length adjustment.
+- `MEASURED`: local isolated compile check for the new Gate 4D module and tests passed with exit code `0`.
+- `MEASURED`: local isolated line-length spot check found no lines above 88 characters in the new Gate 4D source/test files.
+- `UNAVAILABLE`: direct mutable local clone evidence for the repository because container DNS could not resolve `github.com`; GitHub connector writes were used.
+- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment because those modules were not installed.
+- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+
 ## 0.18.0 - 2026-06-05
 
 **Engineering milestone:** Gate 4C conservative trade lifecycle simulation boundary.
