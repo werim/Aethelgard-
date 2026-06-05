@@ -1,4 +1,4 @@
-"""Research-only backtest foundation and replay boundaries."""
+"""Research-only backtest foundation, replay, and lifecycle boundaries."""
 
 from src.backtest.foundation import (
     REQUIRED_EXECUTION_ASSUMPTIONS,
@@ -11,6 +11,18 @@ from src.backtest.foundation import (
     assert_can_produce_performance_results,
     backtest_metadata_json,
     unavailable_execution_assumptions,
+)
+from src.backtest.lifecycle import (
+    LifecycleEventType,
+    LifecycleObservation,
+    LifecycleSimulationMetadata,
+    LifecycleState,
+    LifecycleTransition,
+    TradeLifecycleSimulation,
+    TradeLifecycleSimulationError,
+    build_trade_lifecycle_simulation,
+    lifecycle_metadata_json,
+    lifecycle_transitions_json,
 )
 from src.backtest.replay import (
     CandleReplay,
@@ -34,10 +46,20 @@ __all__ = [
     "EvidenceClassification",
     "ExecutionAssumption",
     "ExecutionEvidence",
+    "LifecycleEventType",
+    "LifecycleObservation",
+    "LifecycleSimulationMetadata",
+    "LifecycleState",
+    "LifecycleTransition",
+    "TradeLifecycleSimulation",
+    "TradeLifecycleSimulationError",
     "assert_can_produce_performance_results",
     "backtest_metadata_json",
     "build_candle_replay",
+    "build_trade_lifecycle_simulation",
     "candle_replay_metadata_json",
     "candle_replay_rows_json",
+    "lifecycle_metadata_json",
+    "lifecycle_transitions_json",
     "unavailable_execution_assumptions",
 ]
