@@ -1,5 +1,28 @@
 # Version History
 
+## 0.18.0 - 2026-06-05
+
+**Engineering milestone:** Gate 4C conservative trade lifecycle simulation boundary.
+
+- Reviewed Gate 4B first. Existing docs showed `0.17.0` Gate 4B deterministic candle replay and identified Gate 4C as the next safe recovery step.
+- Added `src/backtest/lifecycle.py` with a deterministic, research-only lifecycle transition boundary over a valid `CandleReplay` plus caller-supplied observations.
+- Added lifecycle event/state models, observation and transition records, simulation metadata, deterministic JSON helpers, and `build_trade_lifecycle_simulation(...)`.
+- Validates trade ID presence, valid replay availability, UTC event timestamps, strictly increasing observation times, event alignment to replay candle open times, optional positive prices, supported event types, and conservative state transitions.
+- Supports terminal evidence states only from caller observations: `POSITION_OBSERVED_CLOSED`, `ENTRY_REJECTED`, and `TIMED_OUT`.
+- Fails closed on missing terminal state, terminal event before entry, duplicate/invalid entry observation, event after terminal state, non-replay event time, invalid replay, malformed timestamps, invalid prices, and unsupported event types.
+- Added focused lifecycle tests covering valid entry/exit, rejected entry, timeout without entry, missing terminal state diagnostics, non-replay event time, unsorted events, invalid replay rejection, invalid optional price, and deterministic serialization.
+- Exported lifecycle helpers from `src/backtest/__init__.py`.
+- Retained the Gate 4C boundary: no strategy generation, no optimizer, no real exchange action, no order-management path, no cost accounting, no performance metric, no PAPER runtime behavior, and no readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: local isolated Gate 4C focused tests passed with `9 passed in 0.21s`.
+- `MEASURED`: local isolated compile check for the new Gate 4C module and tests passed with exit code `0`.
+- `MEASURED`: local isolated line-length spot check found no lines above 88 characters in the new Gate 4C source/test files.
+- `UNAVAILABLE`: direct mutable local clone evidence for the repository because GitHub writes were performed through the connector API.
+- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
+- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+
 ## 0.17.0 - 2026-06-04
 
 **Engineering milestone:** Gate 4B deterministic candle replay recovery boundary.
