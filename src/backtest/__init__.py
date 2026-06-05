@@ -1,5 +1,18 @@
-"""Research-only backtest foundation, replay, and lifecycle boundaries."""
+"""Research-only backtest foundation, replay, lifecycle, and cost gates."""
 
+from src.backtest.cost_evidence import (
+    REQUIRED_COST_EVIDENCE_CATEGORIES,
+    CostEvidenceCategory,
+    CostEvidenceClassification,
+    CostEvidenceError,
+    CostEvidenceGateResult,
+    CostEvidenceRecord,
+    assert_can_publish_net_metrics,
+    cost_evidence_gate_json,
+    evaluate_cost_evidence_gate,
+    render_cost_evidence_markdown,
+    unavailable_cost_evidence,
+)
 from src.backtest.foundation import (
     REQUIRED_EXECUTION_ASSUMPTIONS,
     BacktestExecutionEvidenceUnavailable,
@@ -35,6 +48,7 @@ from src.backtest.replay import (
 )
 
 __all__ = [
+    "REQUIRED_COST_EVIDENCE_CATEGORIES",
     "REQUIRED_EXECUTION_ASSUMPTIONS",
     "BacktestExecutionEvidenceUnavailable",
     "BacktestFoundationError",
@@ -43,6 +57,11 @@ __all__ = [
     "CandleReplayError",
     "CandleReplayMetadata",
     "CandleReplayRow",
+    "CostEvidenceCategory",
+    "CostEvidenceClassification",
+    "CostEvidenceError",
+    "CostEvidenceGateResult",
+    "CostEvidenceRecord",
     "EvidenceClassification",
     "ExecutionAssumption",
     "ExecutionEvidence",
@@ -54,12 +73,17 @@ __all__ = [
     "TradeLifecycleSimulation",
     "TradeLifecycleSimulationError",
     "assert_can_produce_performance_results",
+    "assert_can_publish_net_metrics",
     "backtest_metadata_json",
     "build_candle_replay",
     "build_trade_lifecycle_simulation",
     "candle_replay_metadata_json",
     "candle_replay_rows_json",
+    "cost_evidence_gate_json",
+    "evaluate_cost_evidence_gate",
     "lifecycle_metadata_json",
     "lifecycle_transitions_json",
+    "render_cost_evidence_markdown",
+    "unavailable_cost_evidence",
     "unavailable_execution_assumptions",
 ]
