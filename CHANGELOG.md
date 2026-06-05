@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.18.0] - 2026-06-05
+
+### Added
+
+- Gate 4C conservative trade lifecycle simulation boundary in `src/backtest/lifecycle.py`.
+- Lifecycle event/state models, caller observation records, transition records, simulation metadata, and deterministic JSON helpers.
+- `build_trade_lifecycle_simulation(...)` for fail-closed validation over valid candle replay plus caller-supplied observations.
+- Focused lifecycle tests for valid entry/exit, rejected entry, timeout without entry, missing terminal-state diagnostics, non-replay event time, unsorted events, invalid replay rejection, invalid optional price, and deterministic serialization.
+
+### Changed
+
+- Package version advanced to `0.18.0`.
+- `src/backtest/__init__.py` now exports Gate 4C lifecycle helpers.
+- VERSION and REPORT now describe the Gate 4C lifecycle simulation boundary and evidence limits.
+
+### Fixed
+
+- Closed the absence of a deterministic lifecycle transition boundary after Gate 4B candle replay.
+- Invalid lifecycle observations now fail closed instead of becoming assumed trade outcomes.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 4C consumes caller-supplied lifecycle observations only.
+- Gate 4C does not generate strategies, optimize parameters, access real exchanges, manage orders, compute performance metrics, add PAPER runtime behavior, or approve readiness.
+- Local Ruff, Black, and Mypy were unavailable in the scratch environment.
+- Exact final branch-head full-suite validation and remote CI are unverified until GitHub Actions reports.
+- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+
 ## [0.17.0] - 2026-06-04
 
 ### Added
