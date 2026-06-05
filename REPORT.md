@@ -4,51 +4,51 @@
 
 - Operational readiness: `RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4B deterministic candle replay recovery boundary.
+- Active increment: Gate 4C conservative trade lifecycle simulation boundary.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD: `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7`, current `dev` before Gate 4B recovery began.
-- Connector comparison showed `dev` was identical to `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7` before Gate 4B recovery began.
-- Startup recovery found that the requested Gate 4A restart assumption was outdated: `dev` already contained `0.16.0 / Increment 4E`, but deterministic candle replay evidence was still absent.
-- Direct mutable local clone status is unavailable in this execution environment because container DNS could not resolve `github.com`; GitHub API operations were used.
+- Gate 4B review source: existing `VERSION.md`, `CHANGELOG.md`, and `REPORT.md` documented deterministic candle replay as `0.17.0` and named Gate 4C as the next safe recovery increment.
+- Direct mutable local clone status is unavailable in this execution environment because repository writes were performed through the GitHub connector API.
 
-## Implemented Gate 4B boundary
+## Implemented Gate 4C boundary
 
-Gate 4B implements only deterministic candle replay over caller-supplied candle rows.
+Gate 4C implements only deterministic lifecycle transitions over caller-supplied observations after candle replay has already validated the dataset.
 
 | Area | Change | Evidence limit |
 | --- | --- | --- |
-| Replay row model | Added normalized `CandleReplayRow` records. | Uses caller-supplied rows only. |
-| Validation | Validates UTC timestamps, monotonic open times, duplicates, gaps, OHLCV shape, prices, volume, symbol, and timeframe. | Does not fetch or prove exchange data authenticity. |
-| Metadata | Emits dataset fingerprint, symbol, timeframe, start/end timestamp, row count, missing interval count, duplicate count, validation status, and deterministic hash. | Metadata is data-quality evidence, not profitability evidence. |
-| Fail-closed behavior | Invalid replay data raises by default. | Read-only diagnostics may inspect invalid metadata, but invalid rows cannot be replayed. |
-| Determinism | Serializes rows and metadata deterministically. | Determinism does not imply strategy edge. |
-| Tests | Covers valid order, deterministic metadata, duplicate/unsorted/gapped data, UTC, OHLCV, price, volume, symbol, and timeframe failures. | Full repository CI pending. |
+| Replay dependency | Requires a valid `CandleReplay` before lifecycle simulation. | Does not fetch or authenticate exchange data. |
+| Observation model | Added normalized caller observation records. | Observations are supplied by the caller, not discovered by the engine. |
+| State machine | Added conservative transitions for observed entry, observed exit, rejected entry, and timeout. | Transitions are audit evidence, not trading edge evidence. |
+| Terminal states | Accepts only observed close, rejected entry, or timeout as valid terminal states. | Missing terminal state fails closed. |
+| Validation | Checks UTC timestamps, increasing event order, replay candle alignment, event types, optional positive prices, and state ordering. | Does not infer fills or assume execution quality. |
+| Metadata | Emits deterministic simulation metadata and transition JSON. | Metadata does not prove profitability or readiness. |
+| Tests | Covers valid lifecycle, rejection, timeout, invalid order, invalid replay, non-replay event times, invalid price, and deterministic output. | Full repository CI pending. |
 
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
-| Starting `dev` comparison | `dev` identical to `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7` | `MEASURED` connector evidence |
-| Local isolated Gate 4B focused tests | `10 passed in 0.55s` | `MEASURED` isolated evidence |
+| Gate 4B pre-review | Existing docs showed Gate 4B as completed and Gate 4C as next safe step | `MEASURED` connector evidence |
+| Local isolated Gate 4C focused tests | `9 passed in 0.21s` | `MEASURED` isolated evidence |
 | Local isolated compile check | exit code `0` | `MEASURED` isolated evidence |
 | New-file line-length spot check | no lines above 88 chars | `MEASURED` isolated evidence |
-| Direct local clone | failed DNS resolution for `github.com` | `UNAVAILABLE` |
+| Direct local clone | unavailable in this environment | `UNAVAILABLE` |
 | Ruff, Black, Mypy | modules unavailable in scratch environment | `UNAVAILABLE` |
 | Exact final branch-head full test suite | Pending CI | `UNVERIFIED` |
 | Current-head workflow for this commit chain | Pending or unavailable until GitHub Actions runs | `UNVERIFIED` |
 
 ## Safety boundary and unresolved risks
 
-- No account access, credentials, exchange fetch, strategy generation, signal generation, trade simulation, fill model, risk allocation, PAPER runtime behavior, real order path, DB repair, optimizer, performance metrics, or profitability analysis is introduced.
-- Gate 4B replays only already supplied candle rows after validation.
-- Missing candles, duplicates, unsorted timestamps, malformed OHLCV, invalid price/volume, and symbol/timeframe mismatches fail closed.
-- Replay metadata does not prove execution realism, market-data completeness, exchange authenticity, fill quality, strategy expectancy, or readiness.
-- API-backed writes created a sequence of small commits rather than one atomic local git commit because a mutable local clone was unavailable.
+- Gate 4C does not generate strategies, create entries, optimize parameters, access accounts, manage orders, add runtime execution behavior, compute performance metrics, claim profitability, or approve readiness.
+- Lifecycle observations remain caller-supplied evidence only.
+- Event timestamps must align to validated replay candle open times.
+- Missing terminal states, invalid state order, invalid replay, malformed timestamps, non-replay event times, and invalid optional prices fail closed.
+- Lifecycle metadata does not prove execution realism, exchange authenticity, fill quality, strategy expectancy, capital safety, or operational readiness.
+- API-backed writes created a sequence of small commits rather than one atomic local commit because a mutable local clone was unavailable.
 
 ## Next step
 
-After Gate 4B is validated, reviewed, and green, the next smallest safe recovery increment is Gate 4C: conservative trade lifecycle simulation boundary only. It must not add optimizer behavior, live execution, order placement, profitability claims, or readiness approval.
+After Gate 4C is validated, reviewed, and green, the next smallest safe increment should remain conservative and evidence-first. Do not add optimization, real exchange actions, performance claims, or readiness approval before the required execution-cost and risk evidence gates are explicitly implemented and reviewed.
