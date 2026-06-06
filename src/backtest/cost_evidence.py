@@ -129,6 +129,11 @@ class CostEvidenceRecord:
         }
 
 
+CostEvidenceRecords = Iterable[CostEvidenceRecord] | Mapping[
+    CostEvidenceCategory, CostEvidenceRecord
+]
+
+
 @dataclass(frozen=True)
 class CostEvidenceGateResult:
     """Structured fail-closed result for execution-cost metric gating."""
@@ -166,13 +171,11 @@ class CostEvidenceGateResult:
 
 
 def evaluate_cost_evidence_gate(
-    evidence_records: Iterable[CostEvidenceRecord] | Mapping[
-        CostEvidenceCategory, CostEvidenceRecord
-    ],
+    evidence_records: CostEvidenceRecords,
     *,
-    required_categories: Sequence[CostEvidenceCategory] = (
-        REQUIRED_COST_EVIDENCE_CATEGORIES
-    ),
+    required_categories: Sequence[
+        CostEvidenceCategory
+    ] = REQUIRED_COST_EVIDENCE_CATEGORIES,
     allow_modeled_costs: bool = True,
     gross_metrics_explicitly_labeled: bool = False,
 ) -> CostEvidenceGateResult:
@@ -344,11 +347,7 @@ def render_cost_evidence_markdown(result: CostEvidenceGateResult) -> str:
     )
 
 
-def _normalize_records(
-    evidence_records: Iterable[CostEvidenceRecord] | Mapping[
-        CostEvidenceCategory, CostEvidenceRecord
-    ],
-) -> tuple[CostEvidenceRecord, ...]:
+def _normalize_records(evidence_records: CostEvidenceRecords) -> tuple[CostEvidenceRecord, ...]:
     if isinstance(evidence_records, Mapping):
         return tuple(evidence_records.values())
     return tuple(evidence_records)
