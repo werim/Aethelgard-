@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.19.0] - 2026-06-05
+
+### Added
+
+- Gate 4D execution-cost evidence boundary in `src/backtest/cost_evidence.py`.
+- Cost evidence records for fees, slippage, spread, funding, and latency.
+- Cost evidence gate before net metrics, expectancy, strategy ranking, optimizer input, and readiness statements.
+- Deterministic JSON and Markdown diagnostics for cost-evidence gate results.
+- Focused tests for missing fees, slippage, spread, funding, latency, unavailable-not-zero behavior, modeled assumptions, measured pass behavior, reporting visibility, and readiness blocking.
+
+### Changed
+
+- Package version advanced to `0.19.0`.
+- `src/backtest/__init__.py` now exports Gate 4D cost-evidence helpers.
+- Metric publication now fails closed when required execution-cost evidence is unavailable.
+
+### Fixed
+
+- Unknown execution costs can no longer be implicitly treated as zero inside the Gate 4D boundary.
+- `UNAVAILABLE` cost evidence cannot carry value or unit fields.
+- MODELED cost evidence requires explicit assumptions and emits modeled-cost metric labeling.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Measured cost coverage may still be incomplete and remains caller-supplied evidence.
+- Gate 4D does not integrate an optimizer, tune models, generate alpha, change runtime execution, or approve readiness.
+- Operational readiness remains PAPER ONLY / NOT LIVE READY.
+- Local Ruff, Black, and Mypy were unavailable in the scratch environment.
+- Exact final branch-head full-suite validation and remote CI are unverified until GitHub Actions reports.
+- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+
 ## [0.18.0] - 2026-06-05
 
 ### Added
@@ -40,7 +75,7 @@
 - `CandleReplayRow`, `CandleReplayMetadata`, `CandleReplay`, and `CandleReplayError` models.
 - `build_candle_replay(...)` for fail-closed validation and deterministic replay packaging over caller-supplied candle rows.
 - Deterministic replay metadata and row JSON serialization helpers.
-- Focused tests for valid ordering/metadata, deterministic metadata JSON, duplicate candles, unsorted candles, missing intervals, UTC timestamp enforcement, malformed OHLCV rows, non-positive prices, negative volume, and symbol/timeframe consistency.
+- Focused tests for valid ordering/metadata, deterministic metadata JSON, duplicate candles, unsorted candles, missing intervals, UTC timestamp enforcement, malformed OHLCV rows, non-positive price, negative volume, and symbol/timeframe consistency.
 
 ### Changed
 
@@ -50,7 +85,7 @@
 
 ### Fixed
 
-- Closed the absence of a deterministic candle replay boundary in the recovered Gate 4B–4F sequence.
+- Closed the absence of a deterministic candle replay boundary in the recovered Gate 4B-4F sequence.
 - Corrupted, duplicate, unsorted, incomplete, malformed, or inconsistent candle rows now fail closed before replay unless explicitly requested as read-only diagnostics.
 
 ### Removed
@@ -217,45 +252,3 @@
 
 - Added Gate 2F reconciliation report artifact persistence.
 - Package version advanced to `0.9.0`.
-
-## [0.8.0] - 2026-05-31
-
-- Added Gate 2E reconciliation reporting helpers.
-- Package version advanced to `0.8.0`.
-
-## [0.7.0] - 2026-05-31
-
-- Added Gate 2D persistence reconciliation scanner.
-- Package version advanced to `0.7.0`.
-
-## [0.6.0] - 2026-05-31
-
-- Added Gate 2C persistence integration helper linking decision audit files to SQLite audit events.
-- Package version advanced to `0.6.0`.
-
-## [0.5.0] - 2026-05-30
-
-- Added database-backed research audit-event persistence in `src/persistence/events.py`.
-- Package version advanced to `0.5.0`.
-
-## [0.4.0] - 2026-05-30
-
-- Added research-only append audit persistence in `src/persistence/audit.py`.
-- Package version advanced to `0.4.0`.
-
-## [0.3.1] - 2026-05-29
-
-- Repaired acquisition retry and restart readback evidence handling.
-- Added Python 3.11/3.12 CI compile-and-test coverage.
-
-## [0.3.0] - 2026-05-27
-
-- Added read-only public Binance Futures historical kline acquisition and immutable raw-artifact evidence boundary.
-
-## [0.2.0] - 2026-05-25
-
-- Added provenance-aware historical Binance Futures kline validation and deterministic dataset fingerprints.
-
-## [0.1.0] - 2026-05-25
-
-- Added the PAPER-only, RESEARCH_ONLY foundation, validation tooling, and CI definition.
