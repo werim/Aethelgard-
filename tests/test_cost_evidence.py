@@ -81,17 +81,15 @@ def test_missing_required_cost_blocks_net_performance_metrics(
 
 
 def test_missing_funding_blocks_when_funding_is_required() -> None:
-    result = evaluate_cost_evidence_gate(
-        records_with_unavailable(CostEvidenceCategory.FUNDING)
-    )
+    records = records_with_unavailable(CostEvidenceCategory.FUNDING)
+    result = evaluate_cost_evidence_gate(records)
     assert CostEvidenceCategory.FUNDING in result.unavailable_categories
     assert result.can_publish_net_metrics is False
 
 
 def test_missing_latency_blocks_execution_realism_metrics() -> None:
-    result = evaluate_cost_evidence_gate(
-        records_with_unavailable(CostEvidenceCategory.LATENCY)
-    )
+    records = records_with_unavailable(CostEvidenceCategory.LATENCY)
+    result = evaluate_cost_evidence_gate(records)
     assert CostEvidenceCategory.LATENCY in result.blocking_categories
     assert result.metric_label == "NET_METRICS_UNAVAILABLE"
 
@@ -113,9 +111,8 @@ def test_modeled_evidence_requires_assumptions_and_labeling() -> None:
     with pytest.raises(CostEvidenceError, match="requires assumptions"):
         invalid.validate()
 
-    result = evaluate_cost_evidence_gate(
-        tuple(modeled_record(category) for category in CostEvidenceCategory)
-    )
+    records = tuple(modeled_record(category) for category in CostEvidenceCategory)
+    result = evaluate_cost_evidence_gate(records)
     assert result.passed is True
     assert result.metric_label == "NET_MODELED_COST_METRICS"
     assert set(result.modeled_categories) == set(CostEvidenceCategory)
