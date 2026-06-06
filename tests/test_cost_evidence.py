@@ -93,7 +93,7 @@ def test_missing_latency_blocks_execution_realism_metrics() -> None:
         records_with_unavailable(CostEvidenceCategory.LATENCY)
     )
     assert CostEvidenceCategory.LATENCY in result.blocking_categories
-    assert "NET_METRICS_UNAVAILABLE" == result.metric_label
+    assert result.metric_label == "NET_METRICS_UNAVAILABLE"
 
 
 def test_unavailable_evidence_is_not_treated_as_zero() -> None:
