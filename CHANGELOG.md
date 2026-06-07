@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.20.0] - 2026-06-07
+
+### Added
+
+- Gate 4B-0 minimal performance metric publication boundary in `src/reporting/performance_boundary.py`.
+- `MetricPublicationStatus`, immutable eligibility diagnostics, and deterministic JSON serialization for metric-publication eligibility/refusal payloads.
+- Focused tests for unavailable evidence blocking, measured/modeled evidence eligibility, unavailable-not-zero behavior, deterministic JSON, malformed metadata fail-closed behavior, and absence of performance metric fields.
+
+### Changed
+
+- Package version advanced to `0.20.0`.
+- `src/reporting/__init__.py` now exports Gate 4B-0 metric-publication eligibility helpers.
+- Reporting can now publish only eligibility/refusal diagnostics before any performance metric surface is allowed.
+
+### Fixed
+
+- Unavailable Gate 4A execution evidence now blocks metric-publication eligibility through a reporting boundary before any performance field is emitted.
+- Unsafe or malformed backtest metadata fails closed as `METRICS_BLOCKED`.
+- Unknown execution evidence remains unavailable and is not converted to zero.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- Gate 4B-0 does not replay candles, simulate trades, compute performance, model costs, integrate an optimizer, add PAPER runtime behavior, place orders, enable LIVE trading, or approve readiness.
+- The boundary only reports metric eligibility/refusal diagnostics.
+- Local Ruff, Black, and Mypy were unavailable in the scratch environment.
+- Exact final branch-head full-suite validation and remote CI are unverified until GitHub Actions reports.
+- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+
 ## [0.19.0] - 2026-06-05
 
 ### Added
