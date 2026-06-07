@@ -347,7 +347,9 @@ def render_cost_evidence_markdown(result: CostEvidenceGateResult) -> str:
     )
 
 
-def _normalize_records(evidence_records: CostEvidenceRecords) -> tuple[CostEvidenceRecord, ...]:
+def _normalize_records(
+    evidence_records: CostEvidenceRecords,
+) -> tuple[CostEvidenceRecord, ...]:
     if isinstance(evidence_records, Mapping):
         return tuple(evidence_records.values())
     return tuple(evidence_records)
