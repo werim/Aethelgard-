@@ -6,6 +6,7 @@
 - Operational classification: `RESEARCH_ONLY`.
 - Live order placement remains prohibited.
 - No alpha, profitability, execution realism, or operational-readiness claim is made.
+- Unknown execution evidence remains `UNAVAILABLE`; it is never converted to zero.
 
 ## Gate 0 — Baseline reconciliation and ledger establishment
 
@@ -104,6 +105,42 @@ Recovery Gate 4B validates and packages candle replay data only. It is not a str
 
 ## Recovery Gate 4C — Conservative trade lifecycle simulation boundary
 
-**Status:** `BLOCKED_PENDING_GATE_4B_REMOTE_VALIDATION_REVIEW_AND_GREEN_STATUS`.
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
-Only after Recovery Gate 4B is validated, reviewed, and green may the next run add conservative lifecycle simulation. Strategy optimization, live order placement, exchange secrets, performance claims, and readiness approval remain blocked.
+## Gate 4D — Execution-cost evidence boundary
+
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
+
+Gate 4D classifies execution-cost evidence as `MEASURED`, `MODELED`, or `UNAVAILABLE`, blocks net metrics while required cost evidence is unavailable, and keeps unknown costs from becoming zero. It does not compute strategy performance, optimize, place orders, or approve readiness.
+
+## Gate 4B-0 — Minimal performance metric publication boundary
+
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
+
+### Scope
+
+- Consume Gate 4A `BacktestRunMetadata`.
+- Reuse `assert_can_produce_performance_results(...)`.
+- Emit only `METRICS_BLOCKED` or `METRICS_PUBLISHABLE` eligibility/refusal diagnostics.
+- Preserve exact unavailable execution assumption names.
+- Serialize eligibility/refusal payloads deterministically.
+- Fail closed on malformed metadata.
+- Do not replay candles, simulate trades, model costs, compute performance, optimize, add PAPER runtime behavior, place orders, or approve readiness.
+
+### Evidence classification
+
+- `MEASURED`: local isolated Gate 4B-0 focused tests passed with `6 passed in 0.15s`.
+- `MEASURED`: local isolated compile check passed.
+- `UNAVAILABLE`: Ruff, Black, and Mypy modules were unavailable in the scratch environment.
+- `UNAVAILABLE`: direct mutable local clone evidence because container DNS could not resolve `github.com`.
+- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
+
+### Boundary limit
+
+Gate 4B-0 is a reporting/publication guard only. It publishes no PnL, returns, win rate, drawdown, Sharpe, expectancy, alpha, profitability metric, or readiness approval.
+
+## Gate 4B-1 — Reporting integration safety pass
+
+**Status:** `NEXT_RECOMMENDED_SAFE_GATE`.
+
+Wire the metric-publication eligibility boundary into any existing or future reporting entry points so performance fields cannot be emitted unless Gate 4B-0 passes. Do not add optimizer behavior, live execution, order placement, or readiness approval.
