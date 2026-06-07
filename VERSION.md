@@ -1,5 +1,26 @@
 # Version History
 
+## 0.20.0 - 2026-06-07
+
+**Engineering milestone:** Gate 4B-0 minimal performance metric publication boundary.
+
+- Added `src/reporting/performance_boundary.py` as a reporting-only eligibility boundary over Gate 4A `BacktestRunMetadata`.
+- Added `MetricPublicationStatus` values `METRICS_BLOCKED` and `METRICS_PUBLISHABLE` plus an immutable eligibility result object.
+- Reused `assert_can_produce_performance_results(...)` so unavailable Gate 4A execution evidence blocks metric publication.
+- Preserved exact unavailable execution assumption names in refusal diagnostics.
+- Added deterministic JSON serialization for metric-publication eligibility/refusal payloads.
+- Added focused tests covering unavailable evidence blocking, measured/modeled evidence eligibility, unavailable-not-zero behavior, deterministic JSON, malformed metadata fail-closed behavior, and absence of performance metric fields.
+- Exported the new reporting boundary from `src/reporting/__init__.py` and advanced package version to `0.20.0`.
+- Retained the Gate 4B-0 boundary: no candle replay, no trade simulation, no cost modeling, no PnL, no returns, no win rate, no drawdown, no Sharpe, no expectancy, no optimizer, no PAPER runtime, no live trading, no order placement, no profitability claim, and no readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: local isolated Gate 4B-0 focused tests passed with `6 passed in 0.15s`.
+- `MEASURED`: local isolated compile check for the new Gate 4B-0 module and focused tests passed with exit code `0`.
+- `UNAVAILABLE`: direct mutable local clone evidence for the repository because container DNS could not resolve `github.com`; GitHub connector writes were used.
+- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment because those modules were not installed.
+- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+
 ## 0.19.0 - 2026-06-05
 
 **Engineering milestone:** Gate 4D execution-cost evidence boundary.
@@ -43,14 +64,13 @@
 - `MEASURED`: local isolated line-length spot check found no lines above 88 characters in the new Gate 4C source/test files.
 - `UNAVAILABLE`: direct mutable local clone evidence for the repository because GitHub writes were performed through the connector API.
 - `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
-- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
 
 ## 0.17.0 - 2026-06-04
 
 **Engineering milestone:** Gate 4B deterministic candle replay recovery boundary.
 
 - Started from verified `dev` head `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7`, which the connector showed was identical to `dev` before this recovery work.
-- Startup recovery found the prompt's expected Gate 4A baseline was outdated: repository `dev` was already at `0.16.0 / Increment 4E`, while deterministic candle replay remained absent.
 - Added `src/backtest/replay.py` with deterministic, research-only candle replay over caller-supplied rows.
 - Added `CandleReplayRow`, `CandleReplayMetadata`, `CandleReplay`, `CandleReplayError`, `build_candle_replay(...)`, `candle_replay_metadata_json(...)`, and `candle_replay_rows_json(...)`.
 - Validates UTC timestamps, strictly increasing open times, duplicate candles, missing candle intervals, malformed OHLC bounds, non-positive prices, invalid volume, symbol consistency, and timeframe consistency.
