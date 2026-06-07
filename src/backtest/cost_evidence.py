@@ -314,8 +314,7 @@ def render_cost_evidence_markdown(result: CostEvidenceGateResult) -> str:
         record = evidence_by_category.get(category)
         if record is None:
             rows.append(
-                f"| `{category.value}` | `UNAVAILABLE` |  |  |  | "
-                "missing record |"
+                f"| `{category.value}` | `UNAVAILABLE` |  |  |  | " "missing record |"
             )
             continue
         value = "" if record.value is None else str(record.value)
