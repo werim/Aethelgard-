@@ -49,14 +49,16 @@ def records_with_unavailable(
     category: CostEvidenceCategory,
 ) -> tuple[CostEvidenceRecord, ...]:
     return tuple(
-        CostEvidenceRecord(
-            category=item,
-            classification=CostEvidenceClassification.UNAVAILABLE,
-            source="test fixture missing evidence",
-            unavailable_reason=f"{item.value} not measured or modeled",
+        (
+            CostEvidenceRecord(
+                category=item,
+                classification=CostEvidenceClassification.UNAVAILABLE,
+                source="test fixture missing evidence",
+                unavailable_reason=f"{item.value} not measured or modeled",
+            )
+            if item is category
+            else measured_record(item)
         )
-        if item is category
-        else measured_record(item)
         for item in CostEvidenceCategory
     )
 
