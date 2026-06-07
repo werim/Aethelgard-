@@ -4,66 +4,70 @@
 
 - Operational readiness: `PAPER_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4D execution-cost evidence boundary.
+- Active increment: Gate 4B-0 minimal performance metric publication boundary.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD: `1bbd7e3850a8250186373d53962a651a2695fc7a`
-- Startup check found no open PRs targeting `dev` through the GitHub connector.
+- Starting HEAD: `4e654a6276f434a0fc16ae22caf9e64e6a17373c`
+- Startup check found no open PRs through the GitHub connector.
 - Combined commit status for the starting HEAD returned no status checks, and commit workflow runs were empty.
 - Direct mutable local clone status is unavailable in this execution environment because container DNS could not resolve `github.com`; repository writes were performed through the GitHub connector API.
 
-## Implemented Gate 4D boundary
+## Implemented Gate 4B-0 boundary
 
-Gate 4D adds a conservative execution-cost evidence boundary before net metrics, expectancy, profitability-oriented strategy comparison, optimizer input, or readiness statements can be published.
+Gate 4B-0 adds a minimal reporting boundary that consumes Gate 4A backtest metadata and decides only whether performance metric publication is eligible or blocked.
 
 | Area | Change | Evidence limit |
 | --- | --- | --- |
-| Evidence categories | Added records for fees, slippage, spread, funding, and latency. | Categories are caller-supplied evidence, not exchange-verified coverage. |
-| Classification | Added `MEASURED`, `MODELED`, and `UNAVAILABLE` cost classifications. | Classification does not prove strategy profitability. |
-| Unavailable evidence | `UNAVAILABLE` records cannot carry value or unit fields. | Unknown cost is never converted to zero. |
-| Modeled evidence | MODELED records require explicit assumptions and are labeled as modeled-cost metrics. | Modeled costs remain assumptions, not measurements. |
-| Gate result | Emits passed status, blocking categories, unavailable categories, modeled/measured categories, diagnostics, metric permissions, and readiness flag. | Readiness remains blocked. |
-| Metric boundary | Blocks net metrics while any required cost category is unavailable. | Gross metrics are only separately allowed when explicitly labeled gross. |
-| Reporting | Adds deterministic JSON and Markdown diagnostics for cost evidence. | Reporting is diagnostic only and not a readiness approval. |
+| Metadata input | Consumes `BacktestRunMetadata`. | Caller-supplied metadata only; no candle replay. |
+| Gate reuse | Calls `assert_can_produce_performance_results(...)`. | Does not independently prove execution realism. |
+| Status | Emits `METRICS_BLOCKED` or `METRICS_PUBLISHABLE`. | Status is diagnostic only. |
+| Refusal diagnostics | Preserves exact unavailable execution assumption names. | Missing evidence remains unavailable. |
+| Serialization | Adds deterministic eligibility/refusal JSON. | Payload is not a performance report. |
+| Metric surface | Emits no PnL, returns, win rate, drawdown, Sharpe, expectancy, alpha, or profitability field. | No performance is computed. |
+| Failure behavior | Malformed metadata fails closed as `METRICS_BLOCKED`. | Validation failure is not repaired or guessed. |
 
 ## Current classification behavior
 
-- `MEASURED`: accepted only with explicit value, unit, source, timestamp or observation window, and limitations.
-- `MODELED`: accepted only with explicit value, unit, source, timestamp or observation window, assumptions, and modeled-cost metric labeling.
-- `UNAVAILABLE`: requires an unavailable reason and cannot carry a value or unit.
-- Missing evidence records are treated as `UNAVAILABLE` and block net metrics.
-- `readiness_allowed` is always `False` in the Gate 4D result.
+- `UNAVAILABLE` execution evidence blocks metric publication.
+- `MEASURED` and `MODELED` Gate 4A execution evidence can make the payload eligible, but only for eligibility diagnostics.
+- Unknown execution evidence cannot carry zero and cannot become zero in the publication boundary.
+- Unsafe or malformed metadata returns refusal diagnostics and no metric fields.
+- Readiness remains blocked.
 
-## Metrics blocked when evidence is missing
+## Explicit non-scope
 
-Gate 4D blocks or marks unavailable:
+Gate 4B-0 does not:
 
-- net PnL,
-- expectancy,
-- Sharpe-like performance summaries,
-- win-rate profitability claims,
-- strategy ranking based on profitability,
-- optimizer input based on profitability,
-- backtest pass/fail based on profitability,
-- operational readiness conclusions.
-
-Gross metrics may only be shown when explicitly labeled gross and must not be used as readiness evidence.
+- replay candles,
+- simulate trades,
+- compute PnL,
+- compute returns,
+- compute win rate,
+- compute drawdown,
+- compute Sharpe,
+- compute expectancy,
+- generate alpha,
+- model fees, slippage, spreads, funding, latency, fills, or orderbook state,
+- optimize strategies,
+- add PAPER runtime behavior,
+- enable live execution,
+- send exchange instructions,
+- approve operational readiness.
 
 ## Validation evidence
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector confirmed access to `werim/Aethelgard-` with write permissions | `MEASURED` connector evidence |
-| Branch read | `VERSION.md` read successfully from `dev` before changes | `MEASURED` connector evidence |
-| Starting HEAD | `1bbd7e3850a8250186373d53962a651a2695fc7a` | `MEASURED` connector evidence |
+| Branch read | `VERSION.md` and required files read successfully from `dev` before changes | `MEASURED` connector evidence |
+| Starting HEAD | `4e654a6276f434a0fc16ae22caf9e64e6a17373c` | `MEASURED` connector evidence |
 | Open PRs affecting `dev` | none visible through connector search | `MEASURED` connector evidence |
 | CI/workflow status | no combined statuses and no workflow runs visible for starting HEAD | `UNAVAILABLE` / empty connector evidence |
-| Local isolated Gate 4D focused tests | `12 passed in 0.14s` after final line-length adjustment | `MEASURED` isolated evidence |
+| Local isolated Gate 4B-0 focused tests | `6 passed in 0.15s` | `MEASURED` isolated evidence |
 | Local isolated compile check | exit code `0` | `MEASURED` isolated evidence |
-| New-file line-length spot check | no lines above 88 chars | `MEASURED` isolated evidence |
 | Direct local clone | DNS resolution for `github.com` failed | `UNAVAILABLE` |
 | Ruff | module unavailable in scratch environment | `UNAVAILABLE` |
 | Black | module unavailable in scratch environment | `UNAVAILABLE` |
@@ -73,19 +77,19 @@ Gross metrics may only be shown when explicitly labeled gross and must not be us
 
 ## Safety boundary and unresolved risks
 
-- Gate 4D does not generate strategies, tune parameters, add optimizer behavior, access accounts, place exchange orders, add live execution, add PAPER runtime behavior, compute actual profitability, or approve readiness.
-- Measured fee, slippage, spread, funding, and latency coverage may still be incomplete.
-- Cost evidence remains caller-supplied until dedicated ingestion or persistence integration proves coverage.
-- Modeled-cost metrics are allowed only as explicitly labeled modeled-cost metrics and remain assumption-dependent.
-- Missing or stale execution-cost evidence remains unavailable and blocks net metric publication.
+- Gate 4B-0 only reports metric eligibility/refusal diagnostics.
+- It does not compute or validate any performance result.
+- It does not model costs; missing or stale execution evidence remains unavailable.
+- It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
+- Full repository tests, lint, format, type checks, and remote CI remain unverified in this environment.
 - API-backed writes created a sequence of small commits rather than one atomic local commit because a mutable local clone was unavailable.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / NOT LIVE READY`
 
-Reason: the execution-cost evidence boundary now prevents missing costs from being treated as zero, but this does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
+Reason: the metric-publication boundary now blocks performance publication when Gate 4A execution evidence is unavailable, but this is only a reporting safeguard. It does not prove execution realism, strategy performance, risk controls, or operational readiness.
 
 ## Next step
 
-The next recommended gate is a conservative reporting integration pass that wires Gate 4D into any existing or future performance/reporting surfaces before they can display net metrics. Do not add optimizer behavior, live execution, order placement, or readiness approval before the cost-evidence and risk gates are fully integrated and independently validated.
+The next recommended safe gate is Gate 4B-1: integrate the metric-publication eligibility boundary into any existing or future reporting entry points so performance fields cannot be emitted unless this boundary has passed. Do not add optimizer behavior, live execution, order placement, or readiness approval.
