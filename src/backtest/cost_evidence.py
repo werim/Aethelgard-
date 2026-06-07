@@ -129,9 +129,10 @@ class CostEvidenceRecord:
         }
 
 
-CostEvidenceRecords = (
-    Iterable[CostEvidenceRecord] | Mapping[CostEvidenceCategory, CostEvidenceRecord]
-)
+CostEvidenceIterable = Iterable[CostEvidenceRecord]
+CostEvidenceMapping = Mapping[CostEvidenceCategory, CostEvidenceRecord]
+CostEvidenceRecords = CostEvidenceIterable | CostEvidenceMapping
+RequiredCostCategories = Sequence[CostEvidenceCategory]
 
 
 @dataclass(frozen=True)
@@ -173,9 +174,7 @@ class CostEvidenceGateResult:
 def evaluate_cost_evidence_gate(
     evidence_records: CostEvidenceRecords,
     *,
-    required_categories: Sequence[CostEvidenceCategory] = (
-        REQUIRED_COST_EVIDENCE_CATEGORIES
-    ),
+    required_categories: RequiredCostCategories = REQUIRED_COST_EVIDENCE_CATEGORIES,
     allow_modeled_costs: bool = True,
     gross_metrics_explicitly_labeled: bool = False,
 ) -> CostEvidenceGateResult:
