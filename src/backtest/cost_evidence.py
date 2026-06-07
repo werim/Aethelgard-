@@ -185,13 +185,13 @@ def evaluate_cost_evidence_gate(
     if len(set(required)) != len(required):
         raise CostEvidenceError("required cost evidence categories must be unique")
     evidence_by_category: dict[CostEvidenceCategory, CostEvidenceRecord] = {}
-    for record in records:
-        record.validate()
-        if record.category in evidence_by_category:
+    for evidence_record in records:
+        evidence_record.validate()
+        if evidence_record.category in evidence_by_category:
             raise CostEvidenceError(
-                f"duplicate cost evidence category: {record.category.value}"
+                f"duplicate cost evidence category: {evidence_record.category.value}"
             )
-        evidence_by_category[record.category] = record
+        evidence_by_category[evidence_record.category] = evidence_record
 
     diagnostics: list[str] = []
     unavailable: list[CostEvidenceCategory] = []
@@ -200,22 +200,22 @@ def evaluate_cost_evidence_gate(
     blocking: list[CostEvidenceCategory] = []
 
     for category in required:
-        record = evidence_by_category.get(category)
-        if record is None:
+        category_record = evidence_by_category.get(category)
+        if category_record is None:
             unavailable.append(category)
             blocking.append(category)
             diagnostics.append(
                 f"{category.value} cost evidence is UNAVAILABLE: missing record"
             )
             continue
-        if record.classification is CostEvidenceClassification.UNAVAILABLE:
+        if category_record.classification is CostEvidenceClassification.UNAVAILABLE:
             unavailable.append(category)
             blocking.append(category)
             diagnostics.append(
                 f"{category.value} cost evidence is UNAVAILABLE: "
-                f"{record.unavailable_reason}"
+                f"{category_record.unavailable_reason}"
             )
-        elif record.classification is CostEvidenceClassification.MODELED:
+        elif category_record.classification is CostEvidenceClassification.MODELED:
             modeled.append(category)
             diagnostics.append(
                 f"{category.value} cost evidence is MODELED; metrics require "
@@ -227,11 +227,12 @@ def evaluate_cost_evidence_gate(
                     f"{category.value} modeled cost evidence is not accepted by "
                     "this gate policy"
                 )
-        elif record.classification is CostEvidenceClassification.MEASURED:
+        elif category_record.classification is CostEvidenceClassification.MEASURED:
             measured.append(category)
         else:  # pragma: no cover - defensive for future enum expansion.
             raise CostEvidenceError(
-                f"unsupported cost evidence classification: {record.classification}"
+                "unsupported cost evidence classification: "
+                f"{category_record.classification}"
             )
 
     if not records:
@@ -311,21 +312,25 @@ def render_cost_evidence_markdown(result: CostEvidenceGateResult) -> str:
     ]
     evidence_by_category = {record.category: record for record in result.evidence}
     for category in REQUIRED_COST_EVIDENCE_CATEGORIES:
-        record = evidence_by_category.get(category)
-        if record is None:
+        category_record = evidence_by_category.get(category)
+        if category_record is None:
             rows.append(
                 f"| `{category.value}` | `UNAVAILABLE` |  |  |  | " "missing record |"
             )
             continue
-        value = "" if record.value is None else str(record.value)
-        unit = "" if record.unit is None else record.unit
-        diagnostic_parts = [*record.assumptions, *record.limitations]
-        if record.unavailable_reason:
-            diagnostic_parts.append(record.unavailable_reason)
+        value = "" if category_record.value is None else str(category_record.value)
+        unit = "" if category_record.unit is None else category_record.unit
+        diagnostic_parts = [
+            *category_record.assumptions,
+            *category_record.limitations,
+        ]
+        if category_record.unavailable_reason:
+            diagnostic_parts.append(category_record.unavailable_reason)
         diagnostics = "; ".join(diagnostic_parts)
         rows.append(
-            f"| `{record.category.value}` | `{record.classification.value}` | "
-            f"{value} | {unit} | {record.source} | {diagnostics} |"
+            f"| `{category_record.category.value}` | "
+            f"`{category_record.classification.value}` | "
+            f"{value} | {unit} | {category_record.source} | {diagnostics} |"
         )
     diagnostics = "\n".join(f"- {item}" for item in result.diagnostics)
     return "\n".join(
