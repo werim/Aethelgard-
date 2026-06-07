@@ -1,0 +1,10 @@
+schema_version: 1
+purpose: RESEARCH_CANDIDATES_ONLY
+trading_enabled: false
+symbols:
+  - symbol: BTCUSDT
+    market: BINANCE_FUTURES
+    enabled_for_research: true
+  - symbol: ETHUSDT
+    market: BINANCE_FUTURES
+    enabled_for_research: true

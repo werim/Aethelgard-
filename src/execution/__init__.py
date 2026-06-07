@@ -1,0 +1,51 @@
+"""Research-only execution evidence helpers."""
+
+from src.execution.context import (
+    ExecutionAssumptionSnapshot,
+    ExecutionContextAssumption,
+    ExecutionContextDecisionOutcome,
+    ExecutionContextError,
+    ExecutionContextInput,
+    ExecutionContextSnapshot,
+    ExecutionContextStatus,
+    assert_execution_context_usable,
+    build_execution_context_snapshot,
+    execution_context_audit_evidence,
+    execution_context_json,
+    unavailable_execution_context_assumptions,
+)
+from src.execution.effective_rr import (
+    EffectiveRRError,
+    EffectiveRRInput,
+    EffectiveRRResult,
+    EffectiveRRStatus,
+    TradeSide,
+    assert_effective_rr_valid,
+    canonical_effective_rr,
+    effective_rr_audit_evidence,
+    effective_rr_report_row,
+)
+
+__all__ = [
+    "EffectiveRRError",
+    "EffectiveRRInput",
+    "EffectiveRRResult",
+    "EffectiveRRStatus",
+    "ExecutionAssumptionSnapshot",
+    "ExecutionContextAssumption",
+    "ExecutionContextDecisionOutcome",
+    "ExecutionContextError",
+    "ExecutionContextInput",
+    "ExecutionContextSnapshot",
+    "ExecutionContextStatus",
+    "TradeSide",
+    "assert_effective_rr_valid",
+    "assert_execution_context_usable",
+    "build_execution_context_snapshot",
+    "canonical_effective_rr",
+    "effective_rr_audit_evidence",
+    "effective_rr_report_row",
+    "execution_context_audit_evidence",
+    "execution_context_json",
+    "unavailable_execution_context_assumptions",
+]

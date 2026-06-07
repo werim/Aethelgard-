@@ -1,0 +1,94 @@
+PROJECT: Aethelgard
+REPOSITORY: https://github.com/werim/Aethelgard-
+TARGET BASE BRANCH: dev
+
+Operate autonomously on exactly one smallest coherent implementation increment that advances
+Aethelgard toward completion while preserving PAPER-only, truthfulness-first engineering.
+
+You must use the actual connected GitHub repository, refresh the current `dev` baseline, and read
+the repository-root `AGENTS.md` before doing any engineering work. Treat `AGENTS.md`, `REPORT.md`,
+`VERSION.md`, `CHANGELOG.md`, `PLAN.md` if present, and the master governance document if present
+as authoritative constraints.
+
+MANDATORY BASELINE CHECK
+
+Before editing:
+
+1. Confirm access to `werim/Aethelgard-` and the remote `dev` branch.
+2. Record repository URL, `dev` HEAD SHA, working-tree status, open PRs affecting `dev`, and visible
+   CI/workflow status for that HEAD when available.
+3. Read `AGENTS.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md` if present, governance
+   documents if present, README, dependency/tooling files, workflows, and the source/tests/config
+   relevant to the next candidate increment.
+4. Determine what is already implemented and validated. Never rely on old task text when the
+   repository has moved.
+5. If another open PR already implements the next increment, do not duplicate it. Review/repair
+   that work only if the task context permits; otherwise report that the next step is already in progress.
+
+SCOPE SELECTION RULE
+
+Choose only the earliest still-missing coherent increment from the ordered engineering roadmap in
+`AGENTS.md` and the current `REPORT.md`. Implement no later system unless it is narrowly necessary
+for that selected increment.
+
+The documentation inspected before this launcher was prepared showed `dev` at version `0.2.0`
+(Phase 2 supplied historical-kline validation) and recommended a bounded Phase 2B next step:
+read-only Binance Futures historical kline acquisition with deterministic pagination,
+retry/rate-limit handling, stale-data rejection, validated request/provenance consistency, and
+immutable local artifact plus metadata/checksum persistence.
+
+This is NOT permission to assume Phase 2B is still missing. Re-inspect the current repository.
+If it remains the earliest missing increment, implement only Phase 2B. If it is already complete,
+select the next smallest documented increment and explicitly justify that selection.
+
+NON-NEGOTIABLE SAFETY RULES
+
+- Maintain `PAPER_ONLY` and `RESEARCH_ONLY` operation.
+- Do not enable LIVE trading or any real exchange-order submission.
+- Do not introduce API secret requirements.
+- Do not fabricate fills, costs, profits, expectancy, readiness, CI results, or source authenticity.
+- Treat unavailable critical evidence and unknown execution costs explicitly as unavailable, never zero.
+- Fail closed on stale, malformed, incomplete, contradictory, or unverified critical data.
+- Do not begin strategy, execution simulation, backtesting, risk, or runtime work before its
+  prerequisite evidence boundary is actually implemented and validated.
+- Do not widen scope, aggressively refactor stable code, or introduce speculative frameworks.
+
+IMPLEMENTATION REQUIREMENTS
+
+For the one chosen increment:
+
+1. Create a focused feature branch from the refreshed current `dev`.
+2. Implement the minimal modular production-quality change in the correct boundary.
+3. Add or update tests covering happy paths and fail-closed edge cases.
+4. Preserve provenance, deterministic behavior, reproducibility metadata, and auditability.
+5. Run the project's relevant validation, including at minimum attempting:
+
+   python -m compileall -q src tests main.py
+   pytest -q
+   ruff check .
+   black --check .
+   mypy .
+
+6. Do not conceal failures. Fix failures in scope or stop and report them.
+7. Update `VERSION.md`, `CHANGELOG.md`, and `REPORT.md` with truthful evidence classification,
+   unresolved risks, validation results, and what still cannot be proven.
+8. Commit atomically on the feature branch.
+9. Open one focused pull request targeting `dev`.
+
+PULL REQUEST CONTENT
+
+The PR must contain:
+
+- baseline `dev` SHA and pre-existing status/PR observations
+- single implemented increment and why it was selected
+- files changed and module boundary preserved
+- tests/checks actually run with exact pass/fail/unverified results
+- confirmation that operation remains PAPER-only and no real-order path was introduced
+- evidence that is measured versus modeled versus unavailable
+- unresolved risks and claims that remain prohibited
+- the next smallest recommended increment, without implementing it
+
+STOP CONDITION
+
+Stop after opening the focused PR. Do not merge it. Do not begin the next phase in the same task.
+A separate run must start again from the then-current `dev` branch after review/merge.
