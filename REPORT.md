@@ -13,8 +13,9 @@
 - Starting HEAD for Gate 4B-1: `1cc9b8b4dddbcf947e233da78bf53aff56adfa87`
 - First implementation/report HEAD: `4d6e6bd9796f0903df572c99d8ea3d0eba3b357d`
 - Documentation/export finalization commits: `c70420fd7978f51745a80a47084280a3ec397874`, `0dd86a0bf24c4ac93d42d6c69e8f8cbfbcbc6a37`, `7cbf7559f878fcac3c9c1828984f7ab877712d96`.
+- Final observed validation cleanup HEAD: `fd7faf0b0affd375e2f3883cf3e81e88ac9ed200`.
 - Open PRs visible through the GitHub connector before this pass: none.
-- Combined commit statuses and workflow runs remain unavailable through connector APIs, but the user supplied a GitHub Actions screenshot showing green validation entries 147, 148, and 149 on `dev` for `test: integrate Gate 4B reporting publication guard`.
+- Combined commit statuses and workflow runs remain unavailable through connector APIs, but the user supplied GitHub Actions screenshots showing green validation entries 147 through 155 on `dev`.
 - Direct mutable local clone status remains unavailable in this execution environment because container DNS could not resolve `github.com`; connector reads and writes were used.
 
 ## Implemented Gate 4B-0 boundary
@@ -99,7 +100,8 @@ The Gate 4B-1 reporting integration safety pass does not:
 | Starting HEAD | `1cc9b8b4dddbcf947e233da78bf53aff56adfa87` | `MEASURED` connector evidence |
 | Open PRs | none visible through connector PR listing before implementation | `MEASURED` connector evidence |
 | Connector CI/workflow status | no combined statuses and no workflow runs visible for observed commits | `UNAVAILABLE` / empty connector evidence |
-| User-provided GitHub validation screenshot | validation 147, 148, and 149 green on `dev` for `test: integrate Gate 4B reporting publication guard` | `MEASURED_BY_USER_SCREENSHOT` |
+| User-provided GitHub validation screenshots | validation 147 through 155 green on `dev`, including implementation, docs/export finalization, accidental placeholder creation, and cleanup | `MEASURED_BY_USER_SCREENSHOT` |
+| Accidental placeholder cleanup | `reports/.gitkeep.tmp` was created accidentally and removed immediately; comparison from intended finalization head to current `dev` shows no file delta | `MEASURED` connector evidence |
 | Local focused compile check | reconstructed minimal `src`/`tests` slice passed `python -m compileall -q src tests` | `MEASURED` focused evidence |
 | Local focused tests | reconstructed focused suite passed `10 passed` | `MEASURED` focused evidence |
 | Requested full compile command | exact `python -m compileall -q src tests main.py` could not run against a full clone because container DNS could not resolve `github.com` | `UNAVAILABLE` |
@@ -117,6 +119,7 @@ The Gate 4B-1 reporting integration safety pass does not:
 - It does not model costs; missing or stale execution evidence remains unavailable.
 - It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
 - Exact branch-head full local tests, lint, format, type checks, and connector-visible CI remain unavailable in this environment.
+- The two accidental placeholder cleanup commits remain in history, but no file delta remains after cleanup.
 
 ## Operational readiness
 
@@ -126,4 +129,4 @@ Reason: the reporting guard blocks performance-field publication while eligibili
 
 ## Next step
 
-After the documentation/export finalization commit is validated, the next safe step is another narrow reporting safety pass or evidence-boundary review only if a concrete integration gap is found. Do not add optimizer behavior, live execution, order placement, strategy logic, trade simulation, performance calculation, or readiness approval.
+After this evidence reconciliation commit is validated, stop Gate 4B-1 work. The next safe increment should be selected only after a fresh repository inspection finds a concrete evidence-boundary gap. Do not add optimizer behavior, live execution, order placement, strategy logic, trade simulation, performance calculation, or readiness approval.
