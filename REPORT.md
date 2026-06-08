@@ -11,9 +11,10 @@
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
 - Starting HEAD for Gate 4B-1: `1cc9b8b4dddbcf947e233da78bf53aff56adfa87`
-- Open PRs visible through the GitHub connector: none.
-- Combined commit status for the starting HEAD returned no statuses.
-- Commit workflow runs for the starting HEAD returned no workflow runs.
+- First implementation/report HEAD: `4d6e6bd9796f0903df572c99d8ea3d0eba3b357d`
+- Documentation/export finalization commits: `c70420fd7978f51745a80a47084280a3ec397874`, `0dd86a0bf24c4ac93d42d6c69e8f8cbfbcbc6a37`, `7cbf7559f878fcac3c9c1828984f7ab877712d96`.
+- Open PRs visible through the GitHub connector before this pass: none.
+- Combined commit statuses and workflow runs remain unavailable through connector APIs, but the user supplied a GitHub Actions screenshot showing green validation entries 147, 148, and 149 on `dev` for `test: integrate Gate 4B reporting publication guard`.
 - Direct mutable local clone status remains unavailable in this execution environment because container DNS could not resolve `github.com`; connector reads and writes were used.
 
 ## Implemented Gate 4B-0 boundary
@@ -51,6 +52,7 @@ Gate 4B-1 adds a narrow reporting helper that accepts an existing Gate 4B-0 elig
 | --- | --- | --- |
 | Guard helper | Added `guarded_performance_report_payload(...)`. | Helper wraps caller payload only; no metrics are calculated. |
 | JSON helper | Added `guarded_performance_report_json(...)`. | Deterministic serialization only. |
+| Export surface | Exported both guarded publication helpers from `src/reporting/__init__.py`. | Import convenience only; no behavior expansion. |
 | Blocked behavior | `METRICS_BLOCKED` or inconsistent `can_publish_metrics=False` fails closed. | Emits refusal diagnostics only while blocked. |
 | Performance field suppression | Blocked candidate payloads are ignored entirely. | PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields cannot leak while blocked. |
 | Unavailable evidence | Existing unavailable execution assumption names remain textual diagnostics. | Unknown evidence is not converted to zero. |
@@ -95,8 +97,9 @@ The Gate 4B-1 reporting integration safety pass does not:
 | Branch read | `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `README.md`, `pyproject.toml`, `.github/workflows/*` search, `src/reporting/*`, and requested tests inspected through connector reads/search | `MEASURED` connector evidence where present |
 | Starting branch | `dev` resolved through direct file reads and `compare dev..dev` | `MEASURED` connector evidence |
 | Starting HEAD | `1cc9b8b4dddbcf947e233da78bf53aff56adfa87` | `MEASURED` connector evidence |
-| Open PRs | none visible through connector PR listing | `MEASURED` connector evidence |
-| CI/workflow status | no combined statuses and no workflow runs visible for the starting or post-change HEAD | `UNAVAILABLE` / empty connector evidence |
+| Open PRs | none visible through connector PR listing before implementation | `MEASURED` connector evidence |
+| Connector CI/workflow status | no combined statuses and no workflow runs visible for observed commits | `UNAVAILABLE` / empty connector evidence |
+| User-provided GitHub validation screenshot | validation 147, 148, and 149 green on `dev` for `test: integrate Gate 4B reporting publication guard` | `MEASURED_BY_USER_SCREENSHOT` |
 | Local focused compile check | reconstructed minimal `src`/`tests` slice passed `python -m compileall -q src tests` | `MEASURED` focused evidence |
 | Local focused tests | reconstructed focused suite passed `10 passed` | `MEASURED` focused evidence |
 | Requested full compile command | exact `python -m compileall -q src tests main.py` could not run against a full clone because container DNS could not resolve `github.com` | `UNAVAILABLE` |
@@ -113,7 +116,7 @@ The Gate 4B-1 reporting integration safety pass does not:
 - It does not compute or validate any performance result.
 - It does not model costs; missing or stale execution evidence remains unavailable.
 - It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
-- Exact branch-head full tests, lint, format, type checks, and remote CI remain unverified or unavailable in this environment.
+- Exact branch-head full local tests, lint, format, type checks, and connector-visible CI remain unavailable in this environment.
 
 ## Operational readiness
 
@@ -123,4 +126,4 @@ Reason: the reporting guard blocks performance-field publication while eligibili
 
 ## Next step
 
-After CI evidence is visible or explicitly unavailable, the next safe step is to keep hardening reporting integration surfaces without adding optimizer behavior, live execution, order placement, strategy logic, trade simulation, or readiness approval.
+After the documentation/export finalization commit is validated, the next safe step is another narrow reporting safety pass or evidence-boundary review only if a concrete integration gap is found. Do not add optimizer behavior, live execution, order placement, strategy logic, trade simulation, performance calculation, or readiness approval.
