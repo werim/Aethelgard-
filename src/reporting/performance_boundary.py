@@ -8,6 +8,7 @@ model costs, calculate performance, or approve PAPER/LIVE readiness.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -91,12 +92,56 @@ def evaluate_metric_publication_eligibility(
     )
 
 
+def guarded_performance_report_payload(
+    eligibility: MetricPublicationEligibility,
+    report_payload: Mapping[str, object],
+) -> dict[str, object]:
+    """Return a performance payload only after Gate 4B-0 eligibility passes.
+
+    Blocked eligibility fails closed and emits refusal diagnostics only. Candidate
+    report fields are deliberately ignored while blocked, so unavailable evidence
+    remains unavailable and cannot be smuggled into performance output as zero.
+    """
+
+    if (
+        eligibility.status is not MetricPublicationStatus.METRICS_PUBLISHABLE
+        or not eligibility.can_publish_metrics
+    ):
+        return _blocked_performance_report_payload(eligibility)
+    return dict(report_payload)
+
+
 def metric_publication_eligibility_json(
     eligibility: MetricPublicationEligibility,
 ) -> str:
     """Serialize metric-publication eligibility deterministically."""
 
     return json.dumps(eligibility.payload(), sort_keys=True, separators=(",", ":"))
+
+
+def guarded_performance_report_json(
+    eligibility: MetricPublicationEligibility,
+    report_payload: Mapping[str, object],
+) -> str:
+    """Serialize a guarded performance report payload deterministically."""
+
+    payload = guarded_performance_report_payload(eligibility, report_payload)
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
+def _blocked_performance_report_payload(
+    eligibility: MetricPublicationEligibility,
+) -> dict[str, object]:
+    reason = eligibility.refusal_reason or "performance publication blocked"
+    diagnostics = eligibility.diagnostics or (reason,)
+    return {
+        "diagnostics": list(diagnostics),
+        "refusal_reason": reason,
+        "status": MetricPublicationStatus.METRICS_BLOCKED.value,
+        "unavailable_execution_assumptions": list(
+            eligibility.unavailable_execution_assumptions
+        ),
+    }
 
 
 def _unavailable_assumption_names(
