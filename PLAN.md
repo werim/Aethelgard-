@@ -139,6 +139,44 @@ Gate 4D classifies execution-cost evidence as `MEASURED`, `MODELED`, or `UNAVAIL
 
 Gate 4B-0 is a reporting/publication guard only. It publishes no PnL, returns, win rate, drawdown, Sharpe, expectancy, alpha, profitability metric, or readiness approval.
 
+## Gate 4B hardening evidence reconciliation
+
+**Status:** `DOCUMENTED_AFTER_PR_13_MERGE_PENDING_REMOTE_CI_EVIDENCE`.
+
+### Repository state
+
+- Repository: `werim/Aethelgard-`.
+- Base branch: `dev`.
+- PR #13: merged.
+- Merge commit: `c2cbfb0331172b1c5476aa1c9f1970b5d44a39b6`.
+- Open PRs targeting `dev`: none visible through connector search.
+- Combined commit statuses for the merge commit: empty.
+- Workflow runs for the merge commit: empty.
+
+### Scope
+
+- Added two deterministic replay hardening tests in `tests/test_backtest_replay.py`.
+- Asserted replay metadata and row payloads contain no performance metric, execution, trade, fill, cost, latency, position, signal, or readiness fields.
+- Asserted valid replay construction and iteration do not import `src.execution`, `src.execution.*`, or order-related execution modules.
+- Left `src/backtest/replay.py` and runtime code untouched.
+- No version bump was made because this was test-only hardening.
+
+### Evidence classification
+
+- `MEASURED`: PR #13 merged into `dev`.
+- `MEASURED`: merge commit recorded as `c2cbfb0331172b1c5476aa1c9f1970b5d44a39b6`.
+- `MEASURED`: connector reads show the added hardening tests on `dev`.
+- `MEASURED`: earlier local extracted-archive validation passed `python -m compileall -q src tests main.py`.
+- `MEASURED`: earlier local extracted-archive validation passed `pytest -q` with `188 passed`.
+- `UNAVAILABLE`: mutable local clone validation at exact merge commit.
+- `UNAVAILABLE`: local `ruff check .`, `black --check .`, and `mypy .` in this environment.
+- `UNAVAILABLE`: remote CI/workflow evidence for the merge commit; connector returned no statuses and no workflow runs.
+- `MODELED`: none.
+
+### Boundary limit
+
+This reconciliation only documents the merged test hardening. It does not add strategy logic, trade simulation, performance metrics, execution-cost modeling, optimizer behavior, PAPER runtime behavior, live trading, order placement, or readiness approval. Replay remains deterministic candle replay only.
+
 ## Gate 4B-1 — Reporting integration safety pass
 
 **Status:** `NEXT_RECOMMENDED_SAFE_GATE`.
