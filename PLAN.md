@@ -179,6 +179,26 @@ This reconciliation only documents the merged test hardening. It does not add st
 
 ## Gate 4B-1 — Reporting integration safety pass
 
-**Status:** `NEXT_RECOMMENDED_SAFE_GATE`.
+**Status:** `IMPLEMENTED_GREEN_BY_USER_REPORTED_VALIDATION`.
 
-Wire the metric-publication eligibility boundary into any existing or future reporting entry points so performance fields cannot be emitted unless Gate 4B-0 passes. Do not add optimizer behavior, live execution, order placement, or readiness approval.
+### Scope
+
+- Added `guarded_performance_report_payload(...)` and `guarded_performance_report_json(...)` in `src/reporting/performance_boundary.py`.
+- The helper accepts an existing Gate 4B-0 eligibility result and fails closed while status is blocked.
+- Blocked publication emits refusal diagnostics only and ignores caller-supplied performance-like payload fields.
+- Exported the guard helpers from `src/reporting/__init__.py`.
+- Added focused tests proving blocked eligibility suppresses PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields.
+- Added focused tests proving unavailable evidence remains unavailable, zero values do not leak from blocked candidate payloads, and the guard does not import execution or order modules.
+
+### Evidence classification
+
+- `MEASURED`: connector reads confirmed implementation on `dev`.
+- `MEASURED`: local reconstructed focused test slice passed `10 passed`.
+- `MEASURED_BY_USER_SCREENSHOT`: GitHub validation entries 147, 148, and 149 are green on `dev` for `test: integrate Gate 4B reporting publication guard`.
+- `UNAVAILABLE`: connector workflow APIs still returned no workflow runs for the observed commit.
+- `UNAVAILABLE`: mutable local full-repository clone remains unavailable in this execution environment.
+- `MODELED`: none.
+
+### Boundary limit
+
+Gate 4B-1 is a reporting integration safety guard only. It does not compute performance, replay candles, simulate trades, model costs, add strategy logic, add optimizer behavior, place orders, enable live trading, or approve readiness.
