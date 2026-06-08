@@ -102,3 +102,65 @@ def test_symbol_and_timeframe_mismatch_fail_closed() -> None:
         build_candle_replay([candle("2026-01-01T00:00:00Z")], symbol="ETHUSDT")
     with pytest.raises(CandleReplayError, match="timeframe mismatch"):
         build_candle_replay([candle("2026-01-01T00:00:00Z")], timeframe="5m")
+
+
+def test_replay_outputs_contain_no_performance_metric_fields() -> None:
+    replay = build_candle_replay(valid_rows(), symbol="BTCUSDT", timeframe="1h")
+    metadata_payload = json.loads(candle_replay_metadata_json(replay.metadata))
+    forbidden_keys = {
+        "pnl",
+        "profit",
+        "loss",
+        "returns",
+        "return",
+        "win_rate",
+        "sharpe",
+        "drawdown",
+        "expectancy",
+        "alpha",
+        "beta",
+        "equity",
+        "balance",
+        "position",
+        "signal",
+        "trade",
+        "fill",
+        "fee",
+        "slippage",
+        "latency",
+        "readiness",
+    }
+
+    assert forbidden_keys.isdisjoint(metadata_payload)
+    for row in replay.iter_rows():
+        assert forbidden_keys.isdisjoint(row.payload())
+
+
+def test_replay_does_not_import_execution_or_order_paths() -> None:
+    import sys
+
+    saved_execution_modules = {
+        name: module
+        for name, module in list(sys.modules.items())
+        if name == "src.execution" or name.startswith("src.execution.")
+    }
+    for name in saved_execution_modules:
+        del sys.modules[name]
+
+    try:
+        replay = build_candle_replay(valid_rows(), symbol="BTCUSDT", timeframe="1h")
+        list(replay.iter_rows())
+
+        loaded_execution_modules = {
+            name
+            for name in sys.modules
+            if name == "src.execution" or name.startswith("src.execution.")
+        }
+        loaded_order_modules = {
+            name for name in loaded_execution_modules if "order" in name
+        }
+
+        assert loaded_execution_modules == set()
+        assert loaded_order_modules == set()
+    finally:
+        sys.modules.update(saved_execution_modules)
