@@ -2,20 +2,19 @@
 
 ## Current classification
 
-- Operational readiness: `PAPER_ONLY / NOT_LIVE_READY`
+- Operational readiness: `PAPER_ONLY / RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4B hardening evidence reconciliation.
+- Active increment: Gate 4B-1 reporting integration safety pass.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD: `4e654a6276f434a0fc16ae22caf9e64e6a17373c`
-- PR #13 merged into `dev` with merge commit `c2cbfb0331172b1c5476aa1c9f1970b5d44a39b6`.
-- Open PRs targeting `dev` are not visible through connector search after the PR #13 merge.
-- Combined commit status for the PR #13 merge commit returned no statuses.
-- Commit workflow runs for the PR #13 merge commit returned no workflow runs.
-- Direct mutable local clone status remains unavailable in this execution environment; connector reads and writes were used for this documentation reconciliation.
+- Starting HEAD for Gate 4B-1: `1cc9b8b4dddbcf947e233da78bf53aff56adfa87`
+- Open PRs visible through the GitHub connector: none.
+- Combined commit status for the starting HEAD returned no statuses.
+- Commit workflow runs for the starting HEAD returned no workflow runs.
+- Direct mutable local clone status remains unavailable in this execution environment because container DNS could not resolve `github.com`; connector reads and writes were used.
 
 ## Implemented Gate 4B-0 boundary
 
@@ -44,10 +43,23 @@ PR #13 added only two focused tests to the deterministic candle replay suite. Th
 | Runtime code | `src/backtest/replay.py` was not modified. | Replay behavior was not changed. |
 | Version | No version bump. | Test-only hardening does not require a release bump. |
 
+## Gate 4B-1 reporting integration safety pass
+
+Gate 4B-1 adds a narrow reporting helper that accepts an existing Gate 4B-0 eligibility result before any caller-supplied performance report payload can be emitted.
+
+| Area | Change | Evidence limit |
+| --- | --- | --- |
+| Guard helper | Added `guarded_performance_report_payload(...)`. | Helper wraps caller payload only; no metrics are calculated. |
+| JSON helper | Added `guarded_performance_report_json(...)`. | Deterministic serialization only. |
+| Blocked behavior | `METRICS_BLOCKED` or inconsistent `can_publish_metrics=False` fails closed. | Emits refusal diagnostics only while blocked. |
+| Performance field suppression | Blocked candidate payloads are ignored entirely. | PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields cannot leak while blocked. |
+| Unavailable evidence | Existing unavailable execution assumption names remain textual diagnostics. | Unknown evidence is not converted to zero. |
+| Execution isolation | Focused test confirms the guard does not import `src.execution` or order modules. | Import-boundary evidence only. |
+
 ## Current classification behavior
 
 - `UNAVAILABLE` execution evidence blocks metric publication.
-- `MEASURED` and `MODELED` Gate 4A execution evidence can make the payload eligible, but only for eligibility diagnostics.
+- `MEASURED` and `MODELED` Gate 4A execution evidence can make a caller-supplied payload publishable, but only after the Gate 4B-0 eligibility result says so.
 - Unknown execution evidence cannot carry zero and cannot become zero in the publication boundary.
 - Unsafe or malformed metadata returns refusal diagnostics and no metric fields.
 - Replay remains deterministic candle replay only.
@@ -56,9 +68,9 @@ PR #13 added only two focused tests to the deterministic candle replay suite. Th
 
 ## Explicit non-scope
 
-The Gate 4B hardening reconciliation does not:
+The Gate 4B-1 reporting integration safety pass does not:
 
-- modify replay implementation,
+- modify `src/backtest/replay.py`,
 - replay candles beyond existing tests,
 - simulate trades,
 - compute PnL,
@@ -80,33 +92,35 @@ The Gate 4B hardening reconciliation does not:
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector confirmed access to `werim/Aethelgard-` with write permissions | `MEASURED` connector evidence |
-| Branch read | `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `README.md`, `pyproject.toml`, workflow config, and merged replay tests read from `dev` | `MEASURED` connector evidence |
-| PR #13 state | closed and merged | `MEASURED` connector evidence |
-| PR #13 merge commit | `c2cbfb0331172b1c5476aa1c9f1970b5d44a39b6` | `MEASURED` connector evidence |
-| Open PRs targeting `dev` | none visible through connector search | `MEASURED` connector evidence |
-| CI/workflow status | no combined statuses and no workflow runs visible for merge commit | `UNAVAILABLE` / empty connector evidence |
-| Earlier local compile check | `python -m compileall -q src tests main.py` passed before PR creation | `MEASURED` extracted-archive evidence |
-| Earlier local full test run | `pytest -q` reported `188 passed` before PR creation | `MEASURED` extracted-archive evidence |
-| Exact merge-commit local validation | mutable local clone unavailable | `UNAVAILABLE` |
-| Ruff | module unavailable in scratch environment | `UNAVAILABLE` |
-| Black | module unavailable in scratch environment | `UNAVAILABLE` |
-| Mypy | module unavailable in scratch environment | `UNAVAILABLE` |
+| Branch read | `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `README.md`, `pyproject.toml`, `.github/workflows/*` search, `src/reporting/*`, and requested tests inspected through connector reads/search | `MEASURED` connector evidence where present |
+| Starting branch | `dev` resolved through direct file reads and `compare dev..dev` | `MEASURED` connector evidence |
+| Starting HEAD | `1cc9b8b4dddbcf947e233da78bf53aff56adfa87` | `MEASURED` connector evidence |
+| Open PRs | none visible through connector PR listing | `MEASURED` connector evidence |
+| CI/workflow status | no combined statuses and no workflow runs visible for the starting or post-change HEAD | `UNAVAILABLE` / empty connector evidence |
+| Local focused compile check | reconstructed minimal `src`/`tests` slice passed `python -m compileall -q src tests` | `MEASURED` focused evidence |
+| Local focused tests | reconstructed focused suite passed `10 passed` | `MEASURED` focused evidence |
+| Requested full compile command | exact `python -m compileall -q src tests main.py` could not run against a full clone because container DNS could not resolve `github.com` | `UNAVAILABLE` |
+| Requested full test run | `pytest -q` against the full repository could not run without a full clone | `UNAVAILABLE` |
+| Ruff | command unavailable in scratch environment | `UNAVAILABLE` |
+| Black | command unavailable in scratch environment | `UNAVAILABLE` |
+| Mypy | command unavailable in scratch environment | `UNAVAILABLE` |
+| Atomic commit | GitHub contents API writes created separate file commits; a local atomic multi-file commit was unavailable | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary and unresolved risks
 
-- Gate 4B hardening only adds tests and documentation evidence.
+- Gate 4B-1 only adds a publication guard and focused tests around existing eligibility diagnostics.
 - It does not compute or validate any performance result.
 - It does not model costs; missing or stale execution evidence remains unavailable.
 - It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
-- Exact merge-commit tests, lint, format, type checks, and remote CI remain unverified or unavailable in this environment.
+- Exact branch-head full tests, lint, format, type checks, and remote CI remain unverified or unavailable in this environment.
 
 ## Operational readiness
 
-Operational readiness: `PAPER ONLY / NOT LIVE READY`
+Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: the merged hardening tests improve replay boundary coverage, but they do not prove execution realism, strategy performance, risk controls, or operational readiness.
+Reason: the reporting guard blocks performance-field publication while eligibility is blocked, but it does not prove execution realism, strategy performance, risk controls, or operational readiness.
 
 ## Next step
 
-After this documentation reconciliation is merged and CI evidence is visible or explicitly unavailable, the next recommended safe gate remains Gate 4B-1: integrate the metric-publication eligibility boundary into any existing or future reporting entry points so performance fields cannot be emitted unless this boundary has passed. Do not add optimizer behavior, live execution, order placement, or readiness approval.
+After CI evidence is visible or explicitly unavailable, the next safe step is to keep hardening reporting integration surfaces without adding optimizer behavior, live execution, order placement, strategy logic, trade simulation, or readiness approval.
