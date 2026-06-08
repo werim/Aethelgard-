@@ -12,6 +12,8 @@ from src.backtest.foundation import (
 from src.reporting.performance_boundary import (
     MetricPublicationStatus,
     evaluate_metric_publication_eligibility,
+    guarded_performance_report_json,
+    guarded_performance_report_payload,
     metric_publication_eligibility_json,
 )
 
@@ -54,6 +56,52 @@ def measured_or_modeled_execution() -> dict[ExecutionAssumption, ExecutionEviden
                 value="modeled-placeholder",
             )
     return evidence
+
+
+def metric_candidate_payload() -> dict[str, object]:
+    return {
+        "pnl": 0,
+        "returns": 0,
+        "win_rate": 0,
+        "sharpe": 0,
+        "drawdown": 0,
+        "expectancy": 0,
+        "alpha": 0,
+        "beta": 0,
+        "equity": 0,
+        "balance": 0,
+        "position": "NONE",
+        "signal": "NONE",
+        "trade": "NONE",
+        "fill": "NONE",
+        "fee": 0,
+        "slippage": 0,
+        "latency": 0,
+        "readiness": "READY",
+    }
+
+
+def forbidden_publication_fields() -> set[str]:
+    return {
+        "pnl",
+        "returns",
+        "win_rate",
+        "sharpe",
+        "drawdown",
+        "expectancy",
+        "alpha",
+        "beta",
+        "equity",
+        "balance",
+        "position",
+        "signal",
+        "trade",
+        "fill",
+        "fee",
+        "slippage",
+        "latency",
+        "readiness",
+    }
 
 
 def test_unavailable_execution_evidence_blocks_metric_publication() -> None:
@@ -160,3 +208,86 @@ def test_no_performance_metric_fields_are_emitted() -> None:
         "status",
         "unavailable_execution_assumptions",
     }
+
+
+def test_blocked_eligibility_prevents_performance_field_publication() -> None:
+    eligibility = evaluate_metric_publication_eligibility(
+        metadata_with_unavailable_execution()
+    )
+
+    payload = guarded_performance_report_payload(
+        eligibility,
+        metric_candidate_payload(),
+    )
+
+    assert payload == {
+        "diagnostics": list(eligibility.diagnostics),
+        "refusal_reason": eligibility.refusal_reason,
+        "status": MetricPublicationStatus.METRICS_BLOCKED.value,
+        "unavailable_execution_assumptions": list(
+            eligibility.unavailable_execution_assumptions
+        ),
+    }
+    assert forbidden_publication_fields().isdisjoint(payload)
+
+
+def test_blocked_publication_keeps_unavailable_evidence_unavailable() -> None:
+    eligibility = evaluate_metric_publication_eligibility(
+        metadata_with_unavailable_execution()
+    )
+    payload = json.loads(
+        guarded_performance_report_json(eligibility, metric_candidate_payload())
+    )
+
+    assert payload["unavailable_execution_assumptions"] == sorted(
+        assumption.value for assumption in REQUIRED_EXECUTION_ASSUMPTIONS
+    )
+    assert "0" not in guarded_performance_report_json(
+        eligibility,
+        metric_candidate_payload(),
+    )
+
+
+def test_guard_does_not_import_execution_or_order_modules() -> None:
+    import sys
+
+    saved_execution_modules = {
+        name: module
+        for name, module in list(sys.modules.items())
+        if name == "src.execution" or name.startswith("src.execution.")
+    }
+    for name in saved_execution_modules:
+        del sys.modules[name]
+
+    try:
+        eligibility = evaluate_metric_publication_eligibility(
+            metadata_with_unavailable_execution()
+        )
+        guarded_performance_report_payload(eligibility, metric_candidate_payload())
+
+        loaded_execution_modules = {
+            name
+            for name in sys.modules
+            if name == "src.execution" or name.startswith("src.execution.")
+        }
+        loaded_order_modules = {
+            name for name in loaded_execution_modules if "order" in name
+        }
+
+        assert loaded_execution_modules == set()
+        assert loaded_order_modules == set()
+    finally:
+        sys.modules.update(saved_execution_modules)
+
+
+def test_paper_only_research_only_posture_remains_in_guard_diagnostics() -> None:
+    eligibility = evaluate_metric_publication_eligibility(
+        metadata_with_unavailable_execution()
+    )
+    payload = guarded_performance_report_payload(
+        eligibility,
+        metric_candidate_payload(),
+    )
+
+    assert payload["status"] == MetricPublicationStatus.METRICS_BLOCKED.value
+    assert "READY" not in json.dumps(payload, sort_keys=True)
