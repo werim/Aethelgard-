@@ -14,6 +14,8 @@ from src.reporting.performance_boundary import (
     MetricPublicationEligibility,
     MetricPublicationStatus,
     evaluate_metric_publication_eligibility,
+    guarded_performance_report_json,
+    guarded_performance_report_payload,
     metric_publication_eligibility_json,
 )
 
@@ -27,6 +29,8 @@ __all__ = [
     "assert_paper_db_audit_clean",
     "audit_paper_runtime_database",
     "evaluate_metric_publication_eligibility",
+    "guarded_performance_report_json",
+    "guarded_performance_report_payload",
     "metric_publication_eligibility_json",
     "paper_db_audit_json",
     "render_paper_db_audit_markdown",
