@@ -8,13 +8,16 @@
 - `MetricPublicationStatus`, immutable eligibility diagnostics, and deterministic JSON serialization for metric-publication eligibility/refusal payloads.
 - Focused tests for unavailable evidence blocking, measured/modeled evidence eligibility, unavailable-not-zero behavior, deterministic JSON, malformed metadata fail-closed behavior, and absence of performance metric fields.
 - Gate 4B replay hardening tests confirming deterministic replay metadata and row payloads expose no performance metric or execution fields and do not import `src.execution` or order-related modules.
+- Gate 4B-1 guarded performance-report publication helpers that accept an existing Gate 4B-0 eligibility result before emitting caller-supplied report payloads.
+- Focused Gate 4B-1 tests proving blocked eligibility suppresses performance-like fields, preserves unavailable evidence, and does not import execution or order modules.
 
 ### Changed
 
 - Package version advanced to `0.20.0`.
-- `src/reporting/__init__.py` now exports Gate 4B-0 metric-publication eligibility helpers.
+- `src/reporting/__init__.py` now exports Gate 4B-0 metric-publication eligibility helpers and Gate 4B-1 guarded publication helpers.
 - Reporting can now publish only eligibility/refusal diagnostics before any performance metric surface is allowed.
 - Documentation now records the PR #13 merge evidence for Gate 4B replay hardening without advancing the version.
+- PLAN and REPORT now record Gate 4B-1 user-reported green validation evidence while connector workflow APIs remain unavailable.
 
 ### Fixed
 
@@ -22,6 +25,7 @@
 - Unsafe or malformed backtest metadata fails closed as `METRICS_BLOCKED`.
 - Unknown execution evidence remains unavailable and is not converted to zero.
 - Deterministic replay boundary tests now guard against accidental performance-field publication or execution/order imports.
+- Blocked Gate 4B-1 publication now ignores candidate payloads that contain PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, or readiness fields.
 
 ### Removed
 
@@ -29,11 +33,11 @@
 
 ### Known limitations
 
-- Gate 4B-0 does not replay candles, simulate trades, compute performance, model costs, integrate an optimizer, add PAPER runtime behavior, place orders, enable LIVE trading, or approve readiness.
+- Gate 4B-0 and Gate 4B-1 do not replay candles, simulate trades, compute performance, model costs, integrate an optimizer, add PAPER runtime behavior, place orders, enable LIVE trading, or approve readiness.
 - Gate 4B replay hardening is test coverage only and does not change runtime behavior.
-- The boundary only reports metric eligibility/refusal diagnostics.
+- The boundary only reports metric eligibility/refusal diagnostics or forwards caller payloads after eligibility is publishable.
 - Local Ruff, Black, and Mypy were unavailable in the scratch environment.
-- Exact final branch-head full-suite validation and remote CI are unverified until GitHub Actions reports.
+- Exact final branch-head full-suite validation remains unavailable locally; GitHub validation is recorded from user-provided green screenshot evidence.
 - API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
 
 ## [0.19.0] - 2026-06-05
