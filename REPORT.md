@@ -4,78 +4,57 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4B-1 reporting integration safety pass.
+- Active increment: Gate 4B-2 reporting boundary completeness audit.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD for Gate 4B-1: `1cc9b8b4dddbcf947e233da78bf53aff56adfa87`
-- First implementation/report HEAD: `4d6e6bd9796f0903df572c99d8ea3d0eba3b357d`
-- Documentation/export finalization commits: `c70420fd7978f51745a80a47084280a3ec397874`, `0dd86a0bf24c4ac93d42d6c69e8f8cbfbcbc6a37`, `7cbf7559f878fcac3c9c1828984f7ab877712d96`.
-- Final observed validation cleanup HEAD: `fd7faf0b0affd375e2f3883cf3e81e88ac9ed200`.
+- Pre-audit documented branch head: `fd7faf0b0affd375e2f3883cf3e81e88ac9ed200`.
+- Gate 4B-2 code hardening commits: `199183174bb01680772609cb8c2ede9ba3b63144`, `9f09b76151b9d09b99b62c723383fc78f79f762e`.
 - Open PRs visible through the GitHub connector before this pass: none.
-- Combined commit statuses and workflow runs remain unavailable through connector APIs, but the user supplied GitHub Actions screenshots showing green validation entries 147 through 155 on `dev`.
-- Direct mutable local clone status remains unavailable in this execution environment because container DNS could not resolve `github.com`; connector reads and writes were used.
+- Connector branch search did not return `dev`, but direct `dev` file reads and connector writes to `dev` succeeded.
+- Combined commit statuses and workflow runs remain unavailable through connector APIs.
+- Direct mutable local clone status remains unavailable in this execution environment; connector reads and writes were used.
 
-## Implemented Gate 4B-0 boundary
+## Gate 4B-2 reporting boundary completeness audit
 
-Gate 4B-0 adds a minimal reporting boundary that consumes Gate 4A backtest metadata and decides only whether performance metric publication is eligible or blocked.
+Gate 4B-2 searched the reporting and serialization surfaces that can emit report, markdown, JSON, payload, or audit data containing performance-like names.
 
-| Area | Change | Evidence limit |
+| Surface | Finding | Action |
 | --- | --- | --- |
-| Metadata input | Consumes `BacktestRunMetadata`. | Caller-supplied metadata only; no candle replay. |
-| Gate reuse | Calls `assert_can_produce_performance_results(...)`. | Does not independently prove execution realism. |
-| Status | Emits `METRICS_BLOCKED` or `METRICS_PUBLISHABLE`. | Status is diagnostic only. |
-| Refusal diagnostics | Preserves exact unavailable execution assumption names. | Missing evidence remains unavailable. |
-| Serialization | Adds deterministic eligibility/refusal JSON. | Payload is not a performance report. |
-| Metric surface | Emits no PnL, returns, win rate, drawdown, Sharpe, expectancy, alpha, or profitability field. | No performance is computed. |
-| Failure behavior | Malformed metadata fails closed as `METRICS_BLOCKED`. | Validation failure is not repaired or guessed. |
+| `src/reporting/performance_boundary.py` eligibility JSON | Emits only eligibility diagnostics and unavailable assumption names. | No performance metric calculation added. |
+| `src/reporting/performance_boundary.py` guarded payload JSON | Concrete bypass found: callers could manually construct a publishable `MetricPublicationEligibility` and pass performance-like fields through the guard. | Fixed with an internal boundary-evaluated token; untrusted eligibility now fails closed. |
+| `src/reporting/paper_db_audit.py` JSON/Markdown | Emits audit table names, row counts, issue codes, and evidence labels. Some names include lifecycle or decision terminology, but no performance metrics are calculated. | Documentation evidence only. |
+| `src/backtest/foundation.py` metadata JSON | Emits run metadata and execution assumption evidence; execution-cost evidence names such as fees, slippage, latency, and funding are evidence labels, not costs treated as zero. | Existing fail-closed behavior retained. |
+| `src/backtest/replay.py` replay JSON | Prior hardening tests assert replay metadata and row payloads do not expose PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, or readiness fields. | Existing coverage retained. |
+| Root Markdown docs | Intentionally mention prohibited or unavailable metrics as boundaries and limitations. | Documentation evidence only. |
 
-## Gate 4B replay hardening reconciliation
+## Implemented Gate 4B-2 hardening
 
-PR #13 added only two focused tests to the deterministic candle replay suite. The merged tests assert that replay outputs contain no performance metric or execution fields and that replay construction/iteration does not import execution or order paths.
-
-| Area | Evidence | Limit |
-| --- | --- | --- |
-| PR merge | PR #13 merged into `dev`. | Merge evidence only; not a runtime proof. |
-| Merge commit | `c2cbfb0331172b1c5476aa1c9f1970b5d44a39b6`. | Connector evidence only. |
-| Metric surface test | Metadata and row payloads reject PnL, returns, Sharpe, drawdown, expectancy, alpha/beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, readiness, and related fields. | Test coverage only; no metrics are produced. |
-| Execution path test | Valid replay build and iteration do not import `src.execution`, `src.execution.*`, or order-related execution modules. | Import-boundary evidence only. |
-| Runtime code | `src/backtest/replay.py` was not modified. | Replay behavior was not changed. |
-| Version | No version bump. | Test-only hardening does not require a release bump. |
-
-## Gate 4B-1 reporting integration safety pass
-
-Gate 4B-1 adds a narrow reporting helper that accepts an existing Gate 4B-0 eligibility result before any caller-supplied performance report payload can be emitted.
-
-| Area | Change | Evidence limit |
-| --- | --- | --- |
-| Guard helper | Added `guarded_performance_report_payload(...)`. | Helper wraps caller payload only; no metrics are calculated. |
-| JSON helper | Added `guarded_performance_report_json(...)`. | Deterministic serialization only. |
-| Export surface | Exported both guarded publication helpers from `src/reporting/__init__.py`. | Import convenience only; no behavior expansion. |
-| Blocked behavior | `METRICS_BLOCKED` or inconsistent `can_publish_metrics=False` fails closed. | Emits refusal diagnostics only while blocked. |
-| Performance field suppression | Blocked candidate payloads are ignored entirely. | PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields cannot leak while blocked. |
-| Unavailable evidence | Existing unavailable execution assumption names remain textual diagnostics. | Unknown evidence is not converted to zero. |
-| Execution isolation | Focused test confirms the guard does not import `src.execution` or order modules. | Import-boundary evidence only. |
+- Added a private boundary-evaluated token to `MetricPublicationEligibility`.
+- `evaluate_metric_publication_eligibility(...)` now creates trusted eligibility objects through an internal helper.
+- `guarded_performance_report_payload(...)` now fails closed when eligibility was not produced by the Gate 4B boundary evaluator.
+- Untrusted publishable eligibility returns only refusal diagnostics, `METRICS_BLOCKED`, and unavailable assumption labels.
+- Added a focused test proving forged publishable eligibility cannot publish candidate fields including PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, or readiness.
+- No strategy logic, optimizer behavior, exchange mutation, simulation engine, performance calculation, or readiness approval was added.
 
 ## Current classification behavior
 
 - `UNAVAILABLE` execution evidence blocks metric publication.
-- `MEASURED` and `MODELED` Gate 4A execution evidence can make a caller-supplied payload publishable, but only after the Gate 4B-0 eligibility result says so.
+- `MEASURED` and `MODELED` Gate 4A execution evidence can make a caller-supplied payload publishable only when eligibility was created by the boundary evaluator.
+- Manually constructed publishable eligibility is treated as untrusted and fails closed.
 - Unknown execution evidence cannot carry zero and cannot become zero in the publication boundary.
 - Unsafe or malformed metadata returns refusal diagnostics and no metric fields.
-- Replay remains deterministic candle replay only.
-- Replay emits no performance metrics and does not touch execution or order paths.
 - Readiness remains blocked.
 
 ## Explicit non-scope
 
-The Gate 4B-1 reporting integration safety pass does not:
+The Gate 4B-2 reporting boundary completeness audit does not:
 
-- modify `src/backtest/replay.py`,
+- modify candle replay behavior,
 - replay candles beyond existing tests,
-- simulate trades,
+- simulate lifecycle outcomes,
 - compute PnL,
 - compute returns,
 - compute win rate,
@@ -86,8 +65,7 @@ The Gate 4B-1 reporting integration safety pass does not:
 - model fees, slippage, spreads, funding, latency, fills, or orderbook state,
 - optimize strategies,
 - add PAPER runtime behavior,
-- enable live execution,
-- send exchange instructions,
+- enable non-paper exchange actions,
 - approve operational readiness.
 
 ## Validation evidence
@@ -95,38 +73,35 @@ The Gate 4B-1 reporting integration safety pass does not:
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector confirmed access to `werim/Aethelgard-` with write permissions | `MEASURED` connector evidence |
-| Branch read | `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `README.md`, `pyproject.toml`, `.github/workflows/*` search, `src/reporting/*`, and requested tests inspected through connector reads/search | `MEASURED` connector evidence where present |
-| Starting branch | `dev` resolved through direct file reads and `compare dev..dev` | `MEASURED` connector evidence |
-| Starting HEAD | `1cc9b8b4dddbcf947e233da78bf53aff56adfa87` | `MEASURED` connector evidence |
+| Branch read | Requested docs, workflow config, reporting files, backtest files, and focused tests inspected through connector reads/search where available | `MEASURED` connector evidence where present |
+| Starting branch | `dev` resolved through direct file reads and successful connector writes | `MEASURED` connector evidence |
 | Open PRs | none visible through connector PR listing before implementation | `MEASURED` connector evidence |
-| Connector CI/workflow status | no combined statuses and no workflow runs visible for observed commits | `UNAVAILABLE` / empty connector evidence |
-| User-provided GitHub validation screenshots | validation 147 through 155 green on `dev`, including implementation, docs/export finalization, accidental placeholder creation, and cleanup | `MEASURED_BY_USER_SCREENSHOT` |
-| Accidental placeholder cleanup | `reports/.gitkeep.tmp` was created accidentally and removed immediately; comparison from intended finalization head to current `dev` shows no file delta | `MEASURED` connector evidence |
-| Local focused compile check | reconstructed minimal `src`/`tests` slice passed `python -m compileall -q src tests` | `MEASURED` focused evidence |
-| Local focused tests | reconstructed focused suite passed `10 passed` | `MEASURED` focused evidence |
-| Requested full compile command | exact `python -m compileall -q src tests main.py` could not run against a full clone because container DNS could not resolve `github.com` | `UNAVAILABLE` |
+| Connector CI/workflow status | no combined statuses or workflow runs visible for observed commits | `UNAVAILABLE` / empty connector evidence |
+| Local focused compile check | reconstructed focused `src`/`tests` slice passed `python -m compileall -q src tests` | `MEASURED` focused evidence |
+| Local focused tests | reconstructed focused suite passed `11 passed in 0.17s` | `MEASURED` focused evidence |
+| Requested full compile command | exact `python -m compileall -q src tests main.py` could not run against a full clone because a mutable clone was unavailable | `UNAVAILABLE` |
 | Requested full test run | `pytest -q` against the full repository could not run without a full clone | `UNAVAILABLE` |
-| Ruff | command unavailable in scratch environment | `UNAVAILABLE` |
-| Black | command unavailable in scratch environment | `UNAVAILABLE` |
-| Mypy | command unavailable in scratch environment | `UNAVAILABLE` |
+| Ruff | attempted in reconstructed focused slice, but environment startup emitted unrelated artifact-tool warmup failure and command returned non-zero | `UNAVAILABLE` |
+| Black | attempted in reconstructed focused slice, but environment startup emitted unrelated artifact-tool warmup failure and command returned non-zero | `UNAVAILABLE` |
+| Mypy | attempted in reconstructed focused slice, but environment startup emitted unrelated artifact-tool warmup failure and command returned non-zero | `UNAVAILABLE` |
 | Atomic commit | GitHub contents API writes created separate file commits; a local atomic multi-file commit was unavailable | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary and unresolved risks
 
-- Gate 4B-1 only adds a publication guard and focused tests around existing eligibility diagnostics.
+- Gate 4B-2 only closes an eligibility provenance gap in the reporting guard and records the audit.
 - It does not compute or validate any performance result.
 - It does not model costs; missing or stale execution evidence remains unavailable.
 - It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
 - Exact branch-head full local tests, lint, format, type checks, and connector-visible CI remain unavailable in this environment.
-- The two accidental placeholder cleanup commits remain in history, but no file delta remains after cleanup.
+- The GitHub contents API produced multiple commits rather than a single atomic local commit.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: the reporting guard blocks performance-field publication while eligibility is blocked, but it does not prove execution realism, strategy performance, risk controls, or operational readiness.
+Reason: the reporting guard now rejects forged publishable eligibility, but this is still a reporting safeguard only. It does not prove execution realism, strategy performance, risk controls, or operational readiness.
 
 ## Next step
 
-After this evidence reconciliation commit is validated, stop Gate 4B-1 work. The next safe increment should be selected only after a fresh repository inspection finds a concrete evidence-boundary gap. Do not add optimizer behavior, live execution, order placement, strategy logic, trade simulation, performance calculation, or readiness approval.
+After this evidence update is validated by repository CI or explicitly recorded as unavailable, stop Gate 4B-2 work. The next safe increment should be selected only after a fresh repository inspection finds a concrete evidence-boundary gap. Do not add optimizer behavior, exchange mutation, strategy logic, lifecycle simulation, performance calculation, or readiness approval.
