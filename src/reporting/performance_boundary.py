@@ -1,15 +1,14 @@
 """Minimal performance metric publication boundary.
 
 This module reports only whether performance metrics may be published from a
-Gate 4A backtest metadata record. It does not replay candles, simulate trades,
-model costs, calculate performance, or approve PAPER/LIVE readiness.
+Gate 4A backtest metadata record. It emits eligibility diagnostics only.
 """
 
 from __future__ import annotations
 
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 
 from src.backtest.foundation import (
@@ -20,6 +19,9 @@ from src.backtest.foundation import (
     ExecutionAssumption,
     assert_can_produce_performance_results,
 )
+
+
+_BOUNDARY_EVALUATED_TOKEN = "GATE_4B_BOUNDARY_EVALUATED"
 
 
 class MetricPublicationStatus(StrEnum):
@@ -38,6 +40,7 @@ class MetricPublicationEligibility:
     unavailable_execution_assumptions: tuple[str, ...]
     refusal_reason: str | None
     diagnostics: tuple[str, ...]
+    _boundary_token: str = field(default="", init=False, repr=False, compare=False)
 
     def payload(self) -> dict[str, object]:
         """Return a deterministic JSON-compatible eligibility payload."""
@@ -63,7 +66,7 @@ def evaluate_metric_publication_eligibility(
     except BacktestExecutionEvidenceUnavailable as exc:
         unavailable = _unavailable_assumption_names(metadata)
         reason = str(exc)
-        return MetricPublicationEligibility(
+        return _boundary_evaluated_eligibility(
             status=MetricPublicationStatus.METRICS_BLOCKED,
             can_publish_metrics=False,
             unavailable_execution_assumptions=unavailable,
@@ -72,7 +75,7 @@ def evaluate_metric_publication_eligibility(
         )
     except BacktestFoundationError as exc:
         reason = f"metadata validation failed closed: {exc}"
-        return MetricPublicationEligibility(
+        return _boundary_evaluated_eligibility(
             status=MetricPublicationStatus.METRICS_BLOCKED,
             can_publish_metrics=False,
             unavailable_execution_assumptions=(),
@@ -80,7 +83,7 @@ def evaluate_metric_publication_eligibility(
             diagnostics=(reason,),
         )
 
-    return MetricPublicationEligibility(
+    return _boundary_evaluated_eligibility(
         status=MetricPublicationStatus.METRICS_PUBLISHABLE,
         can_publish_metrics=True,
         unavailable_execution_assumptions=(),
@@ -100,9 +103,11 @@ def guarded_performance_report_payload(
 
     Blocked eligibility fails closed and emits refusal diagnostics only. Candidate
     report fields are deliberately ignored while blocked, so unavailable evidence
-    remains unavailable and cannot be smuggled into performance output as zero.
+    remains unavailable and cannot be introduced as zero.
     """
 
+    if not _was_boundary_evaluated(eligibility):
+        return _untrusted_eligibility_report_payload()
     if (
         eligibility.status is not MetricPublicationStatus.METRICS_PUBLISHABLE
         or not eligibility.can_publish_metrics
@@ -129,6 +134,29 @@ def guarded_performance_report_json(
     return json.dumps(payload, sort_keys=True, separators=(",", ":"))
 
 
+def _boundary_evaluated_eligibility(
+    *,
+    status: MetricPublicationStatus,
+    can_publish_metrics: bool,
+    unavailable_execution_assumptions: tuple[str, ...],
+    refusal_reason: str | None,
+    diagnostics: tuple[str, ...],
+) -> MetricPublicationEligibility:
+    eligibility = MetricPublicationEligibility(
+        status=status,
+        can_publish_metrics=can_publish_metrics,
+        unavailable_execution_assumptions=unavailable_execution_assumptions,
+        refusal_reason=refusal_reason,
+        diagnostics=diagnostics,
+    )
+    object.__setattr__(eligibility, "_boundary_token", _BOUNDARY_EVALUATED_TOKEN)
+    return eligibility
+
+
+def _was_boundary_evaluated(eligibility: MetricPublicationEligibility) -> bool:
+    return eligibility._boundary_token == _BOUNDARY_EVALUATED_TOKEN
+
+
 def _blocked_performance_report_payload(
     eligibility: MetricPublicationEligibility,
 ) -> dict[str, object]:
@@ -141,6 +169,19 @@ def _blocked_performance_report_payload(
         "unavailable_execution_assumptions": list(
             eligibility.unavailable_execution_assumptions
         ),
+    }
+
+
+def _untrusted_eligibility_report_payload() -> dict[str, object]:
+    reason = (
+        "performance publication blocked: eligibility was not produced by "
+        "Gate 4B boundary evaluation"
+    )
+    return {
+        "diagnostics": [reason],
+        "refusal_reason": reason,
+        "status": MetricPublicationStatus.METRICS_BLOCKED.value,
+        "unavailable_execution_assumptions": [],
     }
 
 
