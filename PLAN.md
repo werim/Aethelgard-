@@ -4,7 +4,7 @@
 
 - Operating mode: `PAPER_ONLY`.
 - Operational classification: `RESEARCH_ONLY`.
-- Live order placement remains prohibited.
+- Non-paper exchange mutation remains prohibited.
 - No alpha, profitability, execution realism, or operational-readiness claim is made.
 - Unknown execution evidence remains `UNAVAILABLE`; it is never converted to zero.
 
@@ -87,7 +87,7 @@ This was not the missing deterministic candle replay boundary requested by the r
 - Validate UTC timestamps, duplicate candles, missing intervals, malformed OHLCV rows, non-positive prices, invalid volume, symbol consistency, and timeframe consistency.
 - Produce dataset fingerprint, symbol, timeframe, start/end timestamp, row count, missing interval count, duplicate count, validation status, and deterministic hash.
 - Fail closed on corrupted, duplicate, unsorted, or incomplete data unless explicitly configured for read-only diagnostics.
-- Do not add strategy, signal generation, trade simulation, position state, PnL, win rate, Sharpe, expectancy, drawdown, optimizer, PAPER runtime, LIVE runtime, or readiness claims.
+- Do not add strategy, signal generation, trade simulation, position state, PnL, win rate, Sharpe, expectancy, drawdown, optimizer, PAPER runtime, non-paper runtime, or readiness claims.
 
 ### Evidence classification
 
@@ -101,7 +101,7 @@ This was not the missing deterministic candle replay boundary requested by the r
 
 ### Boundary limit
 
-Recovery Gate 4B validates and packages candle replay data only. It is not a strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, order path, performance report, or readiness certification.
+Recovery Gate 4B validates and packages candle replay data only. It is not a strategy runtime, execution ledger, fill model, cost model, risk allocator, paper runtime, execution path, performance report, or readiness certification.
 
 ## Recovery Gate 4C — Conservative trade lifecycle simulation boundary
 
@@ -111,7 +111,7 @@ Recovery Gate 4B validates and packages candle replay data only. It is not a str
 
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
-Gate 4D classifies execution-cost evidence as `MEASURED`, `MODELED`, or `UNAVAILABLE`, blocks net metrics while required cost evidence is unavailable, and keeps unknown costs from becoming zero. It does not compute strategy performance, optimize, place orders, or approve readiness.
+Gate 4D classifies execution-cost evidence as `MEASURED`, `MODELED`, or `UNAVAILABLE`, blocks net metrics while required cost evidence is unavailable, and keeps unknown costs from becoming zero. It does not compute strategy performance, optimize, mutate exchange state, or approve readiness.
 
 ## Gate 4B-0 — Minimal performance metric publication boundary
 
@@ -125,7 +125,7 @@ Gate 4D classifies execution-cost evidence as `MEASURED`, `MODELED`, or `UNAVAIL
 - Preserve exact unavailable execution assumption names.
 - Serialize eligibility/refusal payloads deterministically.
 - Fail closed on malformed metadata.
-- Do not replay candles, simulate trades, model costs, compute performance, optimize, add PAPER runtime behavior, place orders, or approve readiness.
+- Do not replay candles, simulate trades, model costs, compute performance, optimize, add PAPER runtime behavior, mutate exchange state, or approve readiness.
 
 ### Evidence classification
 
@@ -157,7 +157,7 @@ Gate 4B-0 is a reporting/publication guard only. It publishes no PnL, returns, w
 
 - Added two deterministic replay hardening tests in `tests/test_backtest_replay.py`.
 - Asserted replay metadata and row payloads contain no performance metric, execution, trade, fill, cost, latency, position, signal, or readiness fields.
-- Asserted valid replay construction and iteration do not import `src.execution`, `src.execution.*`, or order-related execution modules.
+- Asserted valid replay construction and iteration do not import `src.execution`, `src.execution.*`, or execution-mutation modules.
 - Left `src/backtest/replay.py` and runtime code untouched.
 - No version bump was made because this was test-only hardening.
 
@@ -175,7 +175,7 @@ Gate 4B-0 is a reporting/publication guard only. It publishes no PnL, returns, w
 
 ### Boundary limit
 
-This reconciliation only documents the merged test hardening. It does not add strategy logic, trade simulation, performance metrics, execution-cost modeling, optimizer behavior, PAPER runtime behavior, live trading, order placement, or readiness approval. Replay remains deterministic candle replay only.
+This reconciliation only documents the merged test hardening. It does not add strategy logic, trade simulation, performance metrics, execution-cost modeling, optimizer behavior, PAPER runtime behavior, non-paper exchange behavior, or readiness approval. Replay remains deterministic candle replay only.
 
 ## Gate 4B-1 — Reporting integration safety pass
 
@@ -188,7 +188,7 @@ This reconciliation only documents the merged test hardening. It does not add st
 - Blocked publication emits refusal diagnostics only and ignores caller-supplied performance-like payload fields.
 - Exported the guard helpers from `src/reporting/__init__.py`.
 - Added focused tests proving blocked eligibility suppresses PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields.
-- Added focused tests proving unavailable evidence remains unavailable, zero values do not leak from blocked candidate payloads, and the guard does not import execution or order modules.
+- Added focused tests proving unavailable evidence remains unavailable, zero values do not leak from blocked candidate payloads, and the guard does not import execution or mutation modules.
 
 ### Evidence classification
 
@@ -201,4 +201,32 @@ This reconciliation only documents the merged test hardening. It does not add st
 
 ### Boundary limit
 
-Gate 4B-1 is a reporting integration safety guard only. It does not compute performance, replay candles, simulate trades, model costs, add strategy logic, add optimizer behavior, place orders, enable live trading, or approve readiness.
+Gate 4B-1 is a reporting integration safety guard only. It does not compute performance, replay candles, simulate trades, model costs, add strategy logic, add optimizer behavior, mutate exchange state, or approve readiness.
+
+## Gate 4B-2 — Reporting boundary completeness audit
+
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
+
+### Scope
+
+- Audited reporting and serialization surfaces for performance-like field emission.
+- Found a concrete bypass where a manually constructed publishable `MetricPublicationEligibility` could pass caller payloads through the publication guard.
+- Added an internal boundary-evaluated token so only eligibility produced by `evaluate_metric_publication_eligibility(...)` can unlock the guarded payload path.
+- Added a focused test proving forged publishable eligibility fails closed and suppresses PnL, returns, win rate, Sharpe, drawdown, expectancy, alpha, beta, equity, balance, position, signal, trade, fill, fee, slippage, latency, and readiness fields.
+- Did not add strategy logic, optimizer behavior, exchange mutation, lifecycle simulation, performance calculation, or readiness approval.
+
+### Evidence classification
+
+- `MEASURED`: connector reads found the bypass in `src/reporting/performance_boundary.py`.
+- `MEASURED`: connector writes added the code and focused test hardening on `dev`.
+- `MEASURED`: reconstructed focused compile check passed `python -m compileall -q src tests`.
+- `MEASURED`: reconstructed focused test run passed `11 passed in 0.17s`.
+- `UNAVAILABLE`: exact full-repository `python -m compileall -q src tests main.py`.
+- `UNAVAILABLE`: exact full-repository `pytest -q`.
+- `UNAVAILABLE`: `ruff check .`, `black --check .`, and `mypy .` in this environment.
+- `UNAVAILABLE`: connector-visible CI/workflow status after the commits.
+- `MODELED`: none.
+
+### Boundary limit
+
+Gate 4B-2 is a reporting guard hardening and evidence update only. It does not compute metrics, model costs, simulate lifecycle outcomes, add strategy logic, add optimizer behavior, mutate exchange state, or approve readiness.
