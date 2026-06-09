@@ -12,12 +12,12 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 
 from src.backtest.foundation import (
+    assert_can_produce_performance_results,
     BacktestExecutionEvidenceUnavailable,
     BacktestFoundationError,
     BacktestRunMetadata,
     EvidenceClassification,
     ExecutionAssumption,
-    assert_can_produce_performance_results,
 )
 
 
