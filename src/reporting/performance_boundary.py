@@ -13,7 +13,6 @@ from enum import StrEnum
 
 from src.backtest import foundation
 
-
 _BOUNDARY_EVALUATED_TOKEN = "GATE_4B_BOUNDARY_EVALUATED"
 
 
@@ -187,7 +186,10 @@ def _unavailable_assumption_names(
             for assumption, evidence in metadata.execution_assumptions.items()
             if (
                 isinstance(assumption, foundation.ExecutionAssumption)
-                and evidence.classification is foundation.EvidenceClassification.UNAVAILABLE
+                and (
+                    evidence.classification
+                    is foundation.EvidenceClassification.UNAVAILABLE
+                )
             )
         )
     )
