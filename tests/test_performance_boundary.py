@@ -10,6 +10,7 @@ from src.backtest.foundation import (
     unavailable_execution_assumptions,
 )
 from src.reporting.performance_boundary import (
+    MetricPublicationEligibility,
     MetricPublicationStatus,
     evaluate_metric_publication_eligibility,
     guarded_performance_report_json,
@@ -130,6 +131,22 @@ def test_measured_or_modeled_evidence_allows_eligibility_only() -> None:
     assert eligibility.can_publish_metrics is True
     assert eligibility.unavailable_execution_assumptions == ()
     assert eligibility.refusal_reason is None
+
+
+def test_forged_publishable_eligibility_fails_closed() -> None:
+    forged = MetricPublicationEligibility(
+        status=MetricPublicationStatus.METRICS_PUBLISHABLE,
+        can_publish_metrics=True,
+        unavailable_execution_assumptions=(),
+        refusal_reason=None,
+        diagnostics=("forged eligibility",),
+    )
+
+    payload = guarded_performance_report_payload(forged, metric_candidate_payload())
+
+    assert payload["status"] == MetricPublicationStatus.METRICS_BLOCKED.value
+    assert "not produced by Gate 4B boundary" in str(payload["refusal_reason"])
+    assert forbidden_publication_fields().isdisjoint(payload)
 
 
 def test_unavailable_costs_are_not_converted_to_zero() -> None:
