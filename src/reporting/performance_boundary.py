@@ -11,14 +11,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import StrEnum
 
-from src.backtest.foundation import (
-    assert_can_produce_performance_results,
-    BacktestExecutionEvidenceUnavailable,
-    BacktestFoundationError,
-    BacktestRunMetadata,
-    EvidenceClassification,
-    ExecutionAssumption,
-)
+from src.backtest import foundation
 
 
 _BOUNDARY_EVALUATED_TOKEN = "GATE_4B_BOUNDARY_EVALUATED"
@@ -57,13 +50,13 @@ class MetricPublicationEligibility:
 
 
 def evaluate_metric_publication_eligibility(
-    metadata: BacktestRunMetadata,
+    metadata: foundation.BacktestRunMetadata,
 ) -> MetricPublicationEligibility:
     """Fail closed unless Gate 4A permits performance-result publication."""
 
     try:
-        assert_can_produce_performance_results(metadata)
-    except BacktestExecutionEvidenceUnavailable as exc:
+        foundation.assert_can_produce_performance_results(metadata)
+    except foundation.BacktestExecutionEvidenceUnavailable as exc:
         unavailable = _unavailable_assumption_names(metadata)
         reason = str(exc)
         return _boundary_evaluated_eligibility(
@@ -73,7 +66,7 @@ def evaluate_metric_publication_eligibility(
             refusal_reason=reason,
             diagnostics=(reason,),
         )
-    except BacktestFoundationError as exc:
+    except foundation.BacktestFoundationError as exc:
         reason = f"metadata validation failed closed: {exc}"
         return _boundary_evaluated_eligibility(
             status=MetricPublicationStatus.METRICS_BLOCKED,
@@ -186,15 +179,15 @@ def _untrusted_eligibility_report_payload() -> dict[str, object]:
 
 
 def _unavailable_assumption_names(
-    metadata: BacktestRunMetadata,
+    metadata: foundation.BacktestRunMetadata,
 ) -> tuple[str, ...]:
     return tuple(
         sorted(
             assumption.value
             for assumption, evidence in metadata.execution_assumptions.items()
             if (
-                isinstance(assumption, ExecutionAssumption)
-                and evidence.classification is EvidenceClassification.UNAVAILABLE
+                isinstance(assumption, foundation.ExecutionAssumption)
+                and evidence.classification is foundation.EvidenceClassification.UNAVAILABLE
             )
         )
     )
