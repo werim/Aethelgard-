@@ -1,3 +1,3 @@
-"""Aethelgard Phase 2 research package."""
+"""Aethelgard research-only package metadata."""
 
-__version__ = "0.2.0"
+__version__ = "0.20.0"
