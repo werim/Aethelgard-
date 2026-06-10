@@ -9,6 +9,7 @@
 - Gate 4B-1 guarded report-publication helpers over an existing Gate 4B-0 eligibility result.
 - Gate 4B-2 forged-eligibility regression coverage.
 - Gate 4B-3 reporting export-boundary evidence reconciliation for `src.reporting.__all__`.
+- Version-ledger consistency tests for `src.__version__`, `pyproject.toml`, `VERSION.md`, and `CHANGELOG.md`.
 
 ### Changed
 
@@ -16,6 +17,7 @@
 - `src/reporting/__init__.py` exports Gate 4B-0 and Gate 4B-1 reporting helpers.
 - Gate 4B-2 records a reporting-boundary completeness audit of report, Markdown, JSON, payload, and serialization paths.
 - Gate 4B-3 records user-reported green validation for the reporting export-boundary test.
+- Version-ledger evidence reconciliation records user-reported green validation for the version consistency test.
 - The guarded publication helper now requires eligibility produced by the Gate 4B evaluator before caller payload publication.
 
 ### Fixed
@@ -25,10 +27,11 @@
 - Unknown execution evidence remains unavailable and is not converted to zero.
 - Gate 4B-2 rejects manually constructed publishable `MetricPublicationEligibility` objects before guarded payload publication.
 - Reporting export drift is covered by a focused test that rejects direct metric/readiness field exports.
+- Version drift between package metadata and top ledger headings is covered by focused tests.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, Gate 4B-2, and Gate 4B-3 do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
+- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, and the version-ledger reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
 - Exact branch-head full-suite validation remains unavailable locally; user reported the latest `dev` validation green.
 - Connector workflow/status APIs returned no runs or statuses for the observed commit.
 
