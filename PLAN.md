@@ -218,15 +218,37 @@ Gate 4B-1 is a reporting integration safety guard only. It does not compute perf
 ### Evidence classification
 
 - `MEASURED`: connector reads found the bypass in `src/reporting/performance_boundary.py`.
-- `MEASURED`: connector writes added the code and focused test hardening on `dev`.
-- `MEASURED`: reconstructed focused compile check passed `python -m compileall -q src tests`.
-- `MEASURED`: reconstructed focused test run passed `11 passed in 0.17s`.
-- `UNAVAILABLE`: exact full-repository `python -m compileall -q src tests main.py`.
-- `UNAVAILABLE`: exact full-repository `pytest -q`.
-- `UNAVAILABLE`: `ruff check .`, `black --check .`, and `mypy .` in this environment.
-- `UNAVAILABLE`: connector-visible CI/workflow status after the commits.
+- `MEASURED`: focused tests were added for forged eligibility fail-closed behavior.
+- `MEASURED_BY_USER_REPORT`: later user-reported validation was green for the reporting-boundary work.
+- `UNAVAILABLE`: connector workflow/status APIs still returned no workflow runs or statuses for the observed commit.
+- `UNAVAILABLE`: mutable local full-repository clone remains unavailable in this execution environment.
 - `MODELED`: none.
 
 ### Boundary limit
 
-Gate 4B-2 is a reporting guard hardening and evidence update only. It does not compute metrics, model costs, simulate lifecycle outcomes, add strategy logic, add optimizer behavior, mutate exchange state, or approve readiness.
+Gate 4B-2 is a reporting-boundary completeness and provenance hardening pass only. It does not compute performance, replay candles, simulate trades, model costs, add strategy logic, add optimizer behavior, mutate exchange state, or approve readiness.
+
+## Gate 4B-3 — Reporting export boundary evidence reconciliation
+
+**Status:** `DOCUMENTED_GREEN_BY_USER_REPORT`.
+
+### Scope
+
+- Added `tests/test_reporting_exports.py` to check the `src.reporting.__all__` export surface.
+- Asserted direct metric/readiness field names are not exposed as reporting package exports.
+- Asserted guarded metric-publication boundary helpers remain visible as the approved reporting path.
+- Recorded user-reported green validation for `test: harden reporting export boundary`.
+- Did not change runtime code, reporting logic, strategy logic, optimizer behavior, exchange mutation, lifecycle simulation, performance calculation, or readiness approval.
+
+### Evidence classification
+
+- `MEASURED`: connector reads confirmed `tests/test_reporting_exports.py` on `dev`.
+- `MEASURED`: connector reads confirmed `src/reporting/__init__.py` exports the guarded reporting helpers.
+- `MEASURED_BY_USER_REPORT`: user reported green validation after commit `20e8d0104d5645402e91e55f058afec5dcd9d739`.
+- `UNAVAILABLE`: connector workflow/status APIs still returned no workflow runs or statuses for the observed commit.
+- `UNAVAILABLE`: mutable local full-repository clone remains unavailable in this execution environment.
+- `MODELED`: none.
+
+### Boundary limit
+
+Gate 4B-3 is documentation and evidence reconciliation for a test-only export-surface guard. It does not compute or publish performance metrics, model costs, add optimizer behavior, add PAPER runtime behavior, mutate exchange state, or approve readiness.

@@ -8,12 +8,14 @@
 - Gate 4B replay hardening coverage for metric-like and execution-like field leakage.
 - Gate 4B-1 guarded report-publication helpers over an existing Gate 4B-0 eligibility result.
 - Gate 4B-2 forged-eligibility regression coverage.
+- Gate 4B-3 reporting export-boundary evidence reconciliation for `src.reporting.__all__`.
 
 ### Changed
 
 - Package version advanced to `0.20.0`.
 - `src/reporting/__init__.py` exports Gate 4B-0 and Gate 4B-1 reporting helpers.
 - Gate 4B-2 records a reporting-boundary completeness audit of report, Markdown, JSON, payload, and serialization paths.
+- Gate 4B-3 records user-reported green validation for the reporting export-boundary test.
 - The guarded publication helper now requires eligibility produced by the Gate 4B evaluator before caller payload publication.
 
 ### Fixed
@@ -22,12 +24,13 @@
 - Unsafe or malformed backtest metadata fails closed as `METRICS_BLOCKED`.
 - Unknown execution evidence remains unavailable and is not converted to zero.
 - Gate 4B-2 rejects manually constructed publishable `MetricPublicationEligibility` objects before guarded payload publication.
+- Reporting export drift is covered by a focused test that rejects direct metric/readiness field exports.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, and Gate 4B-2 do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
-- Exact final branch-head full-suite validation remains unavailable locally; focused reconstructed validation passed for Gate 4B-2.
-- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+- Gate 4B-0, Gate 4B-1, Gate 4B-2, and Gate 4B-3 do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
+- Exact branch-head full-suite validation remains unavailable locally; user reported the latest `dev` validation green.
+- Connector workflow/status APIs returned no runs or statuses for the observed commit.
 
 ## [0.19.0] - 2026-06-05
 
@@ -81,13 +84,3 @@
 
 - Added Gate 3 stale tick data-quality guard in `src/data/stale_tick_guard.py`.
 - Package version advanced to `0.11.0`.
-
-## [0.10.0] - 2026-06-01
-
-- Added Gate 2G persistence/audit phase closure ledger.
-- Package version advanced to `0.10.0`.
-
-## [0.9.0] - 2026-05-31
-
-- Added Gate 2F reconciliation report artifact persistence.
-- Package version advanced to `0.9.0`.
