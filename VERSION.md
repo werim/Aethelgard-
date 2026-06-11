@@ -1,5 +1,25 @@
 # Version History
 
+## 0.20.1 - 2026-06-11
+
+**Engineering milestone:** CI evidence assumption hardening test.
+
+- Added `tests/test_ci_evidence_assumptions.py` to lock down the existing CI evidence contract without changing runtime, reporting, export, optimizer, or execution behavior.
+- Verified the workflow remains scoped to `dev` push and pull-request validation.
+- Added tests that JUnit evidence is produced under `reports/junit-${{ matrix.python-version }}.xml`, uploaded as a per-version artifact, and fails closed when the evidence file is missing.
+- Added tests that compile, pytest, Ruff, Black, and Mypy validation steps remain explicit in `.github/workflows/ci.yml`.
+- Advanced package version to `0.20.1`.
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY and the existing Gate 4B-0 public metric boundary.
+
+## Validation evidence
+
+- `MEASURED`: GitHub connector inspection found `.github/workflows/ci.yml` exists and already runs compile, pytest with JUnit XML evidence, artifact upload, Ruff, Black, and Mypy.
+- `MEASURED`: GitHub connector inspection found no equivalent CI evidence-assumption test before adding `tests/test_ci_evidence_assumptions.py`.
+- `MEASURED`: GitHub connector writes completed for the focused test and documentation/version updates.
+- `UNAVAILABLE`: direct mutable local clone execution in this environment; GitHub connector writes were used.
+- `UNAVAILABLE`: local full-suite pytest, Ruff, Black, and Mypy execution against the final repository state.
+- `UNVERIFIED`: exact final branch-head remote CI until GitHub Actions reports.
+
 ## 0.20.0 - 2026-06-07
 
 **Engineering milestone:** Gate 4B-0 minimal performance metric publication boundary.
@@ -88,7 +108,7 @@
 - `MEASURED`: local isolated new-file line-length spot check found no lines above 88 characters in the new 4B source/test files.
 - `UNAVAILABLE`: direct mutable local clone evidence because container network DNS could not resolve `github.com`.
 - `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
-- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
+- `UNVERIFIED`: exact final branch-head full repository tests until CI runs.
 
 ## 0.16.0 - 2026-06-04
 
