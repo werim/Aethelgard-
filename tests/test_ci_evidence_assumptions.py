@@ -1,6 +1,9 @@
 from pathlib import Path
 
 CI_WORKFLOW = Path(".github/workflows/ci.yml")
+PYTEST_JUNIT_STEP = (
+    'pytest -q --junitxml="reports/junit-${{ matrix.python-version }}.xml"'
+)
 
 
 def _ci_workflow_text() -> str:
@@ -19,7 +22,7 @@ def test_ci_workflow_preserves_dev_branch_validation_boundary() -> None:
 def test_ci_workflow_records_junit_evidence_and_fails_closed() -> None:
     text = _ci_workflow_text()
 
-    assert "pytest -q --junitxml=\"reports/junit-${{ matrix.python-version }}.xml\"" in text
+    assert PYTEST_JUNIT_STEP in text
     assert "uses: actions/upload-artifact@v4" in text
     assert "name: pytest-junit-${{ matrix.python-version }}" in text
     assert "path: reports/junit-${{ matrix.python-version }}.xml" in text
@@ -31,7 +34,7 @@ def test_ci_workflow_keeps_validation_steps_explicit() -> None:
 
     required_steps = [
         "python -m compileall -q src tests main.py",
-        "pytest -q --junitxml=\"reports/junit-${{ matrix.python-version }}.xml\"",
+        PYTEST_JUNIT_STEP,
         "ruff check .",
         "black --check .",
         "mypy .",
