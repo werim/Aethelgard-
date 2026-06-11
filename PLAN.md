@@ -141,6 +141,31 @@ Gate 4B-0 is a reporting/publication guard only. It publishes no PnL, returns, w
 
 ## Gate 4B-1 — Reporting integration safety pass
 
-**Status:** `NEXT_RECOMMENDED_SAFE_GATE`.
+**Status:** `DEFERRED_UNTIL_CONCRETE_NEW_PUBLIC_EXPORT_GAP`.
 
-Wire the metric-publication eligibility boundary into any existing or future reporting entry points so performance fields cannot be emitted unless Gate 4B-0 passes. Do not add optimizer behavior, live execution, order placement, or readiness approval.
+Do not continue public export work unless a concrete new reporting/export gap is found.
+
+## Gate 4B-0A — CI evidence assumption hardening test
+
+**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
+
+### Scope
+
+- Add a focused repository test for existing `.github/workflows/ci.yml` assumptions.
+- Preserve dev push and pull-request validation boundaries.
+- Assert pytest JUnit evidence is generated under `reports/` and uploaded as a per-Python-version artifact.
+- Assert artifact upload fails closed when JUnit evidence is missing.
+- Assert compile, pytest, Ruff, Black, and Mypy validation steps remain explicit.
+- Do not alter runtime, strategy, optimizer, reporting export, paper execution, live execution, order placement, or readiness status.
+
+### Evidence classification
+
+- `MEASURED`: connector inspection found `.github/workflows/ci.yml` exists.
+- `MEASURED`: connector inspection found no equivalent CI evidence-assumption test before this increment.
+- `MEASURED`: connector writes added the focused test and updated version/documentation ledgers.
+- `UNAVAILABLE`: direct mutable local clone and local validation execution.
+- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
+
+### Boundary limit
+
+This gate only prevents silent drift in CI evidence assumptions. It does not produce CI evidence, prove tests passed, compute any performance metric, or certify operational readiness.
