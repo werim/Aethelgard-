@@ -252,3 +252,30 @@ Gate 4B-2 is a reporting-boundary completeness and provenance hardening pass onl
 ### Boundary limit
 
 Gate 4B-3 is documentation and evidence reconciliation for a test-only export-surface guard. It does not compute or publish performance metrics, model costs, add optimizer behavior, add PAPER runtime behavior, mutate exchange state, or approve readiness.
+
+## Gate 4B-4 — Public package export boundary consistency
+
+**Status:** `DOCUMENTED_GREEN_BY_USER_REPORT`.
+
+### Scope
+
+- Added `tests/test_public_exports.py` to check stable public package `__all__` surfaces across `src.backtest`, `src.data`, `src.execution`, and `src.reporting`.
+- Asserted every exported name declared in `__all__` is available on the package module.
+- Asserted direct unsafe export names are not exposed, including `live`, `order`, `trade`, `position`, `optimizer`, `alpha`, `pnl`, `returns`, `win_rate`, `drawdown`, `sharpe`, `expectancy`, `profit`, `profitability`, and `readiness`.
+- Repaired two Ruff `I001` import-block failures without changing the boundary assertion intent.
+- Recorded user-reported green validation after final commit `7863e360e8f61b305962d9438ffacf03b8401587`.
+- Did not change runtime code, reporting logic, strategy logic, optimizer behavior, exchange mutation, lifecycle simulation, performance calculation, PAPER runtime behavior, or readiness approval.
+
+### Evidence classification
+
+- `MEASURED`: connector reads confirmed `tests/test_public_exports.py` on `dev` with no import block.
+- `MEASURED`: connector commit reads confirmed the public export test commit `11f94a7f03dd54a6cca5adb17eedfbd5aa666b2e`.
+- `MEASURED`: connector commit reads confirmed Ruff repair commits `77c94073dbb02871121f73684c8213d858a923f8` and `7863e360e8f61b305962d9438ffacf03b8401587`.
+- `MEASURED_BY_USER_REPORT`: user reported green validation after commit `7863e360e8f61b305962d9438ffacf03b8401587`.
+- `UNAVAILABLE`: connector workflow/status APIs still returned no workflow runs or statuses for the observed commit.
+- `UNAVAILABLE`: mutable local full-repository clone remains unavailable in this execution environment.
+- `MODELED`: none.
+
+### Boundary limit
+
+Gate 4B-4 is test-only public export-boundary hardening and documentation evidence reconciliation. It does not compute or publish performance metrics, model costs, add optimizer behavior, add PAPER runtime behavior, mutate exchange state, add strategy alpha logic, place orders, enable live trading, or approve readiness.
