@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.20.1] - 2026-06-11
+
+### Added
+
+- Focused CI evidence-assumption tests in `tests/test_ci_evidence_assumptions.py`.
+- Coverage that `.github/workflows/ci.yml` keeps dev push and pull-request validation, JUnit test evidence generation, fail-closed artifact upload, and explicit compile/test/lint/format/type validation steps.
+
+### Changed
+
+- Package version advanced to `0.20.1`.
+
+### Fixed
+
+- CI evidence assumptions are now protected from silent workflow drift by repository tests.
+
+### Removed
+
+- None.
+
+### Known limitations
+
+- This increment does not change runtime behavior, reporting exports, strategy logic, backtesting behavior, optimizer behavior, PAPER runtime behavior, live execution, order placement, performance metrics, or readiness approval.
+- Full final branch-head pytest, Ruff, Black, Mypy, and remote CI are unverified until executable environment or GitHub Actions evidence is available.
+- API-backed writes created several small commits rather than one atomic local commit because direct mutable local clone access was unavailable.
+
 ## [0.20.0] - 2026-06-07
 
 ### Added
