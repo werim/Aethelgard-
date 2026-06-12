@@ -28,7 +28,8 @@ def test_project_state_records_current_dev_evidence_without_readiness_upgrade() 
 
     assert "Repository: `werim/Aethelgard-`" in text
     assert "Target branch: `dev`" in text
-    assert "Gate 4B-5 — Project state ledger reconciliation." in text
+    assert "Gate 4B-5A — VERSION ledger reconciliation." in text
+    assert "Gate 4B-5 was recorded" in text
     assert "PAPER ONLY" in text
     assert "RESEARCH ONLY" in text
     assert "NOT READY" in text
@@ -38,11 +39,14 @@ def test_project_state_preserves_safety_boundary() -> None:
     text = project_state_text()
 
     required_phrases = {
-        "does not compute performance",
-        "model execution costs",
-        "add optimizer behavior",
-        "add non-paper runtime behavior",
-        "approve operational readiness",
+        "does not change runtime behavior",
+        "strategy logic",
+        "optimizer behavior",
+        "execution-cost modeling",
+        "performance calculation",
+        "PAPER runtime behavior",
+        "exchange mutation",
+        "readiness status",
         "Unknown execution costs are not zero",
         "Missing evidence remains unavailable",
     }
