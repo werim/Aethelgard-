@@ -1,12 +1,11 @@
-from pathlib import Path
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PROJECT_STATE = PROJECT_ROOT / "PROJECT_STATE.md"
+PROJECT_STATE_PATH = "PROJECT_STATE.md"
 
 
 def project_state_text() -> str:
-    return PROJECT_STATE.read_text(encoding="utf-8")
+    from pathlib import Path
+
+    project_root = Path(__file__).resolve().parents[1]
+    return (project_root / PROJECT_STATE_PATH).read_text(encoding="utf-8")
 
 
 def test_project_state_no_longer_claims_repository_state_unknown() -> None:
