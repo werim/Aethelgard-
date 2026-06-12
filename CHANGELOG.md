@@ -11,6 +11,7 @@
 - Gate 4B-3 reporting export-boundary evidence reconciliation for `src.reporting.__all__`.
 - Version-ledger consistency tests for `src.__version__`, `pyproject.toml`, `VERSION.md`, and `CHANGELOG.md`.
 - Public package export-boundary consistency tests for `src.backtest`, `src.data`, `src.execution`, and `src.reporting`.
+- Gate 4B-5 project-state ledger reconciliation and focused stale-claim regression coverage.
 
 ### Changed
 
@@ -21,6 +22,7 @@
 - Version-ledger evidence reconciliation records user-reported green validation for the version consistency test.
 - Public export-boundary evidence reconciliation records user-reported green validation for the package export consistency test after Ruff import-block repair.
 - The guarded publication helper now requires eligibility produced by the Gate 4B evaluator before caller payload publication.
+- `PROJECT_STATE.md` now reflects the current `dev` ledger state instead of the stale Gate 0 planning state.
 
 ### Fixed
 
@@ -32,11 +34,12 @@
 - Version drift between package metadata and top ledger headings is covered by focused tests.
 - Public package export drift is covered by focused tests that reject direct unsafe export names across stable public package surfaces.
 - Ruff import-block failures in `tests/test_public_exports.py` were repaired without changing runtime behavior.
+- Stale `PROJECT_STATE.md` unknown-repository claims are covered by a focused regression test.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
-- Exact branch-head full-suite validation remains unavailable locally; user reported the latest `dev` validation green.
+- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
+- Exact branch-head full-suite validation remains unavailable locally; user reported the latest `dev` validation green before this reconciliation.
 - Connector workflow/status APIs returned no runs or statuses for the observed commit.
 
 ## [0.19.0] - 2026-06-05

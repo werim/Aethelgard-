@@ -4,103 +4,69 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: public export-boundary validation evidence reconciliation.
+- Active increment: Gate 4B-5 project state ledger reconciliation.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Starting HEAD for the public export-boundary test: `65483735bbe93f4013632fec090487c2d619bbf5`.
-- Starting commit message: `docs: reconcile version ledger validation evidence`.
-- Public export test commit: `11f94a7f03dd54a6cca5adb17eedfbd5aa666b2e`.
-- Ruff import-order repair commit: `77c94073dbb02871121f73684c8213d858a923f8`.
-- Final Ruff import-block repair commit: `7863e360e8f61b305962d9438ffacf03b8401587`.
-- Open PRs visible through the GitHub connector before this pass: none.
-- Combined commit statuses and workflow runs remain unavailable through connector APIs.
-- User reported the `dev` validation as green after the final public export-boundary repair.
-- Direct mutable local clone status remains unavailable in this execution environment; connector reads and writes were used.
+- Observed `dev` HEAD: `4263b85289c2b3ba077eff2f1cf553e878b3ba29`
+- Observed HEAD commit message: `docs: update project state ledger`
+- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this reconciliation.
+- Connector workflow/status evidence remains unavailable or empty for observed commits.
+- Mutable local clone validation remains unavailable in this execution environment.
 
-## Public export-boundary validation evidence reconciliation
+## Gate 4B-5 project state ledger reconciliation
 
-This reconciliation records the final validation evidence for the test-only public export-boundary consistency hardening.
+This pass updates stale `PROJECT_STATE.md` content so it no longer claims that repository state, branch, HEAD, PLAN.md, and later gate work are unknown after those items have already been documented on `dev`.
 
-| Surface | Finding | Action |
+| Area | Finding | Action |
 | --- | --- | --- |
-| `tests/test_public_exports.py` | Added coverage over `src.backtest`, `src.data`, `src.execution`, and `src.reporting` public `__all__` surfaces. | Test remains focused on export consistency and direct unsafe export-name drift. |
-| `tests/test_public_exports.py` | Initial commit triggered Ruff `I001` import-block failures. | Repaired by removing the import block and using built-in import behavior inside the test. |
-| GitHub validation | User reported green after commit `7863e360e8f61b305962d9438ffacf03b8401587`. | Classified as `MEASURED_BY_USER_REPORT` because connector CI/status APIs still returned empty evidence. |
+| Project state ledger | `PROJECT_STATE.md` still described a Gate 0 planning state and unknown repository evidence. | Reconciled it to the current `dev` ledger state. |
+| Current gate sequence | `PLAN.md` and `CHANGELOG.md` already record Gate 4B reporting and export-boundary work through Gate 4B-4. | `PROJECT_STATE.md` now references the current ledger sequence. |
+| Regression coverage | No focused test guarded against reintroducing stale project-state claims. | Added `tests/test_project_state_current.py`. |
+| Runtime behavior | No runtime behavior was needed. | Source runtime code remains untouched. |
 
-## Implemented evidence update
-
-- Recorded the user-reported green validation for commit `7863e360e8f61b305962d9438ffacf03b8401587`.
-- Preserved the distinction between connector-visible CI evidence and user-reported validation evidence.
-- Confirmed this pass is documentation/evidence reconciliation only.
-- No source runtime behavior, strategy logic, optimizer behavior, exchange mutation, simulation engine, performance calculation, or readiness approval was added.
-
-## Current classification behavior
-
-- `UNAVAILABLE` execution evidence blocks metric publication.
-- `MEASURED` and `MODELED` Gate 4A execution evidence can make a caller-supplied payload publishable only when eligibility was created by the boundary evaluator.
-- Manually constructed publishable eligibility is treated as untrusted and fails closed.
-- The reporting export surface is covered by a focused test that blocks direct metric/readiness field export drift.
-- Public package export surfaces are covered by a focused test that blocks direct unsafe export-name drift.
-- The package/project/documentation version ledger is covered by focused tests that block version drift.
-- Unknown execution evidence cannot carry zero and cannot become zero in the publication boundary.
-- Unsafe or malformed metadata returns refusal diagnostics and no metric fields.
-- Readiness remains blocked.
-
-## Explicit non-scope
-
-The public export-boundary validation evidence reconciliation does not:
-
-- modify candle replay behavior,
-- replay candles,
-- simulate lifecycle outcomes,
-- compute PnL,
-- compute returns,
-- compute win rate,
-- compute drawdown,
-- compute Sharpe,
-- compute expectancy,
-- generate alpha,
-- model fees, slippage, spreads, funding, latency, fills, or orderbook state,
-- optimize strategies,
-- add PAPER runtime behavior,
-- enable non-paper exchange actions,
-- approve operational readiness.
-
-## Validation evidence
+## Evidence classification
 
 | Check | Result | Classification |
 | --- | --- | --- |
-| Repository access | GitHub connector confirmed access to `werim/Aethelgard-` with write permissions | `MEASURED` connector evidence |
-| Branch read | `dev` resolved through direct commit and file reads | `MEASURED` connector evidence |
-| Starting branch HEAD | `65483735bbe93f4013632fec090487c2d619bbf5` | `MEASURED` connector evidence |
-| Public export test commit | `11f94a7f03dd54a6cca5adb17eedfbd5aa666b2e` | `MEASURED` connector evidence |
-| Ruff repair commit | `77c94073dbb02871121f73684c8213d858a923f8` | `MEASURED` connector evidence |
-| Final repair commit | `7863e360e8f61b305962d9438ffacf03b8401587` | `MEASURED` connector evidence |
-| Public export test file | `tests/test_public_exports.py` present on `dev` with no import block and package export checks | `MEASURED` connector evidence |
-| User-reported validation | user reported green after `test: remove import block from public export test` | `MEASURED_BY_USER_REPORT` |
-| Connector CI/workflow status | no combined statuses or workflow runs visible for observed commit | `UNAVAILABLE` / empty connector evidence |
-| Local `git status` | mutable local clone unavailable | `UNAVAILABLE` |
-| Local full tests/lint/type/format | mutable local clone unavailable in this execution environment | `UNAVAILABLE` |
+| Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
+| Branch read | `dev` resolved through direct compare and file reads | `MEASURED` connector evidence |
+| Observed `dev` HEAD | `4263b85289c2b3ba077eff2f1cf553e878b3ba29` | `MEASURED` connector evidence |
+| Project docs read | `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` read from `dev` | `MEASURED` connector evidence |
+| Test added | `tests/test_project_state_current.py` checks stale claims and safety boundary language | `MEASURED` proposed patch evidence |
+| Connector CI/workflow status | no workflow runs or statuses visible for observed commit | `UNAVAILABLE` / empty connector evidence |
+| Local full validation | mutable local clone unavailable | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
-## Safety boundary and unresolved risks
+## Safety boundary
 
-- This pass only reconciles evidence for a test-only public export-boundary hardening.
-- It does not compute or validate any performance result.
-- It does not model costs; missing or stale execution evidence remains unavailable.
-- It does not prove strategy profitability, execution realism coverage, capital safety, or production readiness.
-- Connector-visible CI remains unavailable in this environment even though user reported validation green.
-- GitHub contents API writes are per-file commits in this environment; atomic local multi-file commits remain unavailable.
+Gate 4B-5 is documentation and focused regression coverage only.
+
+It does not modify candle replay behavior, replay candles, simulate lifecycle outcomes, compute performance, model costs, generate alpha, optimize strategies, add PAPER runtime behavior, enable non-paper exchange actions, or approve operational readiness.
+
+Unknown execution costs are not zero. Missing evidence remains unavailable.
+
+## Validation commands
+
+```bash
+python -m compileall -q src tests main.py
+pytest -q tests/test_project_state_current.py
+pytest -q
+ruff check .
+black --check .
+mypy .
+```
+
+These commands must be run in a proper mutable checkout. Any unavailable tool must be reported as `UNAVAILABLE`, not treated as passed.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: public export-boundary tests and documentation evidence improve auditability, but they do not prove execution realism, strategy performance, risk controls, or operational readiness.
+Reason: project-state documentation consistency improves auditability, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
 
 ## Next step
 
-Public export-boundary evidence reconciliation should stop here unless fresh inspection finds a new concrete gap. The next safe increment should prefer documentation evidence reconciliation, missing tests for already-existing behavior, fail-closed validation gaps, audit/provenance gaps, reporting guard gaps, or CI/tooling reliability gaps. Do not add optimizer behavior, exchange mutation, strategy logic, lifecycle simulation, performance calculation, or readiness approval.
+Stop expanding reporting-boundary documentation unless fresh inspection finds a concrete gap. The next safe increment should prefer small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior. Do not add optimizer behavior, exchange mutation, strategy logic, lifecycle simulation expansion, performance calculation, or readiness approval.
