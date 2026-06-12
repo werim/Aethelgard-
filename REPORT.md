@@ -4,7 +4,7 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4B-5 project state ledger reconciliation.
+- Active increment: Gate 4B-5A VERSION ledger reconciliation.
 
 ## Baseline
 
@@ -27,6 +27,17 @@ This pass updates stale `PROJECT_STATE.md` content so it no longer claims that r
 | Regression coverage | No focused test guarded against reintroducing stale project-state claims. | Added `tests/test_project_state_current.py`. |
 | Runtime behavior | No runtime behavior was needed. | Source runtime code remains untouched. |
 
+## Gate 4B-5A VERSION ledger reconciliation
+
+A review identified that Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 as the current 0.20.0 milestone.
+
+Actions:
+
+- Record Gate 4B-5 in `VERSION.md`.
+- Add focused version-ledger regression coverage.
+- Preserve PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status.
+- Leave runtime behavior unchanged.
+
 ## Evidence classification
 
 | Check | Result | Classification |
@@ -35,14 +46,16 @@ This pass updates stale `PROJECT_STATE.md` content so it no longer claims that r
 | Branch read | `dev` resolved through direct compare and file reads | `MEASURED` connector evidence |
 | Observed `dev` HEAD | `4263b85289c2b3ba077eff2f1cf553e878b3ba29` | `MEASURED` connector evidence |
 | Project docs read | `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` read from `dev` | `MEASURED` connector evidence |
-| Test added | `tests/test_project_state_current.py` checks stale claims and safety boundary language | `MEASURED` proposed patch evidence |
+| Project-state test added | `tests/test_project_state_current.py` checks stale claims and safety boundary language | `MEASURED` proposed patch evidence |
+| Version-ledger test added | `tests/test_version_ledger_current.py` checks Gate 4B-5 markers across current ledgers | `MEASURED` proposed patch evidence |
+| VERSION drift review | Review identified Gate 4B-5 missing from `VERSION.md` | `MEASURED` review evidence |
 | Connector CI/workflow status | no workflow runs or statuses visible for observed commit | `UNAVAILABLE` / empty connector evidence |
 | Local full validation | mutable local clone unavailable | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 4B-5 is documentation and focused regression coverage only.
+Gate 4B-5A is documentation and focused regression coverage only.
 
 It does not modify candle replay behavior, replay candles, simulate lifecycle outcomes, compute performance, model costs, generate alpha, optimize strategies, add PAPER runtime behavior, enable non-paper exchange actions, or approve operational readiness.
 
@@ -52,6 +65,7 @@ Unknown execution costs are not zero. Missing evidence remains unavailable.
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_version_ledger_current.py
 pytest -q tests/test_project_state_current.py
 pytest -q
 ruff check .
@@ -65,7 +79,7 @@ These commands must be run in a proper mutable checkout. Any unavailable tool mu
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: project-state documentation consistency improves auditability, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
+Reason: project-state and version-ledger documentation consistency improves auditability, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
 
 ## Next step
 
