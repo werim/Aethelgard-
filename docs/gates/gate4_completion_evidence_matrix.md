@@ -1,7 +1,7 @@
 # Gate 4 Completion Evidence Matrix
 
 Gate: Gate 4 execution realism and reporting safety
-Target: Gate 4CLOSE-1
+Target: Gate 4CLOSE-1 / Gate 4CLOSE-1A
 Scope: test/documentation-only evidence closure
 Runtime behavior changed: no
 Operating mode: PAPER_ONLY / RESEARCH_ONLY
@@ -9,11 +9,13 @@ Live status: NOT_LIVE_READY
 
 ## Safety position
 
-This matrix does not approve live trading or operational readiness.
-Unknown execution costs are not zero. Missing cost evidence remains
-explicitly UNAVAILABLE. Backtest performance alone does not prove production
-readiness. No secret handling or non-paper exchange mutation is approved by
-this evidence pass.
+This matrix does not approve operational readiness. Unknown execution costs
+are not zero. Missing cost evidence remains explicitly UNAVAILABLE. Backtest
+performance alone does not prove production readiness. Gate 4CLOSE-1A narrows
+the public-export claim to the evidence actually covered by the safe public
+export tests: unsafe live/order/runtime names are rejected from checked public
+package surfaces. Broader export classes are not claimed by this matrix unless
+a focused safe test exists for them.
 
 ## Evidence matrix
 
@@ -28,8 +30,7 @@ this evidence pass.
 | Missing cost evidence remains unavailable | `evaluate_cost_evidence_gate()` records missing categories as UNAVAILABLE and blocking. | `tests/test_cost_evidence.py::test_no_cost_evidence_fails_closed`. | This document, `PLAN.md`, `REPORT.md`, and `PROJECT_STATE.md`. | No default-cost public export is approved. | PROVEN | Missing evidence must be reported, not guessed. |
 | Backtest metrics do not prove readiness | `CostEvidenceGateResult.readiness_allowed` is always false in the cost gate. | `tests/test_cost_evidence.py::test_readiness_approval_remains_blocked_with_unavailable_costs`. | This document and `REPORT.md`. | `tests/test_public_exports.py` rejects direct readiness exports. | PROVEN | Backtest evidence remains research-only. |
 | PAPER-only safety text exists | `PLAN.md`, `REPORT.md`, and `PROJECT_STATE.md` state PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. | `tests/test_gate4_completion_evidence_matrix.py` guards the required safety wording. | This document and current ledgers. | Public export checks remain documentation/test-only. | PROVEN | No runtime code is changed by Gate 4CLOSE-1. |
-| No unsafe public exports | `src/backtest/__init__.py`, `src/execution/__init__.py`, `src/data/__init__.py`, and `src/reporting/__init__.py` are the checked public surfaces. | `tests/test_public_exports.py` and `tests/test_gate4_public_safety_exports.py`. | This document and `REPORT.md`. | Unsafe live/order/secret/readiness names are rejected. | PROVEN | Export safety is proven by public package surface tests. |
-| No secret handling exposed publicly | Public package `__all__` surfaces are inspected by tests. | `tests/test_gate4_public_safety_exports.py` rejects secret/key/token export names. | This document and `REPORT.md`. | Unsafe credential-style names are rejected. | PROVEN | This does not inspect private internals. |
+| No unsafe public exports | `src/backtest/__init__.py`, `src/execution/__init__.py`, `src/data/__init__.py`, and `src/reporting/__init__.py` are the checked public surfaces. | `tests/test_public_exports.py` and `tests/test_gate4_public_safety_exports.py`. | This document and `REPORT.md`. | Unsafe live/order/runtime names are rejected. | PROVEN | Export safety is proven only for checked public package surfaces and listed unsafe live/order/runtime names. |
 
 ## Validation commands
 
@@ -48,11 +49,10 @@ mypy .
 Commands unavailable in an environment must be reported as UNAVAILABLE, not
 passed. Connector writes alone do not prove local or CI validation.
 
-## Gate 4CLOSE-1 conclusion
+## Gate 4CLOSE-1A conclusion
 
-Gate 4CLOSE-1 is documentation and focused regression coverage only. It
-proves the current Gate 4 evidence boundaries are represented by source,
-tests, safety text, and public-export checks. It does not compute performance,
-model new costs, add strategy logic, add optimizer behavior, mutate exchange
-state, expand PAPER runtime behavior, place orders, enable live trading, or
-approve readiness.
+Gate 4CLOSE-1A is documentation and focused regression coverage only. It
+reconciles the evidence matrix so it claims only source, tests, safety text,
+and public-export checks that are actually represented in the repository. It
+does not compute performance, model new costs, add strategy logic, add
+optimizer behavior, expand PAPER runtime behavior, or approve readiness.
