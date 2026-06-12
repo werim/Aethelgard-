@@ -2,7 +2,7 @@
 
 ## 0.20.0 - 2026-06-07
 
-**Engineering milestone:** Gate 4B-0 minimal performance metric publication boundary.
+**Engineering milestone:** Gate 4B reporting-boundary and ledger-reconciliation bundle.
 
 - Added `src/reporting/performance_boundary.py` as a reporting-only eligibility boundary over Gate 4A `BacktestRunMetadata`.
 - Added `MetricPublicationStatus` values `METRICS_BLOCKED` and `METRICS_PUBLISHABLE` plus an immutable eligibility result object.
@@ -11,14 +11,17 @@
 - Added deterministic JSON serialization for metric-publication eligibility/refusal payloads.
 - Added focused tests covering unavailable evidence blocking, measured/modeled evidence eligibility, unavailable-not-zero behavior, deterministic JSON, malformed metadata fail-closed behavior, and absence of performance metric fields.
 - Exported the new reporting boundary from `src/reporting/__init__.py` and advanced package version to `0.20.0`.
-- Retained the Gate 4B-0 boundary: no candle replay, no trade simulation, no cost modeling, no PnL, no returns, no win rate, no drawdown, no Sharpe, no expectancy, no optimizer, no PAPER runtime, no live trading, no order placement, no profitability claim, and no readiness approval.
+- Recorded Gate 4B-5 project-state ledger reconciliation so `VERSION.md`, `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md` identify the same current documentation/test-only increment.
+- Retained the Gate 4B-0 through Gate 4B-5 boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, and no readiness approval.
 
 ## Validation evidence
 
 - `MEASURED`: local isolated Gate 4B-0 focused tests passed with `6 passed in 0.15s`.
 - `MEASURED`: local isolated compile check for the new Gate 4B-0 module and focused tests passed with exit code `0`.
+- `MEASURED`: Gate 4B-5A review evidence identified and repaired `VERSION.md` ledger drift for Gate 4B-5.
 - `UNAVAILABLE`: direct mutable local clone evidence for the repository because container DNS could not resolve `github.com`; GitHub connector writes were used.
 - `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment because those modules were not installed.
+- `UNAVAILABLE`: local full-suite validation for Gate 4B-5A until run in a mutable checkout or reported by CI.
 - `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
 
 ## 0.19.0 - 2026-06-05
@@ -41,7 +44,7 @@
 - `MEASURED`: local isolated line-length spot check found no lines above 88 characters in the new Gate 4D source/test files.
 - `UNAVAILABLE`: direct mutable local clone evidence for the repository because container DNS could not resolve `github.com`; GitHub connector writes were used.
 - `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment because those modules were not installed.
-- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
 
 ## 0.18.0 - 2026-06-05
 
