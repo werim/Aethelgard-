@@ -34,14 +34,16 @@ Current documented sequence includes:
 - Gate 4B-2 reporting-boundary completeness and forged-eligibility hardening
 - Gate 4B-3 reporting export-boundary evidence reconciliation
 - Gate 4B-4 public package export-boundary consistency reconciliation
+- Gate 4B-5 project-state ledger reconciliation
+- Gate 4B-5A VERSION ledger reconciliation
 
 This file is now reconciled to the current `dev` documentation state instead of claiming that repository state, branch, HEAD, PLAN.md, and later gates are unknown.
 
 ## Latest Safe Increment Selected
 
-Gate 4B-5 — Project state ledger reconciliation.
+Gate 4B-5A — VERSION ledger reconciliation.
 
-This is a documentation/test-only reconciliation pass. It aligns `PROJECT_STATE.md` with the already documented `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` evidence.
+This phase resolves review-identified ledger drift: Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 as the current 0.20.0 milestone.
 
 ## Evidence Classification
 
@@ -52,6 +54,8 @@ This is a documentation/test-only reconciliation pass. It aligns `PROJECT_STATE.
 - `PLAN.md` records Gate 4B-1, Gate 4B-2, Gate 4B-3, and Gate 4B-4 as already documented on `dev`.
 - `CHANGELOG.md` records the 0.20.0 reporting-boundary work, export-boundary work, version-ledger tests, and public export-boundary reconciliation.
 - `REPORT.md` records the latest public export-boundary validation evidence reconciliation.
+- Gate 4B-5A review evidence identified `VERSION.md` drift for Gate 4B-5.
+- `VERSION.md` now records Gate 4B-5 as part of the current 0.20.0 ledger.
 
 ### MODELED
 
@@ -68,7 +72,7 @@ This is a documentation/test-only reconciliation pass. It aligns `PROJECT_STATE.
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-This project state reconciliation does not compute performance, model execution costs, add optimizer behavior, add strategy logic, mutate exchange state, add non-paper runtime behavior, or approve operational readiness.
+Gate 4B-5A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable.
 
@@ -76,6 +80,7 @@ Unknown execution costs are not zero. Missing evidence remains unavailable.
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_version_ledger_current.py
 pytest -q tests/test_project_state_current.py
 pytest -q
 ruff check .
