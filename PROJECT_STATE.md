@@ -41,6 +41,12 @@ Current documented sequence includes:
 
 This file is reconciled to the current documentation state and no longer claims that repository state, branch, HEAD, PLAN.md, or later gates are unknown.
 
+## Prior Ledger Evidence Retained
+
+Gate 4B-5A — VERSION ledger reconciliation.
+
+The Gate 4B-5 and Gate 4B-5A markers remain present as regression anchors while Gate 4CLOSE-1B records the latest safe increment.
+
 ## Latest Safe Increment Selected
 
 Gate 4CLOSE-1B — validation-command ledger consistency guard.
