@@ -4,26 +4,32 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4CLOSE-1A matrix wording reconciliation.
+- Active increment: Gate 4CLOSE-1B validation-command ledger consistency guard.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Observed `dev` HEAD after this reconciliation: `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a`
-- Observed HEAD commit message: `test: fix gate 4 matrix import sorting`
-- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `docs/gates/gate4_completion_evidence_matrix.md`, and `tests/test_gate4_completion_evidence_matrix.py` were read from `dev` during this reconciliation.
+- Observed `dev` HEAD before this increment: `a3bbd2230699d045139bbbb565753a188a78aa73`
+- Branch for this PR: `gate4close-1b-validation-ledger`
+- `PROJECT_STATE.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
+- Mutable local clone validation remains unavailable in this execution environment.
 
-## Gate 4CLOSE-1A completion evidence
+## Prior ledger evidence retained
 
-Gate 4CLOSE-1A reconciles an overbroad evidence-matrix claim so the documented public-export evidence matches the focused tests that actually exist.
+Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation remain recorded in the current ledgers as prior documentation/test-only increments.
+
+The Gate 4B-5 marker remains present as a regression anchor while Gate 4CLOSE-1B records the latest validation-command consistency guard.
+
+## Gate 4CLOSE-1B validation-command ledger consistency guard
+
+Gate 4CLOSE-1B adds focused regression coverage so `REPORT.md` and `PROJECT_STATE.md` keep the same validation command surface.
 
 Actions:
 
-- Updated `docs/gates/gate4_completion_evidence_matrix.md` to limit the public-export claim to unsafe live/order/runtime names on checked public package surfaces.
-- Removed the unsupported broader public-export claim from the Gate 4 completion matrix.
-- Updated `tests/test_gate4_completion_evidence_matrix.py` so it checks the current Gate 4CLOSE-1A matrix wording and core evidence links.
-- Repaired the Ruff import-sort failure in `tests/test_gate4_completion_evidence_matrix.py` by moving `Path` into a local helper import, matching existing project test style.
+- Added `tests/test_validation_command_ledger_consistency.py`.
+- Asserted the focused Gate 4 completion matrix tests, full pytest run, Ruff, Black, and Mypy command strings remain present in both `REPORT.md` and `PROJECT_STATE.md`.
+- Asserted the ledger keeps local execution evidence explicitly `UNAVAILABLE` when commands were not directly run in the current execution environment.
 - Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status.
 - Left runtime behavior unchanged.
 
@@ -32,20 +38,16 @@ Actions:
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
-| Branch read | `dev` resolved through direct compare and file reads | `MEASURED` connector evidence |
-| Observed `dev` HEAD | `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a` | `MEASURED` connector evidence |
-| Matrix reconciliation | `docs/gates/gate4_completion_evidence_matrix.md` now limits the export claim to checked live/order/runtime names | `MEASURED` connector evidence |
-| Matrix test reconciliation | `tests/test_gate4_completion_evidence_matrix.py` now checks Gate 4CLOSE-1A evidence without the removed unsupported boundary | `MEASURED` connector evidence |
-| Ruff failure review | User-provided CI log showed Ruff I001 import-block failure in `tests/test_gate4_completion_evidence_matrix.py` | `MEASURED` user-provided evidence |
-| Ruff repair | `tests/test_gate4_completion_evidence_matrix.py` import structure was updated at commit `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a` | `MEASURED` connector evidence |
-| Validation result | User-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, with Python 3.11 and 3.12 jobs successful | `MEASURED` user-provided evidence |
+| Branch base | PR branch reset to current `dev` comparison head `a3bbd2230699d045139bbbb565753a188a78aa73` before changes | `MEASURED` connector evidence |
+| Test coverage | `tests/test_validation_command_ledger_consistency.py` added on the PR branch | `MEASURED` connector evidence |
+| Documentation ledger | `REPORT.md` and `PROJECT_STATE.md` now expose the same validation command surface | `MEASURED` connector evidence |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
-| Connector CI/status API evidence | direct connector status visibility may remain empty even when the user-provided CI screenshot is green | `UNAVAILABLE` if not separately visible through connector |
+| Local command execution | not directly run in this execution environment | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 4CLOSE-1A is documentation and focused regression coverage only.
+Gate 4CLOSE-1B is documentation and focused regression coverage only.
 
 It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status.
 
@@ -54,6 +56,7 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 ## Validation commands
 
 ```bash
+pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q
@@ -62,14 +65,16 @@ black --check .
 mypy .
 ```
 
-User-provided CI screenshot records the validation workflow as successful for commit `334bb0d`. Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: Gate 4CLOSE-1A reconciles audit wording and test coverage, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
+Reason: Gate 4CLOSE-1B guards validation-command ledger consistency, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
 
 ## Next step
 
-Gate 4CLOSE-1A can be treated as closed once the ledger-update commit is included in a green validation run. The next safe increment should be selected only after fresh `dev` inspection and should prefer small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior.
+After Gate 4CLOSE-1B is green, the next safe increment should remain small and fail-closed: audit/provenance consistency coverage, CI/tooling reliability coverage, or missing tests for already-existing behavior.
+
+No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
