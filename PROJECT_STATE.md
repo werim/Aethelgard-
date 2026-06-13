@@ -45,6 +45,8 @@ This file is reconciled to the current documentation state and no longer claims 
 
 Gate 4B-5A — VERSION ledger reconciliation.
 
+Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
+
 The Gate 4B-5 and Gate 4B-5A markers remain present as regression anchors while Gate 4CLOSE-1B records the latest safe increment.
 
 ## Latest Safe Increment Selected
