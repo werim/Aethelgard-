@@ -1,5 +1,18 @@
 """Aethelgard reporting boundaries for research-only evidence ledgers."""
 
+from src.reporting.operational_evidence import (
+    DeploymentBlockerMatrixRow,
+    DeploymentBlockerStatus,
+    OperationalDeploymentStatus,
+    OperationalEvidenceClassification,
+    OperationalEvidenceGateError,
+    OperationalEvidenceGateResult,
+    OperationalEvidenceItem,
+    assert_operational_deployment_not_blocked,
+    evaluate_operational_evidence_gate,
+    operational_evidence_gate_json,
+    render_deployment_blocker_matrix_markdown,
+)
 from src.reporting.paper_db_audit import (
     PaperDbAuditError,
     PaperDbAuditIssue,
@@ -20,18 +33,29 @@ from src.reporting.performance_boundary import (
 )
 
 __all__ = [
+    "DeploymentBlockerMatrixRow",
+    "DeploymentBlockerStatus",
     "MetricPublicationEligibility",
     "MetricPublicationStatus",
+    "OperationalDeploymentStatus",
+    "OperationalEvidenceClassification",
+    "OperationalEvidenceGateError",
+    "OperationalEvidenceGateResult",
+    "OperationalEvidenceItem",
     "PaperDbAuditError",
     "PaperDbAuditIssue",
     "PaperDbAuditReport",
     "PaperDbAuditStatus",
+    "assert_operational_deployment_not_blocked",
     "assert_paper_db_audit_clean",
     "audit_paper_runtime_database",
     "evaluate_metric_publication_eligibility",
+    "evaluate_operational_evidence_gate",
     "guarded_performance_report_json",
     "guarded_performance_report_payload",
     "metric_publication_eligibility_json",
+    "operational_evidence_gate_json",
     "paper_db_audit_json",
+    "render_deployment_blocker_matrix_markdown",
     "render_paper_db_audit_markdown",
 ]
