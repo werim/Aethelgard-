@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.21.0] - 2026-06-13
+
+### Added
+
+- Gate 5A operational evidence gate and deployment-blocker matrix in `src/reporting/operational_evidence.py`.
+- Focused Gate 5A regression coverage in `tests/test_operational_evidence_gate.py`.
+- Gate 5A documentation in `docs/gates/gate5a_operational_evidence_gate.md`.
+- Public reporting exports for Gate 5A diagnostic helpers.
+
+### Changed
+
+- Package version advanced to `0.21.0`.
+- `src.reporting.__all__` now exposes the Gate 5A operational evidence diagnostic boundary.
+
+### Fixed
+
+- PAPER deployment diagnostics now fail closed when operational evidence for audit trail integrity, CI validation, data freshness, execution-cost evidence, PAPER runtime reconciliation, or risk-control enforcement is missing, modeled, or unavailable.
+
+### Known limitations
+
+- Gate 5A does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+- Local full-repository validation remains unavailable in this execution environment; only reconstructed focused Gate 5A tests were run locally.
+- Connector writes were performed as separate commits because the available GitHub contents API actions write one file per commit in this environment.
+
 ## [0.20.0] - 2026-06-07
 
 ### Added
@@ -106,5 +130,5 @@
 
 ## [0.11.0] - 2026-06-01
 
-- Added Gate 3 stale tick data-quality guard in `src/data/stale_tick_guard.py`.
+- Added Gate 3 market tick data-quality guard in `src/data/stale_tick_guard.py`.
 - Package version advanced to `0.11.0`.
