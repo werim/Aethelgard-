@@ -1,7 +1,7 @@
 # Gate 4 Completion Evidence Matrix
 
 Gate: Gate 4 execution realism and reporting safety
-Target: Gate 4CLOSE-1 / Gate 4CLOSE-1A
+Target: Gate 4CLOSE-1 / Gate 4CLOSE-1A / Gate 4CLOSE-1C
 Scope: test/documentation-only evidence closure
 Runtime behavior changed: no
 Operating mode: PAPER_ONLY / RESEARCH_ONLY
@@ -15,7 +15,9 @@ performance alone does not prove production readiness. Gate 4CLOSE-1A narrows
 the public-export claim to the evidence actually covered by the safe public
 export tests: unsafe live/order/runtime names are rejected from checked public
 package surfaces. Broader export classes are not claimed by this matrix unless
-a focused safe test exists for them.
+a focused safe test exists for them. Gate 4CLOSE-1C canonicalizes the
+validation command ledger across this matrix, `REPORT.md`, and
+`PROJECT_STATE.md`.
 
 ## Evidence matrix
 
@@ -36,6 +38,7 @@ a focused safe test exists for them.
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
@@ -49,10 +52,10 @@ mypy .
 Commands unavailable in an environment must be reported as UNAVAILABLE, not
 passed. Connector writes alone do not prove local or CI validation.
 
-## Gate 4CLOSE-1A conclusion
+## Gate 4CLOSE-1C conclusion
 
-Gate 4CLOSE-1A is documentation and focused regression coverage only. It
-reconciles the evidence matrix so it claims only source, tests, safety text,
-and public-export checks that are actually represented in the repository. It
-does not compute performance, model new costs, add strategy logic, add
-optimizer behavior, expand PAPER runtime behavior, or approve readiness.
+Gate 4CLOSE-1C is documentation and focused regression coverage only. It keeps
+the validation command surface canonical across this matrix, `REPORT.md`, and
+`PROJECT_STATE.md`. It does not compute performance, model new costs, add
+strategy logic, add optimizer behavior, expand PAPER runtime behavior, or
+approve readiness.
