@@ -1,5 +1,24 @@
 # Version History
 
+## 0.21.1 - 2026-06-13
+
+**Engineering milestone:** Gate 5A-1 operational evidence input integrity hardening.
+
+- Hardened Gate 5A evidence item validation so duplicate blocker IDs, unsupported blocker IDs, empty blocker IDs, non-canonical blocker IDs, empty summaries, and empty sources fail closed.
+- Preserved the Gate 5A deployment-blocker matrix behavior: only `MEASURED` evidence clears required PAPER operational diagnostic blocker rows.
+- Added focused tests covering duplicate evidence, unsupported evidence, empty and non-canonical blocker IDs, empty summaries, and empty sources.
+- Advanced package version to `0.21.1`.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: connector comparison resolved `dev` HEAD `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4` before this increment.
+- `MEASURED`: `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
+- `MEASURED`: reconstructed focused Gate 5A-1 validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed` in the scratch workspace.
+- `UNAVAILABLE`: direct mutable local clone evidence because repository operations were performed through the GitHub connector.
+- `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
+- `UNVERIFIED`: exact final branch-head remote CI until GitHub Actions reports.
+
 ## 0.21.0 - 2026-06-13
 
 **Engineering milestone:** Gate 5A operational evidence gate and deployment-blocker matrix.
