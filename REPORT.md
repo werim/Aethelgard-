@@ -15,6 +15,12 @@
 - `PROJECT_STATE.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
 - Mutable local clone validation remains unavailable in this execution environment.
 
+## Prior ledger evidence retained
+
+Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation remain recorded in the current ledgers as prior documentation/test-only increments.
+
+The Gate 4B-5 marker remains present as a regression anchor while Gate 4CLOSE-1B records the latest validation-command consistency guard.
+
 ## Gate 4CLOSE-1B validation-command ledger consistency guard
 
 Gate 4CLOSE-1B adds focused regression coverage so `REPORT.md` and `PROJECT_STATE.md` keep the same validation command surface.
