@@ -16,11 +16,11 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD during this reconciliation: `4263b85289c2b3ba077eff2f1cf553e878b3ba29`
-- HEAD commit message: `docs: update project state ledger`
+- Verified `dev` HEAD during this reconciliation: `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a`
+- HEAD commit message: `test: fix gate 4 matrix import sorting`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
-- Connector-visible workflow runs for observed commits: unavailable / empty
-- Mutable local clone validation in this environment: unavailable
+- User-provided CI evidence: validation run `#196` succeeded for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs
+- Mutable local clone validation in this execution environment: unavailable
 
 ## Current Ledger Position
 
@@ -36,14 +36,16 @@ Current documented sequence includes:
 - Gate 4B-4 public package export-boundary consistency reconciliation
 - Gate 4B-5 project-state ledger reconciliation
 - Gate 4B-5A VERSION ledger reconciliation
+- Gate 4CLOSE-1 completion evidence matrix
+- Gate 4CLOSE-1A matrix wording reconciliation
 
-This file is now reconciled to the current `dev` documentation state instead of claiming that repository state, branch, HEAD, PLAN.md, and later gates are unknown.
+This file is reconciled to the current `dev` documentation state and no longer claims that repository state, branch, HEAD, PLAN.md, or later gates are unknown.
 
 ## Latest Safe Increment Selected
 
-Gate 4B-5A — VERSION ledger reconciliation.
+Gate 4CLOSE-1A — matrix wording reconciliation.
 
-This phase resolves review-identified ledger drift: Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 as the current 0.20.0 milestone.
+This phase resolves an overbroad Gate 4 completion matrix claim. The matrix now limits the public-export evidence claim to checked live/order/runtime names on public package surfaces, and the focused matrix test now tracks the corrected Gate 4CLOSE-1A wording.
 
 ## Evidence Classification
 
@@ -51,11 +53,10 @@ This phase resolves review-identified ledger drift: Gate 4B-5 was recorded in `C
 
 - `dev` resolved through direct GitHub compare/read evidence.
 - `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev`.
-- `PLAN.md` records Gate 4B-1, Gate 4B-2, Gate 4B-3, and Gate 4B-4 as already documented on `dev`.
-- `CHANGELOG.md` records the 0.20.0 reporting-boundary work, export-boundary work, version-ledger tests, and public export-boundary reconciliation.
-- `REPORT.md` records the latest public export-boundary validation evidence reconciliation.
-- Gate 4B-5A review evidence identified `VERSION.md` drift for Gate 4B-5.
-- `VERSION.md` now records Gate 4B-5 as part of the current 0.20.0 ledger.
+- `docs/gates/gate4_completion_evidence_matrix.md` records Gate 4CLOSE-1A and narrows the public-export claim to checked live/order/runtime names.
+- `tests/test_gate4_completion_evidence_matrix.py` checks Gate 4CLOSE-1A target text, PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status, core Gate 4 evidence boundaries, and evidence-file references.
+- User-provided CI screenshot records validation run `#196` as successful for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs.
+- `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` now record Gate 4CLOSE-1A completion evidence.
 
 ### MODELED
 
@@ -63,35 +64,33 @@ This phase resolves review-identified ledger drift: Gate 4B-5 was recorded in `C
 
 ### UNAVAILABLE
 
-- Exact local `git status` from a mutable clone in this environment.
-- Exact local full-suite test execution in this environment.
-- Local Ruff, Black, and Mypy execution in this environment.
-- Connector-visible GitHub Actions workflow evidence for the observed `dev` HEAD.
+- Exact local `git status` from a mutable clone in this execution environment.
+- Exact local command execution in this execution environment.
+- Connector-visible GitHub Actions workflow evidence when not separately visible through the connector API.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 4B-5A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
+Gate 4CLOSE-1A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status.
 
-Unknown execution costs are not zero. Missing evidence remains unavailable.
+Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
 ## Validation Required For This Increment
 
 ```bash
-python -m compileall -q src tests main.py
-pytest -q tests/test_version_ledger_current.py
-pytest -q tests/test_project_state_current.py
+pytest -q tests/test_gate4_completion_evidence_matrix.py
+pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q
 ruff check .
 black --check .
 mypy .
 ```
 
-If any command or tool is unavailable, report it as `UNAVAILABLE`; do not treat it as passed.
+User-provided CI screenshot shows the validation workflow succeeded for commit `334bb0d`. Any command not run directly in this execution environment remains local-execution `UNAVAILABLE` here.
 
 ## Next Recommended Step
 
-Stop expanding reporting-boundary documentation unless a fresh concrete gap is found. The next safe increment should be chosen only after current `dev` inspection, with preference for small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior.
+If the ledger-update commits are included in a green validation run, Gate 4CLOSE-1A can be treated as closed. The next safe increment should be chosen only after current `dev` inspection, with preference for small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
