@@ -4,64 +4,68 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4CLOSE-1C validation-command canonicalization guard.
+- Active increment: Gate 5A Operational Evidence Gate / Deployment Blocker Matrix.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Observed `dev` HEAD before this increment: `5d67fefa99cf57f86f163aacb3a45f1f61083795`
-- Branch for this PR: `gate4close-1c-validation-ledger`
-- `PROJECT_STATE.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `docs/gates/gate4_completion_evidence_matrix.md`, and `tests/test_validation_command_ledger_consistency.py` were read from `dev` before this increment.
-- Mutable local clone validation remains unavailable in this execution environment.
+- Observed `dev` HEAD before this increment: `8fca2c83ea11fd1f1d6279c48b168305df55015e`
+- Previous merged increment: Gate 4CLOSE-1C validation-command canonicalization guard.
+- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
+- Mutable local clone validation remains unavailable in this execution environment because container DNS could not resolve `github.com`.
 
-## Prior ledger evidence retained
+## Gate 5A operational evidence gate
 
-Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, and Gate 4CLOSE-1B validation-command ledger consistency remain recorded in the current ledgers as prior documentation/test-only increments.
+Gate 5A adds a deterministic reporting boundary for operational evidence and deployment blockers. It evaluates caller-supplied evidence rows for required blocker categories and fails closed unless every category is backed by `MEASURED` evidence.
 
-The Gate 4B-5 and Gate 4CLOSE-1B markers remain present as regression anchors while Gate 4CLOSE-1C records the latest validation-command canonicalization guard.
+Implemented files:
 
-## Gate 4CLOSE-1C validation-command canonicalization guard
+- `src/reporting/operational_evidence.py`
+- `tests/test_operational_evidence_gate.py`
+- `docs/gates/gate5a_operational_evidence_gate.md`
+- `src/reporting/__init__.py` export updates
 
-Gate 4CLOSE-1C adds focused regression coverage so `REPORT.md`, `PROJECT_STATE.md`, and `docs/gates/gate4_completion_evidence_matrix.md` keep the same canonical validation command surface.
+Required blocker categories:
 
-Actions:
+| Blocker | Required evidence | Clearing rule |
+| --- | --- | --- |
+| `audit_trail_integrity` | append-only audit trail integrity evidence | `MEASURED` only |
+| `ci_validation` | exact branch-head CI or local validation evidence | `MEASURED` only |
+| `data_freshness` | freshness and selector-consistency evidence | `MEASURED` only |
+| `execution_cost_evidence` | fees, spread, slippage, funding, and latency evidence | `MEASURED` only |
+| `paper_runtime_reconciliation` | PAPER runtime lifecycle reconciliation evidence | `MEASURED` only |
+| `risk_control_enforcement` | risk controls and circuit-breaker enforcement evidence | `MEASURED` only |
 
-- Expanded `tests/test_validation_command_ledger_consistency.py`.
-- Asserted the compile check, focused Gate 4 completion matrix tests, cost-evidence/public-export focused tests, full pytest run, Ruff, Black, and Mypy command strings remain present in `REPORT.md`, `PROJECT_STATE.md`, and `docs/gates/gate4_completion_evidence_matrix.md`.
-- Asserted the ledger keeps local execution evidence explicitly `UNAVAILABLE` when commands were not directly run in the current execution environment.
-- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status.
-- Left runtime behavior unchanged.
+Missing, `MODELED`, or `UNAVAILABLE` evidence leaves the corresponding row `BLOCKED`. Unknown execution costs are not zero. Missing evidence remains unavailable.
 
 ## Evidence classification
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
-| Branch base | PR branch reset to current `dev` comparison head `5d67fefa99cf57f86f163aacb3a45f1f61083795` before changes | `MEASURED` connector evidence |
-| Test coverage | `tests/test_validation_command_ledger_consistency.py` expanded on the PR branch | `MEASURED` connector evidence |
-| Documentation ledger | `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix now expose the same validation command surface | `MEASURED` connector evidence |
+| Branch base | `dev` resolved to `8fca2c83ea11fd1f1d6279c48b168305df55015e` before Gate 5A | `MEASURED` connector evidence |
+| Source boundary | Gate 5A operational evidence module added | `MEASURED` connector evidence |
+| Test coverage | Focused Gate 5A tests added | `MEASURED` connector evidence |
+| Focused scratch validation | `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` passed with `5 passed` in reconstructed workspace | `MEASURED` reconstructed-workspace evidence |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
-| Local command execution | not directly run in this execution environment | `UNAVAILABLE` |
+| Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
+| Remote CI after final Gate 5A head | not yet observed through connector | `UNVERIFIED` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 4CLOSE-1C is documentation and focused regression coverage only.
+Gate 5A is a diagnostic reporting boundary only.
 
-It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status.
-
-Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+It does not change strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status. It does not enable live trading, request secrets, submit exchange orders, infer profitability, or approve production readiness.
 
 ## Validation commands
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_validation_command_ledger_consistency.py
-pytest -q tests/test_gate4_completion_evidence_matrix.py
-pytest -q tests/test_gate4_public_safety_exports.py
-pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_operational_evidence_gate.py
 pytest -q tests/test_public_exports.py
+pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q
 ruff check .
 black --check .
@@ -74,10 +78,10 @@ Commands not directly run in this execution environment remain local-execution `
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: Gate 4CLOSE-1C guards validation-command ledger canonicalization, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
+Reason: Gate 5A can report a supplied PAPER deployment blocker matrix, but it does not prove execution realism, strategy performance, risk survivability, capital safety, long-running PAPER runtime behavior, live safety, or production readiness.
 
 ## Next step
 
-After Gate 4CLOSE-1C is green, the next safe increment should remain small and fail-closed: audit/provenance consistency coverage, CI/tooling reliability coverage, or missing tests for already-existing behavior.
+After Gate 5A is green in CI, the next safe increment should remain small and fail-closed: broaden operational evidence inputs only where measured artifacts exist, add CI/status evidence ingestion if available, or harden existing audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
