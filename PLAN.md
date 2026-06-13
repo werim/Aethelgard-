@@ -45,27 +45,27 @@
 | Gate 4CLOSE-1B — Validation-command ledger consistency | `DOCUMENTED` | REPORT/PROJECT_STATE command consistency. |
 | Gate 4CLOSE-1C — Validation-command canonicalization | `DOCUMENTED` | REPORT/PROJECT_STATE/Gate 4 matrix command canonicalization. |
 | Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Fail-closed PAPER operational evidence diagnostics only. |
+| Gate 5A-1 — Operational Evidence Input Integrity Hardening | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Malformed evidence rows fail closed before matrix construction. |
 
-## Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix
+## Gate 5A-1 — Operational Evidence Input Integrity Hardening
 
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Add a deterministic deployment-blocker matrix in `src/reporting/operational_evidence.py`.
-- Require `MEASURED` evidence to clear each PAPER operational blocker row.
-- Keep missing, `MODELED`, and `UNAVAILABLE` evidence blocked.
-- Cover audit trail integrity, CI validation, data freshness, execution-cost evidence, PAPER runtime reconciliation, and risk-control enforcement.
-- Render deterministic JSON and Markdown diagnostics.
-- Export Gate 5A helpers from `src.reporting`.
+- Validate caller-supplied Gate 5A evidence before building the blocker matrix.
+- Fail closed for duplicate blocker IDs.
+- Fail closed for unsupported blocker IDs.
+- Fail closed for empty blocker IDs, non-canonical blocker IDs, empty summaries, and empty sources.
+- Preserve Gate 5A clearing semantics: only `MEASURED` evidence clears required PAPER operational diagnostic blockers.
 - Add focused tests in `tests/test_operational_evidence_gate.py`.
-- Document the gate in `docs/gates/gate5a_operational_evidence_gate.md`.
+- Update Gate 5A documentation, version ledger, changelog, report, and project state.
 
 ### Evidence classification
 
-- `MEASURED`: starting `dev` resolved to `8fca2c83ea11fd1f1d6279c48b168305df55015e` through connector comparison.
-- `MEASURED`: Gate 5A source, tests, docs, exports, version ledger, changelog, report, and project-state updates were written to `dev` through the GitHub connector.
-- `MEASURED`: reconstructed focused validation passed `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` with `5 passed`.
+- `MEASURED`: starting `dev` resolved to `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4` through connector comparison.
+- `MEASURED`: Gate 5A-1 source, tests, docs, version ledger, changelog, report, project-state updates, and package version bumps were written to the PR branch through the GitHub connector.
+- `MEASURED`: reconstructed focused validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed`.
 - `UNAVAILABLE`: mutable local clone validation in this execution environment.
 - `UNAVAILABLE`: exact branch-head full local validation, Ruff, Black, and Mypy in this execution environment.
 - `UNAVAILABLE`: atomic multi-file commit evidence; connector contents writes were performed as separate commits.
@@ -79,6 +79,8 @@ python -m compileall -q src tests main.py
 pytest -q tests/test_operational_evidence_gate.py
 pytest -q tests/test_public_exports.py
 pytest -q tests/test_gate4_public_safety_exports.py
+pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q
 ruff check .
 black --check .
@@ -87,8 +89,8 @@ mypy .
 
 ### Boundary limit
 
-Gate 5A is an operational evidence diagnostic boundary only. It does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+Gate 5A-1 is an operational evidence input-integrity hardening boundary only. It does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
 
 ## Next recommended step
 
-After Gate 5A is green in CI, keep the next increment small and fail-closed: broaden operational evidence inputs only where measured artifacts exist, add CI/status evidence ingestion if available, or harden existing audit/runtime reconciliation tests.
+After Gate 5A-1 is green in CI, keep the next increment small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.

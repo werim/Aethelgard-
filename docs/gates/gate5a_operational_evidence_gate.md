@@ -17,6 +17,18 @@ readiness. It does not compute performance metrics, model missing costs,
 generate alpha, run strategies, submit orders, mutate exchange state, or infer
 that backtest results are operationally safe.
 
+## Gate 5A-1 input integrity hardening
+
+Gate 5A-1 keeps the diagnostic boundary unchanged while hardening the caller
+input contract. Evidence rows now fail closed before matrix construction when a
+caller supplies duplicate blocker IDs, unsupported blocker IDs, empty blocker
+IDs, non-canonical blocker IDs with surrounding whitespace, empty summaries, or
+empty sources.
+
+This prevents malformed evidence from being silently ignored or overwritten. It
+also keeps missing, modeled, and unavailable evidence explicit instead of
+allowing input drift to masquerade as measured operational proof.
+
 ## Required blocker categories
 
 | Blocker | Required evidence | Clearing rule |

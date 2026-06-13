@@ -124,6 +124,7 @@ def evaluate_operational_evidence_gate(
 ) -> OperationalEvidenceGateResult:
     """Evaluate Gate 5A and fail closed unless every blocker is measured."""
 
+    _validate_operational_evidence_items(evidence_items)
     evidence_by_id = {item.blocker_id: item for item in evidence_items}
     rows = tuple(
         _build_matrix_row(blocker_id, required_evidence, evidence_by_id)
@@ -151,7 +152,7 @@ def evaluate_operational_evidence_gate(
         diagnostics=(
             "Gate 5A blockers have measured evidence for PAPER operational "
             "deployment diagnostics only; no LIVE readiness or profitability "
-            "claim is implied",
+            "claim is implied"
         ),
     )
 
@@ -206,6 +207,41 @@ def assert_operational_deployment_not_blocked(
         raise OperationalEvidenceGateError(
             f"Gate 5A deployment blocked by unresolved evidence: {unresolved}"
         )
+
+
+def _validate_operational_evidence_items(
+    evidence_items: Sequence[OperationalEvidenceItem],
+) -> None:
+    """Validate caller-supplied evidence before building the blocker matrix."""
+
+    seen: set[str] = set()
+    for item in evidence_items:
+        blocker_id = item.blocker_id.strip()
+        if not blocker_id:
+            raise OperationalEvidenceGateError(
+                "Gate 5A evidence item has empty blocker_id"
+            )
+        if blocker_id != item.blocker_id:
+            raise OperationalEvidenceGateError(
+                f"Gate 5A evidence item has non-canonical blocker_id: {blocker_id}"
+            )
+        if blocker_id not in REQUIRED_OPERATIONAL_BLOCKERS:
+            raise OperationalEvidenceGateError(
+                f"Gate 5A evidence item has unsupported blocker_id: {blocker_id}"
+            )
+        if blocker_id in seen:
+            raise OperationalEvidenceGateError(
+                f"Gate 5A evidence item has duplicate blocker_id: {blocker_id}"
+            )
+        if not item.summary.strip():
+            raise OperationalEvidenceGateError(
+                f"Gate 5A evidence item has empty summary: {blocker_id}"
+            )
+        if not item.source.strip():
+            raise OperationalEvidenceGateError(
+                f"Gate 5A evidence item has empty source: {blocker_id}"
+            )
+        seen.add(blocker_id)
 
 
 def _build_matrix_row(

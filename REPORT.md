@@ -4,65 +4,65 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A Operational Evidence Gate / Deployment Blocker Matrix.
+- Active increment: Gate 5A-1 Operational Evidence Input Integrity Hardening.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Observed `dev` HEAD before this increment: `8fca2c83ea11fd1f1d6279c48b168305df55015e`
-- Previous merged increment: Gate 4CLOSE-1C validation-command canonicalization guard.
-- Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation.
+- Observed `dev` HEAD before this increment: `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4`
+- Previous merged increment: Gate 5A Operational Evidence Gate / Deployment Blocker Matrix.
+- Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, and Gate 5A operational evidence gate.
 - `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
-- Mutable local clone validation remains unavailable in this execution environment because container DNS could not resolve `github.com`.
+- Mutable local clone validation remains unavailable in this execution environment because repository writes were performed through the GitHub connector.
 
-## Prior ledger evidence retained
+## Gate 5A-1 operational evidence input integrity hardening
 
-Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, and Gate 4CLOSE-1C validation-command canonicalization remain recorded in the current ledgers as prior documentation/test-only increments.
-
-The Gate 4B-5 marker remains present as a regression anchor while Gate 5A records the latest operational evidence diagnostic boundary.
-
-## Gate 5A operational evidence gate
-
-Gate 5A adds a deterministic reporting boundary for operational evidence and deployment blockers. It evaluates caller-supplied evidence rows for required blocker categories and fails closed unless every category is backed by `MEASURED` evidence.
+Gate 5A-1 hardens the existing Gate 5A operational evidence diagnostic boundary. It validates caller-supplied evidence rows before the deployment-blocker matrix is built.
 
 Implemented files:
 
 - `src/reporting/operational_evidence.py`
 - `tests/test_operational_evidence_gate.py`
 - `docs/gates/gate5a_operational_evidence_gate.md`
-- `src/reporting/__init__.py` export updates
+- `pyproject.toml`
+- `src/__init__.py`
+- `VERSION.md`
+- `CHANGELOG.md`
+- `PLAN.md`
+- `PROJECT_STATE.md`
 
-Required blocker categories:
+Input conditions that now fail closed:
 
-| Blocker | Required evidence | Clearing rule |
-| --- | --- | --- |
-| `audit_trail_integrity` | append-only audit trail integrity evidence | `MEASURED` only |
-| `ci_validation` | exact branch-head CI or local validation evidence | `MEASURED` only |
-| `data_freshness` | freshness and selector-consistency evidence | `MEASURED` only |
-| `execution_cost_evidence` | fees, spread, slippage, funding, and latency evidence | `MEASURED` only |
-| `paper_runtime_reconciliation` | PAPER runtime lifecycle reconciliation evidence | `MEASURED` only |
-| `risk_control_enforcement` | risk controls and circuit-breaker enforcement evidence | `MEASURED` only |
+| Invalid input | Result |
+| --- | --- |
+| duplicate `blocker_id` | `OperationalEvidenceGateError` |
+| unsupported `blocker_id` | `OperationalEvidenceGateError` |
+| empty `blocker_id` | `OperationalEvidenceGateError` |
+| non-canonical `blocker_id` with surrounding whitespace | `OperationalEvidenceGateError` |
+| empty evidence summary | `OperationalEvidenceGateError` |
+| empty evidence source | `OperationalEvidenceGateError` |
 
-Missing, `MODELED`, or `UNAVAILABLE` evidence leaves the corresponding row `BLOCKED`. Unknown execution costs are not zero. Missing evidence remains unavailable.
+The existing Gate 5A matrix still blocks missing, `MODELED`, and `UNAVAILABLE` evidence. Unknown execution costs are not zero. Missing evidence remains unavailable.
 
 ## Evidence classification
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
-| Branch base | `dev` resolved to `8fca2c83ea11fd1f1d6279c48b168305df55015e` before Gate 5A | `MEASURED` connector evidence |
-| Source boundary | Gate 5A operational evidence module added | `MEASURED` connector evidence |
-| Test coverage | Focused Gate 5A tests added | `MEASURED` connector evidence |
-| Focused scratch validation | `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` passed with `5 passed` in reconstructed workspace | `MEASURED` reconstructed-workspace evidence |
+| Branch base | `dev` resolved to `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4` before Gate 5A-1 | `MEASURED` connector evidence |
+| Source boundary | Gate 5A-1 input validation added | `MEASURED` connector evidence |
+| Test coverage | Focused Gate 5A-1 tests added | `MEASURED` connector evidence |
+| Focused scratch validation | `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` passed with `10 passed` in reconstructed workspace | `MEASURED` reconstructed-workspace evidence |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
 | Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
-| Remote CI after final Gate 5A head | not yet observed through connector | `UNVERIFIED` |
+| Ruff, Black, and Mypy | not directly run in this execution environment | `UNAVAILABLE` |
+| Remote CI after final Gate 5A-1 head | not yet observed through connector | `UNVERIFIED` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 5A is a diagnostic reporting boundary only.
+Gate 5A-1 is an input-integrity hardening boundary only.
 
 It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
@@ -90,10 +90,10 @@ Commands not directly run in this execution environment remain local-execution `
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: Gate 5A can report a supplied PAPER deployment blocker matrix, but it does not prove execution realism, strategy performance, risk survivability, capital safety, long-running PAPER runtime behavior, live safety, or production readiness.
+Reason: Gate 5A-1 rejects malformed evidence rows before building PAPER deployment diagnostics, but it does not prove execution realism, strategy performance, risk survivability, capital safety, long-running PAPER runtime behavior, live safety, or production readiness.
 
 ## Next step
 
-After Gate 5A is green in CI, the next safe increment should remain small and fail-closed: broaden operational evidence inputs only where measured artifacts exist, add CI/status evidence ingestion if available, or harden existing audit/runtime reconciliation tests.
+After Gate 5A-1 is green in CI, keep the next safe increment small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.

@@ -20,7 +20,7 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD before this increment: `8fca2c83ea11fd1f1d6279c48b168305df55015e`
+- Verified `dev` HEAD before this increment: `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
 
@@ -41,6 +41,7 @@ Current documented sequence includes:
 - Gate 4CLOSE-1B validation-command ledger consistency guard
 - Gate 4CLOSE-1C validation-command canonicalization guard
 - Gate 5A operational evidence gate / deployment blocker matrix
+- Gate 5A-1 operational evidence input integrity hardening
 
 ## Prior Ledger Evidence Retained
 
@@ -48,13 +49,13 @@ Gate 4B-5A — VERSION ledger reconciliation.
 
 Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
 
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, and Gate 4CLOSE-1C markers remain present as regression anchors while Gate 5A records the latest safe increment.
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, and Gate 5A markers remain present as regression anchors while Gate 5A-1 records the latest safe increment.
 
 ## Latest Safe Increment Selected
 
-Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix.
+Gate 5A-1 — Operational Evidence Input Integrity Hardening.
 
-This phase adds a fail-closed diagnostic reporting boundary so PAPER deployment blocker categories remain blocked unless measured evidence is supplied for audit trail integrity, CI validation, data freshness, execution-cost evidence, PAPER runtime reconciliation, and risk-control enforcement.
+This phase hardens the Gate 5A operational evidence diagnostic boundary by rejecting malformed caller-supplied evidence before building the deployment-blocker matrix.
 
 ## Evidence Classification
 
@@ -62,11 +63,11 @@ This phase adds a fail-closed diagnostic reporting boundary so PAPER deployment 
 
 - `dev` resolved through direct GitHub compare/read evidence.
 - `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev`.
-- `src/reporting/operational_evidence.py` was added on `dev`.
-- `tests/test_operational_evidence_gate.py` was added on `dev`.
-- `docs/gates/gate5a_operational_evidence_gate.md` was added on `dev`.
-- `src.reporting` exports the Gate 5A diagnostic helpers.
-- Reconstructed focused validation passed `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` with `5 passed`.
+- `src/reporting/operational_evidence.py` was updated on the PR branch.
+- `tests/test_operational_evidence_gate.py` was updated on the PR branch.
+- `docs/gates/gate5a_operational_evidence_gate.md` was updated on the PR branch.
+- `pyproject.toml` and `src/__init__.py` were updated to version `0.21.1` on the PR branch.
+- Reconstructed focused validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed`.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -85,7 +86,7 @@ This phase adds a fail-closed diagnostic reporting boundary so PAPER deployment 
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-1 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -109,6 +110,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A is green in CI, the next safe increment should remain small and fail-closed: broaden operational evidence inputs only where measured artifacts exist, add CI/status evidence ingestion if available, or harden existing audit/runtime reconciliation tests.
+After Gate 5A-1 is green in CI, the next safe increment should remain small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
