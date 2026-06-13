@@ -20,14 +20,11 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- PR branch: `gate4close-1c-validation-ledger`
-- Verified `dev` HEAD before this increment: `5d67fefa99cf57f86f163aacb3a45f1f61083795`
+- Verified `dev` HEAD before this increment: `8fca2c83ea11fd1f1d6279c48b168305df55015e`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
 
 ## Current Ledger Position
-
-The live `dev` ledger has advanced beyond the old Gate 0 planning state.
 
 Current documented sequence includes:
 
@@ -43,31 +40,25 @@ Current documented sequence includes:
 - Gate 4CLOSE-1A matrix wording reconciliation
 - Gate 4CLOSE-1B validation-command ledger consistency guard
 - Gate 4CLOSE-1C validation-command canonicalization guard
-
-This file is reconciled to the current documentation state and no longer claims that repository state, branch, HEAD, PLAN.md, or later gates are unknown.
-
-## Prior Ledger Evidence Retained
-
-Gate 4B-5A — VERSION ledger reconciliation.
-
-Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
-
-The Gate 4B-5, Gate 4B-5A, and Gate 4CLOSE-1B markers remain present as regression anchors while Gate 4CLOSE-1C records the latest safe increment.
+- Gate 5A operational evidence gate / deployment blocker matrix
 
 ## Latest Safe Increment Selected
 
-Gate 4CLOSE-1C — validation-command canonicalization guard.
+Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix.
 
-This phase extends focused regression coverage so `REPORT.md`, `PROJECT_STATE.md`, and `docs/gates/gate4_completion_evidence_matrix.md` continue to expose the same canonical validation command surface and continue to label local command execution as `UNAVAILABLE` when not directly run in the current execution environment.
+This phase adds a fail-closed diagnostic reporting boundary so PAPER deployment blocker categories remain blocked unless measured evidence is supplied for audit trail integrity, CI validation, data freshness, execution-cost evidence, PAPER runtime reconciliation, and risk-control enforcement.
 
 ## Evidence Classification
 
 ### MEASURED
 
 - `dev` resolved through direct GitHub compare/read evidence.
-- `PROJECT_STATE.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `docs/gates/gate4_completion_evidence_matrix.md`, and `tests/test_validation_command_ledger_consistency.py` were read from `dev`.
-- `tests/test_validation_command_ledger_consistency.py` was expanded on the PR branch.
-- `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix now expose the same validation command surface.
+- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev`.
+- `src/reporting/operational_evidence.py` was added on `dev`.
+- `tests/test_operational_evidence_gate.py` was added on `dev`.
+- `docs/gates/gate5a_operational_evidence_gate.md` was added on `dev`.
+- `src.reporting` exports the Gate 5A diagnostic helpers.
+- Reconstructed focused validation passed `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` with `5 passed`.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -77,14 +68,16 @@ This phase extends focused regression coverage so `REPORT.md`, `PROJECT_STATE.md
 ### UNAVAILABLE
 
 - Exact local `git status` from a mutable clone in this execution environment.
-- Exact local command execution in this execution environment.
-- Connector-visible GitHub Actions workflow evidence when not separately visible through the connector API.
+- Exact branch-head full local command execution in this execution environment.
+- Local Ruff, Black, and Mypy execution in this execution environment.
+- Final branch-head GitHub Actions evidence until CI reports.
+- Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 4CLOSE-1C does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status.
+Gate 5A does not change strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status. It does not add order execution, account mutation, alpha claims, or readiness approval.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -92,11 +85,9 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_validation_command_ledger_consistency.py
-pytest -q tests/test_gate4_completion_evidence_matrix.py
-pytest -q tests/test_gate4_public_safety_exports.py
-pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_operational_evidence_gate.py
 pytest -q tests/test_public_exports.py
+pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q
 ruff check .
 black --check .
@@ -107,6 +98,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 4CLOSE-1C is green, the next safe increment should remain small and fail-closed: audit/provenance consistency coverage, CI/tooling reliability coverage, or missing tests for already-existing behavior.
+After Gate 5A is green in CI, the next safe increment should remain small and fail-closed: broaden operational evidence inputs only where measured artifacts exist, add CI/status evidence ingestion if available, or harden existing audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
