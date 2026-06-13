@@ -12,8 +12,15 @@
 - Base branch: `dev`
 - Observed `dev` HEAD before this increment: `8fca2c83ea11fd1f1d6279c48b168305df55015e`
 - Previous merged increment: Gate 4CLOSE-1C validation-command canonicalization guard.
+- Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation.
 - `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
 - Mutable local clone validation remains unavailable in this execution environment because container DNS could not resolve `github.com`.
+
+## Prior ledger evidence retained
+
+Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, and Gate 4CLOSE-1C validation-command canonicalization remain recorded in the current ledgers as prior documentation/test-only increments.
+
+The Gate 4B-5 marker remains present as a regression anchor while Gate 5A records the latest operational evidence diagnostic boundary.
 
 ## Gate 5A operational evidence gate
 
@@ -57,15 +64,20 @@ Missing, `MODELED`, or `UNAVAILABLE` evidence leaves the corresponding row `BLOC
 
 Gate 5A is a diagnostic reporting boundary only.
 
-It does not change strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status. It does not enable live trading, request secrets, submit exchange orders, infer profitability, or approve production readiness.
+It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
+Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
 ## Validation commands
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_operational_evidence_gate.py
-pytest -q tests/test_public_exports.py
+pytest -q tests/test_validation_command_ledger_consistency.py
+pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
+pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_public_exports.py
+pytest -q tests/test_operational_evidence_gate.py
 pytest -q
 ruff check .
 black --check .
