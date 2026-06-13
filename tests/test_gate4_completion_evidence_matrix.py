@@ -1,11 +1,14 @@
-from pathlib import Path
+MATRIX_PATH = "docs/gates/gate4_completion_evidence_matrix.md"
 
 
-MATRIX = Path("docs/gates/gate4_completion_evidence_matrix.md")
+def matrix_text() -> str:
+    from pathlib import Path
+
+    return Path(MATRIX_PATH).read_text(encoding="utf-8")
 
 
 def test_gate4_completion_matrix_current_target() -> None:
-    text = MATRIX.read_text(encoding="utf-8")
+    text = matrix_text()
 
     assert "Gate 4CLOSE-1A" in text
     assert "PAPER_ONLY" in text
@@ -14,7 +17,7 @@ def test_gate4_completion_matrix_current_target() -> None:
 
 
 def test_gate4_completion_matrix_core_boundaries() -> None:
-    text = MATRIX.read_text(encoding="utf-8")
+    text = matrix_text()
 
     for phrase in (
         "Fee modeling boundary",
@@ -31,7 +34,7 @@ def test_gate4_completion_matrix_core_boundaries() -> None:
 
 
 def test_gate4_completion_matrix_links_evidence_files() -> None:
-    text = MATRIX.read_text(encoding="utf-8")
+    text = matrix_text()
 
     for evidence_path in (
         "src/backtest/cost_evidence.py",
