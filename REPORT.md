@@ -4,39 +4,28 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 4B-5A VERSION ledger reconciliation.
+- Active increment: Gate 4CLOSE-1A matrix wording reconciliation.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Observed `dev` HEAD: `4263b85289c2b3ba077eff2f1cf553e878b3ba29`
-- Observed HEAD commit message: `docs: update project state ledger`
-- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this reconciliation.
-- Connector workflow/status evidence remains unavailable or empty for observed commits.
-- Mutable local clone validation remains unavailable in this execution environment.
+- Observed `dev` HEAD after this reconciliation: `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a`
+- Observed HEAD commit message: `test: fix gate 4 matrix import sorting`
+- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, `VERSION.md`, `docs/gates/gate4_completion_evidence_matrix.md`, and `tests/test_gate4_completion_evidence_matrix.py` were read from `dev` during this reconciliation.
 
-## Gate 4B-5 project state ledger reconciliation
+## Gate 4CLOSE-1A completion evidence
 
-This pass updates stale `PROJECT_STATE.md` content so it no longer claims that repository state, branch, HEAD, PLAN.md, and later gate work are unknown after those items have already been documented on `dev`.
-
-| Area | Finding | Action |
-| --- | --- | --- |
-| Project state ledger | `PROJECT_STATE.md` still described a Gate 0 planning state and unknown repository evidence. | Reconciled it to the current `dev` ledger state. |
-| Current gate sequence | `PLAN.md` and `CHANGELOG.md` already record Gate 4B reporting and export-boundary work through Gate 4B-4. | `PROJECT_STATE.md` now references the current ledger sequence. |
-| Regression coverage | No focused test guarded against reintroducing stale project-state claims. | Added `tests/test_project_state_current.py`. |
-| Runtime behavior | No runtime behavior was needed. | Source runtime code remains untouched. |
-
-## Gate 4B-5A VERSION ledger reconciliation
-
-A review identified that Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 as the current 0.20.0 milestone.
+Gate 4CLOSE-1A reconciles an overbroad evidence-matrix claim so the documented public-export evidence matches the focused tests that actually exist.
 
 Actions:
 
-- Record Gate 4B-5 in `VERSION.md`.
-- Add focused version-ledger regression coverage.
-- Preserve PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status.
-- Leave runtime behavior unchanged.
+- Updated `docs/gates/gate4_completion_evidence_matrix.md` to limit the public-export claim to unsafe live/order/runtime names on checked public package surfaces.
+- Removed the unsupported broader public-export claim from the Gate 4 completion matrix.
+- Updated `tests/test_gate4_completion_evidence_matrix.py` so it checks the current Gate 4CLOSE-1A matrix wording and core evidence links.
+- Repaired the Ruff import-sort failure in `tests/test_gate4_completion_evidence_matrix.py` by moving `Path` into a local helper import, matching existing project test style.
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY status.
+- Left runtime behavior unchanged.
 
 ## Evidence classification
 
@@ -44,43 +33,43 @@ Actions:
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
 | Branch read | `dev` resolved through direct compare and file reads | `MEASURED` connector evidence |
-| Observed `dev` HEAD | `4263b85289c2b3ba077eff2f1cf553e878b3ba29` | `MEASURED` connector evidence |
-| Project docs read | `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` read from `dev` | `MEASURED` connector evidence |
-| Project-state test added | `tests/test_project_state_current.py` checks stale claims and safety boundary language | `MEASURED` proposed patch evidence |
-| Version-ledger test added | `tests/test_version_ledger_current.py` checks Gate 4B-5 markers across current ledgers | `MEASURED` proposed patch evidence |
-| VERSION drift review | Review identified Gate 4B-5 missing from `VERSION.md` | `MEASURED` review evidence |
-| Connector CI/workflow status | no workflow runs or statuses visible for observed commit | `UNAVAILABLE` / empty connector evidence |
-| Local full validation | mutable local clone unavailable | `UNAVAILABLE` |
+| Observed `dev` HEAD | `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a` | `MEASURED` connector evidence |
+| Matrix reconciliation | `docs/gates/gate4_completion_evidence_matrix.md` now limits the export claim to checked live/order/runtime names | `MEASURED` connector evidence |
+| Matrix test reconciliation | `tests/test_gate4_completion_evidence_matrix.py` now checks Gate 4CLOSE-1A evidence without the removed unsupported boundary | `MEASURED` connector evidence |
+| Ruff failure review | User-provided CI log showed Ruff I001 import-block failure in `tests/test_gate4_completion_evidence_matrix.py` | `MEASURED` user-provided evidence |
+| Ruff repair | `tests/test_gate4_completion_evidence_matrix.py` import structure was updated at commit `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a` | `MEASURED` connector evidence |
+| Validation result | User-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, with Python 3.11 and 3.12 jobs successful | `MEASURED` user-provided evidence |
+| Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
+| Connector CI/status API evidence | direct connector status visibility may remain empty even when the user-provided CI screenshot is green | `UNAVAILABLE` if not separately visible through connector |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 4B-5A is documentation and focused regression coverage only.
+Gate 4CLOSE-1A is documentation and focused regression coverage only.
 
-It does not modify candle replay behavior, replay candles, simulate lifecycle outcomes, compute performance, model costs, generate alpha, optimize strategies, add PAPER runtime behavior, enable non-paper exchange actions, or approve operational readiness.
+It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status.
 
-Unknown execution costs are not zero. Missing evidence remains unavailable.
+Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
 ## Validation commands
 
 ```bash
-python -m compileall -q src tests main.py
-pytest -q tests/test_version_ledger_current.py
-pytest -q tests/test_project_state_current.py
+pytest -q tests/test_gate4_completion_evidence_matrix.py
+pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q
 ruff check .
 black --check .
 mypy .
 ```
 
-These commands must be run in a proper mutable checkout. Any unavailable tool must be reported as `UNAVAILABLE`, not treated as passed.
+User-provided CI screenshot records the validation workflow as successful for commit `334bb0d`. Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: project-state and version-ledger documentation consistency improves auditability, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
+Reason: Gate 4CLOSE-1A reconciles audit wording and test coverage, but it does not prove execution realism, strategy performance, risk controls, capital safety, or operational readiness.
 
 ## Next step
 
-Stop expanding reporting-boundary documentation unless fresh inspection finds a concrete gap. The next safe increment should prefer small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior. Do not add optimizer behavior, exchange mutation, strategy logic, lifecycle simulation expansion, performance calculation, or readiness approval.
+Gate 4CLOSE-1A can be treated as closed once the ledger-update commit is included in a green validation run. The next safe increment should be selected only after fresh `dev` inspection and should prefer small fail-closed validation gaps, audit/provenance gaps, CI/tooling reliability gaps, or missing tests for already-existing behavior.
