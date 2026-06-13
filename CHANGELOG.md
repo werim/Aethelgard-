@@ -13,6 +13,8 @@
 - Public package export-boundary consistency tests for `src.backtest`, `src.data`, `src.execution`, and `src.reporting`.
 - Gate 4B-5 project-state ledger reconciliation and focused stale-claim regression coverage.
 - Gate 4B-5A VERSION ledger reconciliation coverage so Gate 4B-5 is recorded across `VERSION.md`, `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`.
+- Gate 4CLOSE-1 completion evidence matrix in `docs/gates/gate4_completion_evidence_matrix.md`.
+- Gate 4CLOSE-1A focused matrix wording reconciliation and regression coverage in `tests/test_gate4_completion_evidence_matrix.py`.
 
 ### Changed
 
@@ -25,6 +27,7 @@
 - The guarded publication helper now requires eligibility produced by the Gate 4B evaluator before caller payload publication.
 - `PROJECT_STATE.md` now reflects the current `dev` ledger state instead of the stale Gate 0 planning state.
 - `VERSION.md` now records Gate 4B-5 as part of the current 0.20.0 ledger bundle.
+- Gate 4CLOSE-1A narrows the completion evidence matrix so public-export evidence is limited to checked live/order/runtime names on public package surfaces.
 
 ### Fixed
 
@@ -38,12 +41,14 @@
 - Ruff import-block failures in `tests/test_public_exports.py` were repaired without changing runtime behavior.
 - Stale `PROJECT_STATE.md` unknown-repository claims are covered by a focused regression test.
 - Review-identified ledger drift where Gate 4B-5 appeared in project/report/changelog docs but not in `VERSION.md`.
+- Gate 4CLOSE-1A removes unsupported matrix wording and repairs Ruff import sorting in `tests/test_gate4_completion_evidence_matrix.py`.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, Gate 4B-5A, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
-- Exact branch-head full-suite validation remains unavailable locally; user reported the latest `dev` validation green before this reconciliation.
-- Connector workflow/status APIs returned no runs or statuses for the observed commit.
+- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1, Gate 4CLOSE-1A, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
+- Exact branch-head local validation remains unavailable in this execution environment.
+- User-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs.
+- Connector workflow/status APIs may return no runs or statuses even when user-provided CI evidence is available.
 
 ## [0.19.0] - 2026-06-05
 
