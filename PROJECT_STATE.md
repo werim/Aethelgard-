@@ -42,6 +42,14 @@ Current documented sequence includes:
 - Gate 4CLOSE-1C validation-command canonicalization guard
 - Gate 5A operational evidence gate / deployment blocker matrix
 
+## Prior Ledger Evidence Retained
+
+Gate 4B-5A — VERSION ledger reconciliation.
+
+Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
+
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, and Gate 4CLOSE-1C markers remain present as regression anchors while Gate 5A records the latest safe increment.
+
 ## Latest Safe Increment Selected
 
 Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix.
@@ -77,7 +85,7 @@ This phase adds a fail-closed diagnostic reporting boundary so PAPER deployment 
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A does not change strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, or readiness status. It does not add order execution, account mutation, alpha claims, or readiness approval.
+Gate 5A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -85,9 +93,12 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_operational_evidence_gate.py
-pytest -q tests/test_public_exports.py
+pytest -q tests/test_validation_command_ledger_consistency.py
+pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
+pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_public_exports.py
+pytest -q tests/test_operational_evidence_gate.py
 pytest -q
 ruff check .
 black --check .
