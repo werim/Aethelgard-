@@ -1,10 +1,3 @@
-# ruff: noqa: I001
-from pathlib import Path
-
-
-ROOT = Path(__file__).resolve().parents[1]
-
-
 EXPECTED_VALIDATION_COMMANDS = (
     "pytest -q tests/test_gate4_completion_evidence_matrix.py",
     "pytest -q tests/test_gate4_public_safety_exports.py",
@@ -22,7 +15,8 @@ UNAVAILABLE_EVIDENCE_MARKERS = (
 
 
 def _read_project_file(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8")
+    with open(path, encoding="utf-8") as project_file:
+        return project_file.read()
 
 
 def test_report_and_project_state_validation_commands_stay_in_sync() -> None:
