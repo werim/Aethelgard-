@@ -16,6 +16,7 @@
 - Gate 4CLOSE-1 completion evidence matrix in `docs/gates/gate4_completion_evidence_matrix.md`.
 - Gate 4CLOSE-1A focused matrix wording reconciliation and regression coverage in `tests/test_gate4_completion_evidence_matrix.py`.
 - Gate 4CLOSE-1B validation-command ledger consistency regression coverage in `tests/test_validation_command_ledger_consistency.py`.
+- Gate 4CLOSE-1C validation-command canonicalization coverage across `REPORT.md`, `PROJECT_STATE.md`, and `docs/gates/gate4_completion_evidence_matrix.md`.
 
 ### Changed
 
@@ -30,6 +31,7 @@
 - `VERSION.md` now records Gate 4B-5 as part of the current 0.20.0 ledger bundle.
 - Gate 4CLOSE-1A narrows the completion evidence matrix so public-export evidence is limited to checked live/order/runtime names on public package surfaces.
 - `REPORT.md` and `PROJECT_STATE.md` now share a guarded validation command surface for Gate 4CLOSE-1B.
+- Gate 4CLOSE-1C canonicalizes the validation command surface across `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix.
 
 ### Fixed
 
@@ -45,10 +47,11 @@
 - Review-identified ledger drift where Gate 4B-5 appeared in project/report/changelog docs but not in `VERSION.md`.
 - Gate 4CLOSE-1A removes unsupported matrix wording and repairs Ruff import sorting in `tests/test_gate4_completion_evidence_matrix.py`.
 - Validation command drift between `REPORT.md` and `PROJECT_STATE.md` is now covered by focused regression tests.
+- Validation command drift between `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix is now covered by focused regression tests.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1, Gate 4CLOSE-1A, Gate 4CLOSE-1B, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
+- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1, Gate 4CLOSE-1A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
 - Exact branch-head local validation remains unavailable in this execution environment.
 - User-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs.
 - Connector workflow/status APIs may return no runs or statuses even when user-provided CI evidence is available.
