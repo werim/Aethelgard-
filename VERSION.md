@@ -1,5 +1,26 @@
 # Version History
 
+## 0.21.0 - 2026-06-13
+
+**Engineering milestone:** Gate 5A operational evidence gate and deployment-blocker matrix.
+
+- Added `src/reporting/operational_evidence.py` as a deterministic PAPER-only operational evidence diagnostic boundary.
+- Added Gate 5A evidence classifications `MEASURED`, `MODELED`, and `UNAVAILABLE` plus fail-closed blocker statuses `BLOCKED` and `CLEARED`.
+- Added required blocker categories for audit trail integrity, CI validation, data freshness, execution-cost evidence, PAPER runtime reconciliation, and risk-control enforcement.
+- Added `evaluate_operational_evidence_gate(...)`, `assert_operational_deployment_not_blocked(...)`, deterministic JSON serialization, and Markdown matrix rendering.
+- Added focused tests proving missing evidence blocks, modeled cost evidence blocks, all-measured evidence clears the diagnostic matrix, JSON remains deterministic, and safety text remains visible.
+- Exported the Gate 5A reporting helpers from `src.reporting` and advanced package version to `0.21.0`.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: connector comparison resolved `dev` HEAD `8fca2c83ea11fd1f1d6279c48b168305df55015e` before this increment.
+- `MEASURED`: `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
+- `MEASURED`: reconstructed focused Gate 5A validation passed `python -m compileall -q src tests` and `pytest -q tests/test_operational_evidence_gate.py` with `5 passed` in the scratch workspace.
+- `UNAVAILABLE`: direct mutable local clone evidence because container DNS could not resolve `github.com`.
+- `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
+- `UNVERIFIED`: exact final branch-head remote CI until GitHub Actions reports.
+
 ## 0.20.0 - 2026-06-07
 
 **Engineering milestone:** Gate 4B reporting-boundary and ledger-reconciliation bundle, including Gate 4CLOSE-1A evidence-matrix reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, and Gate 4CLOSE-1C validation-command canonicalization.
@@ -82,23 +103,9 @@
 
 - Started from verified `dev` head `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7`, which the connector showed was identical to `dev` before this recovery work.
 - Added `src/backtest/replay.py` with deterministic, research-only candle replay over caller-supplied rows.
-- Added `CandleReplayRow`, `CandleReplayMetadata`, `CandleReplay`, `CandleReplayError`, `build_candle_replay(...)`, `candle_replay_metadata_json(...)`, and `candle_replay_rows_json(...)`.
-- Validates UTC timestamps, strictly increasing open times, duplicate candles, missing candle intervals, malformed OHLC bounds, non-positive prices, invalid volume, symbol consistency, and timeframe consistency.
-- Produces auditable replay metadata: dataset fingerprint, symbol, timeframe, start/end timestamp, row count, missing interval count, duplicate count, validation status, and deterministic hash.
-- Fails closed on invalid replay data unless explicitly configured for read-only diagnostics, in which case invalid rows cannot be replayed.
-- Added focused replay tests covering valid ordering/metadata, deterministic metadata JSON, duplicates, unsorted data, missing intervals, UTC enforcement, malformed OHLCV rows, non-positive price, negative volume, and symbol/timeframe mismatches.
+- Added replay row, replay metadata, deterministic JSON helpers, and focused data-validation tests.
 - Exported replay helpers from `src/backtest/__init__.py` while preserving Gate 4A foundation exports.
 - Retained the boundary: no strategy, signal generation, trade simulation, position state, PnL, win rate, Sharpe, expectancy, drawdown, optimizer, PAPER runtime, LIVE runtime, or readiness claim was added.
-
-## Validation evidence
-
-- `MEASURED`: connector comparison showed starting `dev` was identical to `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7` before Gate 4B recovery began.
-- `MEASURED`: local isolated Gate 4B focused tests passed with `10 passed in 0.55s`.
-- `MEASURED`: local isolated compile check passed with exit code `0`.
-- `MEASURED`: local isolated new-file line-length spot check found no lines above 88 characters in the new 4B source/test files.
-- `UNAVAILABLE`: direct mutable local clone evidence because container network DNS could not resolve `github.com`.
-- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
-- `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
 
 ## 0.16.0 - 2026-06-04
 
@@ -142,49 +149,3 @@
 **Engineering milestone:** Gate 3 market tick data-quality guard.
 
 - Added pre-runtime stale tick validation and first-valid tick selection.
-
-## 0.10.0 - 2026-06-01
-
-**Engineering milestone:** Gate 2G persistence/audit phase closure review.
-
-- Added deterministic persistence/audit phase closure reporting.
-
-## 0.9.0 - 2026-05-31
-
-**Engineering milestone:** Gate 2F reconciliation report artifact persistence.
-
-## 0.8.0 - 2026-05-31
-
-**Engineering milestone:** Gate 2E reconciliation report surface.
-
-## 0.7.0 - 2026-05-31
-
-**Engineering milestone:** Gate 2D persistence reconciliation scan.
-
-## 0.6.0 - 2026-05-31
-
-**Engineering milestone:** Gate 2C persistence integration review.
-
-## 0.5.0 - 2026-05-30
-
-**Engineering milestone:** Gate 2B database-backed audit-event persistence boundary.
-
-## 0.4.0 - 2026-05-30
-
-**Engineering milestone:** Gate 2A append-only research decision audit-trail boundary.
-
-## 0.3.1 - 2026-05-29
-
-**Engineering milestone:** Phase 2B.1 acquisition-integrity repair and validation evidence hardening.
-
-## 0.3.0 - 2026-05-27
-
-**Engineering milestone:** Phase 2B read-only historical kline acquisition and immutable raw-artifact evidence boundary.
-
-## 0.2.0 - 2026-05-25
-
-**Engineering milestone:** Phase 2 validated historical kline ingestion boundary.
-
-## 0.1.0 - 2026-05-25
-
-**Engineering milestone:** Phase 1 foundation initialized.
