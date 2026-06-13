@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.21.1] - 2026-06-13
+
+### Fixed
+
+- Hardened Gate 5A operational evidence input validation.
+- Duplicate blocker evidence now fails closed instead of silently overwriting earlier evidence.
+- Unsupported blocker IDs now fail closed instead of being ignored.
+- Empty blocker IDs, non-canonical blocker IDs, empty summaries, and empty sources now fail closed.
+
+### Changed
+
+- Package version advanced to `0.21.1`.
+- Gate 5A documentation now records the Gate 5A-1 input integrity boundary.
+
+### Known limitations
+
+- Gate 5A-1 does not collect CI, runtime, risk, audit, or execution-cost evidence automatically.
+- Gate 5A-1 does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+- Local full-repository validation remains unavailable in this execution environment; only reconstructed focused Gate 5A tests were run locally.
+
 ## [0.21.0] - 2026-06-13
 
 ### Added
