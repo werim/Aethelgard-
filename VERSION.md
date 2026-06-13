@@ -2,7 +2,7 @@
 
 ## 0.20.0 - 2026-06-07
 
-**Engineering milestone:** Gate 4B reporting-boundary and ledger-reconciliation bundle.
+**Engineering milestone:** Gate 4B reporting-boundary and ledger-reconciliation bundle, including Gate 4CLOSE-1A evidence-matrix reconciliation.
 
 - Added `src/reporting/performance_boundary.py` as a reporting-only eligibility boundary over Gate 4A `BacktestRunMetadata`.
 - Added `MetricPublicationStatus` values `METRICS_BLOCKED` and `METRICS_PUBLISHABLE` plus an immutable eligibility result object.
@@ -12,17 +12,20 @@
 - Added focused tests covering unavailable evidence blocking, measured/modeled evidence eligibility, unavailable-not-zero behavior, deterministic JSON, malformed metadata fail-closed behavior, and absence of performance metric fields.
 - Exported the new reporting boundary from `src/reporting/__init__.py` and advanced package version to `0.20.0`.
 - Recorded Gate 4B-5 project-state ledger reconciliation so `VERSION.md`, `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md` identify the same current documentation/test-only increment.
-- Retained the Gate 4B-0 through Gate 4B-5 boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, and no readiness approval.
+- Added Gate 4CLOSE-1 completion evidence matrix for Gate 4 source, test, safety-text, and public-export evidence.
+- Completed Gate 4CLOSE-1A matrix wording reconciliation so the public-export evidence claim is limited to checked live/order/runtime names on public package surfaces.
+- Retained the Gate 4B-0 through Gate 4CLOSE-1A boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, and no readiness approval.
 
 ## Validation evidence
 
 - `MEASURED`: local isolated Gate 4B-0 focused tests passed with `6 passed in 0.15s`.
 - `MEASURED`: local isolated compile check for the new Gate 4B-0 module and focused tests passed with exit code `0`.
 - `MEASURED`: Gate 4B-5A review evidence identified and repaired `VERSION.md` ledger drift for Gate 4B-5.
+- `MEASURED`: Gate 4CLOSE-1A connector evidence updated the matrix and focused matrix test on `dev` through commit `334bb0d909bdc1e8538ebeee5336c3b71bf7a77a`.
+- `MEASURED`: user-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs.
 - `UNAVAILABLE`: direct mutable local clone evidence for the repository because container DNS could not resolve `github.com`; GitHub connector writes were used.
-- `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment because those modules were not installed.
-- `UNAVAILABLE`: local full-suite validation for Gate 4B-5A until run in a mutable checkout or reported by CI.
-- `UNVERIFIED`: exact final branch-head full repository test suite and remote CI until GitHub Actions reports.
+- `UNAVAILABLE`: local command execution for the final Gate 4CLOSE-1A branch-head in this execution environment.
+- `UNVERIFIED`: connector-visible workflow/status APIs may remain empty even when user-provided CI evidence is available.
 
 ## 0.19.0 - 2026-06-05
 
