@@ -78,6 +78,76 @@ def test_gate5a_clears_only_when_all_blockers_have_measured_evidence() -> None:
     assert_operational_deployment_not_blocked(result)
 
 
+def test_gate5a_rejects_duplicate_evidence_items() -> None:
+    evidence = list(_measured_items())
+    evidence.append(evidence[0])
+
+    with pytest.raises(OperationalEvidenceGateError, match="duplicate blocker_id"):
+        evaluate_operational_evidence_gate(tuple(evidence))
+
+
+def test_gate5a_rejects_unsupported_evidence_items() -> None:
+    evidence = (
+        OperationalEvidenceItem(
+            blocker_id="exchange_mutation_approval",
+            classification=OperationalEvidenceClassification.MEASURED,
+            summary="unsupported evidence must not be ignored",
+            source="test fixture",
+        ),
+    )
+
+    with pytest.raises(OperationalEvidenceGateError, match="unsupported blocker_id"):
+        evaluate_operational_evidence_gate(evidence)
+
+
+def test_gate5a_rejects_empty_or_noncanonical_blocker_id() -> None:
+    empty_id = OperationalEvidenceItem(
+        blocker_id=" ",
+        classification=OperationalEvidenceClassification.MEASURED,
+        summary="missing blocker id",
+        source="test fixture",
+    )
+    padded_id = OperationalEvidenceItem(
+        blocker_id=" ci_validation ",
+        classification=OperationalEvidenceClassification.MEASURED,
+        summary="padded blocker id",
+        source="test fixture",
+    )
+
+    with pytest.raises(OperationalEvidenceGateError, match="empty blocker_id"):
+        evaluate_operational_evidence_gate((empty_id,))
+    with pytest.raises(OperationalEvidenceGateError, match="non-canonical blocker_id"):
+        evaluate_operational_evidence_gate((padded_id,))
+
+
+def test_gate5a_rejects_empty_evidence_summary() -> None:
+    evidence = (
+        OperationalEvidenceItem(
+            blocker_id="ci_validation",
+            classification=OperationalEvidenceClassification.MEASURED,
+            summary=" ",
+            source="test fixture",
+        ),
+    )
+
+    with pytest.raises(OperationalEvidenceGateError, match="empty summary"):
+        evaluate_operational_evidence_gate(evidence)
+
+
+def test_gate5a_rejects_empty_evidence_source() -> None:
+    evidence = (
+        OperationalEvidenceItem(
+            blocker_id="ci_validation",
+            classification=OperationalEvidenceClassification.MEASURED,
+            summary="measured CI evidence",
+            source=" ",
+        ),
+    )
+
+    with pytest.raises(OperationalEvidenceGateError, match="empty source"):
+        evaluate_operational_evidence_gate(evidence)
+
+
 def test_gate5a_json_is_deterministic_and_contains_no_performance_metrics() -> None:
     result = evaluate_operational_evidence_gate(_measured_items())
     payload = json.loads(operational_evidence_gate_json(result))
