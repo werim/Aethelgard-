@@ -152,7 +152,7 @@ def evaluate_operational_evidence_gate(
         diagnostics=(
             "Gate 5A blockers have measured evidence for PAPER operational "
             "deployment diagnostics only; no LIVE readiness or profitability "
-            "claim is implied"
+            "claim is implied",
         ),
     )
 
