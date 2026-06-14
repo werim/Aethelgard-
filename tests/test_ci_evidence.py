@@ -98,14 +98,14 @@ def test_ci_evidence_is_unavailable_when_required_artifact_is_missing() -> None:
         required_artifacts=REQUIRED_ARTIFACTS,
     )
 
+    missing_artifact = "required CI artifact 'junit-3.12.xml' is missing"
+
     assert assessment.status is CiEvidenceStatus.CI_UNAVAILABLE
     assert (
         assessment.evidence_item.classification
         is OperationalEvidenceClassification.UNAVAILABLE
     )
-    assert "required CI artifact 'junit-3.12.xml' is missing" in (
-        assessment.diagnostics
-    )
+    assert missing_artifact in assessment.diagnostics
 
 
 def test_ci_evidence_is_unavailable_for_malformed_required_payloads() -> None:
