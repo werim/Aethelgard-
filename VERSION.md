@@ -1,5 +1,26 @@
 # Version History
 
+## 0.22.0 - 2026-06-14
+
+**Engineering milestone:** Gate 5A-2 CI evidence adapter.
+
+- Added `src/reporting/ci_evidence.py` as a deterministic, offline CI evidence adapter for the Gate 5A `ci_validation` blocker row.
+- Added CI evidence payload models for workflow conclusion, required jobs, required artifacts, commit SHA, and source evidence.
+- Added fail-closed classification: only complete successful CI payloads become `MEASURED`; missing, malformed, duplicated, failed, or incomplete evidence remains `UNAVAILABLE`.
+- Added `tests/test_ci_evidence.py` covering measured CI evidence, failed jobs, missing artifacts, malformed required payloads, Gate 5A integration, and deterministic JSON without performance metrics.
+- Added `docs/gates/gate5a_ci_evidence.md`.
+- Advanced package version to `0.22.0`.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: connector comparison resolved `dev` HEAD `9ba80955227fcf9b09071f7a11a615cb780ed241` before this increment.
+- `MEASURED`: `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
+- `MEASURED`: connector writes added Gate 5A-2 source, focused tests, documentation, and ledger updates on `dev`.
+- `UNAVAILABLE`: direct mutable local clone evidence because repository operations were performed through the GitHub connector.
+- `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
+- `UNVERIFIED`: exact final branch-head remote CI until GitHub Actions reports.
+
 ## 0.21.1 - 2026-06-13
 
 **Engineering milestone:** Gate 5A-1 operational evidence input integrity hardening.
@@ -115,56 +136,3 @@
 - `UNAVAILABLE`: direct mutable local clone evidence for the repository because GitHub writes were performed through the connector API.
 - `UNAVAILABLE`: local Ruff, Black, and Mypy module execution in the scratch environment.
 - `UNVERIFIED`: exact final branch-head full repository tests and remote CI until GitHub Actions reports.
-
-## 0.17.0 - 2026-06-04
-
-**Engineering milestone:** Gate 4B deterministic candle replay recovery boundary.
-
-- Started from verified `dev` head `f4b0b6ae6c9c20afd8d42c69a14bfdfcdaff9ba7`, which the connector showed was identical to `dev` before this recovery work.
-- Added `src/backtest/replay.py` with deterministic, research-only candle replay over caller-supplied rows.
-- Added replay row, replay metadata, deterministic JSON helpers, and focused data-validation tests.
-- Exported replay helpers from `src/backtest/__init__.py` while preserving Gate 4A foundation exports.
-- Retained the boundary: no strategy, signal generation, trade simulation, position state, PnL, win rate, Sharpe, expectancy, drawdown, optimizer, PAPER runtime, LIVE runtime, or readiness claim was added.
-
-## 0.16.0 - 2026-06-04
-
-**Engineering milestone:** Increment 4E symbol selection hardening.
-
-- Added deterministic research-only symbol-selection hardening in `src/data/symbol_selection.py`.
-- Required caller-provided exchange metadata and market-liquidity evidence; missing evidence remains `UNAVAILABLE`.
-- Retained the boundary: no exchange fetch, alpha ranking, optimizer, strategy logic, backtest replay, fill simulation, PAPER runtime behavior, readiness certification, or live order path was added.
-
-## 0.15.0 - 2026-06-02
-
-**Engineering milestone:** Increment 4D paper runtime DB audit pack.
-
-- Added read-only SQLite paper runtime database integrity audit reporting.
-- Retained the boundary: no DB repair, row deletion, historical rewrite, synthetic field invention, strategy logic, PAPER runtime behavior, readiness certification, or live order path was added.
-
-## 0.14.0 - 2026-06-02
-
-**Engineering milestone:** Increment 4C execution context population.
-
-- Added explicit execution context snapshots and cost-assumption evidence.
-- Missing execution-cost assumptions remain `UNAVAILABLE` and cannot carry zero values.
-
-## 0.13.0 - 2026-06-02
-
-**Engineering milestone:** Increment 4B canonical effective RR finalization.
-
-- Added a single canonical effective RR calculation path.
-- Preserved raw expected RR separately from canonical `effective_rr`.
-- Retained the boundary: no optimizer, strategy logic, risk allocation, backtest replay, fill simulation, PAPER runtime, readiness certification, or live order path was added.
-
-## 0.12.0 - 2026-06-02
-
-**Engineering milestone:** Gate 4A conservative backtest foundation skeleton.
-
-- Added immutable backtest run metadata and execution evidence records.
-- Added fail-closed validation so performance results cannot be produced while any required execution evidence is unavailable.
-
-## 0.11.0 - 2026-06-01
-
-**Engineering milestone:** Gate 3 market tick data-quality guard.
-
-- Added pre-runtime stale tick validation and first-valid tick selection.
