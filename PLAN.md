@@ -45,27 +45,28 @@
 | Gate 4CLOSE-1B — Validation-command ledger consistency | `DOCUMENTED` | REPORT/PROJECT_STATE command consistency. |
 | Gate 4CLOSE-1C — Validation-command canonicalization | `DOCUMENTED` | REPORT/PROJECT_STATE/Gate 4 matrix command canonicalization. |
 | Gate 5A — Operational Evidence Gate / Deployment Blocker Matrix | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Fail-closed PAPER operational evidence diagnostics only. |
-| Gate 5A-1 — Operational Evidence Input Integrity Hardening | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Malformed evidence rows fail closed before matrix construction. |
+| Gate 5A-1 — Operational Evidence Input Integrity Hardening | `GREEN_BY_USER_REPORTED_VALIDATION` | Malformed evidence rows fail closed before matrix construction. |
+| Gate 5A-1A — Diagnostics Tuple Typing Repair | `GREEN_BY_USER_REPORTED_VALIDATION` | Successful diagnostics payload remains `tuple[str, ...]`. |
+| Gate 5A-1B — PROJECT_STATE Safety Phrase Reconciliation | `GREEN_BY_USER_REPORTED_VALIDATION` | Exact safety-boundary phrase restored. |
+| Gate 5A-2 — CI Evidence Adapter | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Caller-supplied CI/status evidence maps fail-closed into `ci_validation`. |
 
-## Gate 5A-1 — Operational Evidence Input Integrity Hardening
+## Gate 5A-2 — CI Evidence Adapter
 
 **Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
 
 ### Scope
 
-- Validate caller-supplied Gate 5A evidence before building the blocker matrix.
-- Fail closed for duplicate blocker IDs.
-- Fail closed for unsupported blocker IDs.
-- Fail closed for empty blocker IDs, non-canonical blocker IDs, empty summaries, and empty sources.
-- Preserve Gate 5A clearing semantics: only `MEASURED` evidence clears required PAPER operational diagnostic blockers.
-- Add focused tests in `tests/test_operational_evidence_gate.py`.
-- Update Gate 5A documentation, version ledger, changelog, report, and project state.
+- Add `src/reporting/ci_evidence.py`.
+- Convert caller-supplied workflow, job, artifact, commit, and source evidence into a Gate 5A `ci_validation` evidence item.
+- Classify CI evidence as `MEASURED` only when workflow conclusion is `success`, every required job succeeds, every required artifact exists, and required names are canonical and unique.
+- Classify missing, malformed, duplicated, failed, incomplete, or non-canonical evidence as `UNAVAILABLE`.
+- Add focused tests in `tests/test_ci_evidence.py`.
+- Update Gate 5A-2 documentation, version ledger, changelog, report, and project state.
 
 ### Evidence classification
 
-- `MEASURED`: starting `dev` resolved to `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4` through connector comparison.
-- `MEASURED`: Gate 5A-1 source, tests, docs, version ledger, changelog, report, project-state updates, and package version bumps were written to the PR branch through the GitHub connector.
-- `MEASURED`: reconstructed focused validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed`.
+- `MEASURED`: starting `dev` resolved to `9ba80955227fcf9b09071f7a11a615cb780ed241` through connector comparison.
+- `MEASURED`: Gate 5A-2 source, tests, docs, version ledger, changelog, report, project-state updates, and package version bumps were written to `dev` through the GitHub connector.
 - `UNAVAILABLE`: mutable local clone validation in this execution environment.
 - `UNAVAILABLE`: exact branch-head full local validation, Ruff, Black, and Mypy in this execution environment.
 - `UNAVAILABLE`: atomic multi-file commit evidence; connector contents writes were performed as separate commits.
@@ -76,11 +77,12 @@
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_operational_evidence_gate.py
-pytest -q tests/test_public_exports.py
+pytest -q tests/test_validation_command_ledger_consistency.py
+pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
-pytest -q tests/test_validation_command_ledger_consistency.py
+pytest -q tests/test_public_exports.py
+pytest -q tests/test_ci_evidence.py
 pytest -q
 ruff check .
 black --check .
@@ -89,8 +91,10 @@ mypy .
 
 ### Boundary limit
 
-Gate 5A-1 is an operational evidence input-integrity hardening boundary only. It does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+Gate 5A-2 is a CI evidence adapter only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
+It does not call GitHub, fetch artifacts, request secrets, mutate workflows, compute performance, place exchange orders, enable live trading, or approve production readiness.
 
 ## Next recommended step
 
-After Gate 5A-1 is green in CI, keep the next increment small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
+After Gate 5A-2 is green in CI, keep the next increment small and fail-closed: use measured CI/status artifacts only when available, or harden audit/runtime reconciliation tests. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
