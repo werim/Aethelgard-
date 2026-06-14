@@ -4,13 +4,14 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-2 CI evidence adapter.
+- Active increment: Gate 5A-2 CI evidence adapter with user-reported green validation evidence.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
 - Observed `dev` HEAD before Gate 5A-2: `9ba80955227fcf9b09071f7a11a615cb780ed241`
+- Observed Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Previous safe increment: Gate 5A-1B PROJECT_STATE safety-boundary phrase reconciliation and user-reported green validation evidence.
 - Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, and Gate 5A-1B safety-phrase reconciliation.
 - `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before this increment.
@@ -58,9 +59,10 @@ Any gap produces `classification=UNAVAILABLE`; it does not become measured evide
 | Test coverage | Focused Gate 5A-2 CI evidence tests added | `MEASURED` connector evidence |
 | Documentation | Gate 5A-2 documentation and ledgers updated | `MEASURED` connector evidence |
 | Package version | `pyproject.toml` and `src.__version__` advanced to `0.22.0` | `MEASURED` connector evidence |
+| Gate 5A-2 CI validation | User reported `Green` after CI style and Black format fixes | `MEASURED` user-reported CI evidence |
 | Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
-| Remote CI after final Gate 5A-2 head | not yet observed through connector | `UNVERIFIED` |
+| Connector-visible remote CI after final Gate 5A-2 head | not observed through connector | `UNAVAILABLE` connector evidence |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
@@ -87,7 +89,7 @@ black --check .
 mypy .
 ```
 
-Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-2 green is recorded as user-reported CI evidence, not connector-visible workflow evidence.
 
 ## Operational readiness
 
@@ -97,6 +99,6 @@ Reason: Gate 5A-2 turns caller-supplied CI/status evidence into fail-closed Gate
 
 ## Next step
 
-After Gate 5A-2 is green in CI, keep the next safe increment small and fail-closed: use the adapter only with measured CI/status artifacts when available, or harden audit/runtime reconciliation tests.
+After Gate 5A-2 green validation evidence is recorded, keep the next safe increment small and fail-closed: use the adapter only with measured CI/status artifacts when available, or harden audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
