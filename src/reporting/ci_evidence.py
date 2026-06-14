@@ -169,7 +169,9 @@ def _ci_evidence_diagnostics(
     if not run.workflow_name.strip():
         diagnostics.append("CI evidence workflow_name is missing")
     if run.conclusion != "success":
-        diagnostics.append(f"CI workflow conclusion is {run.conclusion!r}, not 'success'")
+        diagnostics.append(
+            f"CI workflow conclusion is {run.conclusion!r}, not 'success'"
+        )
     if not run.source.strip():
         diagnostics.append("CI evidence source is missing")
 
