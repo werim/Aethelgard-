@@ -75,6 +75,9 @@ def test_gate5a_clears_only_when_all_blockers_have_measured_evidence() -> None:
     assert result.status is OperationalDeploymentStatus.DEPLOYMENT_NOT_BLOCKED
     assert result.paper_deployment_blocked is False
     assert all(row.status is DeploymentBlockerStatus.CLEARED for row in result.matrix)
+    assert isinstance(result.diagnostics, tuple)
+    assert len(result.diagnostics) == 1
+    assert "no LIVE readiness" in result.diagnostics[0]
     assert_operational_deployment_not_blocked(result)
 
 
