@@ -129,13 +129,15 @@ def test_ci_evidence_item_can_feed_gate5a_ci_validation_row() -> None:
         required_artifacts=REQUIRED_ARTIFACTS,
     )
     evidence_items = tuple(
-        ci_assessment.evidence_item
-        if blocker_id == "ci_validation"
-        else OperationalEvidenceItem(
-            blocker_id=blocker_id,
-            classification=OperationalEvidenceClassification.MEASURED,
-            summary=f"measured evidence for {blocker_id}",
-            source="test fixture",
+        (
+            ci_assessment.evidence_item
+            if blocker_id == "ci_validation"
+            else OperationalEvidenceItem(
+                blocker_id=blocker_id,
+                classification=OperationalEvidenceClassification.MEASURED,
+                summary=f"measured evidence for {blocker_id}",
+                source="test fixture",
+            )
         )
         for blocker_id in REQUIRED_OPERATIONAL_BLOCKERS
     )
