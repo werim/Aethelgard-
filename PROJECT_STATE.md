@@ -21,10 +21,11 @@ RESEARCH_ONLY
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
 - Verified `dev` HEAD before Gate 5A-2: `9ba80955227fcf9b09071f7a11a615cb780ed241`
+- Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Previous verified Gate 5A-1B safety-phrase reconciliation commit: `f3041edb4b5b5eb7a2e6c2bcee235502dc56b99f`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
-- Connector-visible workflow evidence for the final Gate 5A-2 head: unavailable until connector or user-provided CI evidence reports it
+- Connector-visible workflow evidence for the final Gate 5A-2 head: unavailable through connector; user reported CI green
 
 ## Current Ledger Position
 
@@ -46,7 +47,7 @@ Current documented sequence includes:
 - Gate 5A-1 operational evidence input integrity hardening
 - Gate 5A-1A diagnostics tuple typing repair and user-reported green validation evidence
 - Gate 5A-1B PROJECT_STATE safety-boundary phrase reconciliation and user-reported green validation evidence
-- Gate 5A-2 CI evidence adapter
+- Gate 5A-2 CI evidence adapter and user-reported green validation evidence
 
 ## Prior Ledger Evidence Retained
 
@@ -73,6 +74,7 @@ Gate 5A-2 adds an offline, deterministic adapter that turns caller-supplied CI/s
 - `docs/gates/gate5a_ci_evidence.md` was added for Gate 5A-2.
 - `pyproject.toml` and `src/__init__.py` were updated to version `0.22.0`.
 - `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, and `PROJECT_STATE.md` were updated for Gate 5A-2.
+- User reported `Green` after Gate 5A-2 CI style and Black format fixes.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -84,7 +86,7 @@ Gate 5A-2 adds an offline, deterministic adapter that turns caller-supplied CI/s
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local Ruff, Black, and Mypy execution in this execution environment.
-- Final branch-head GitHub Actions evidence until CI reports.
+- Connector-visible final branch-head GitHub Actions evidence; user-reported CI green is recorded separately as measured user evidence.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
@@ -117,6 +119,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A-2 is green in CI, the next safe increment should remain small and fail-closed: use measured CI/status artifacts only when available, or harden audit/runtime reconciliation tests.
+After Gate 5A-2 green validation evidence is recorded, the next safe increment should remain small and fail-closed: use measured CI/status artifacts only when available, or harden audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
