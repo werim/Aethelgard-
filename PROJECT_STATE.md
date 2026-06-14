@@ -75,6 +75,8 @@ Gate 5A-1 hardened the Gate 5A operational evidence diagnostic boundary by rejec
 - User-provided GitHub Actions log showed Python 3.11 Mypy failed on the Gate 5A successful diagnostics payload because a `str` was supplied where `tuple[str, ...]` was required.
 - Gate 5A-1A changed the successful diagnostics payload from a string to a one-item tuple.
 - User reported `Green` after the Gate 5A-1A diagnostics tuple repair.
+- User-provided GitHub Actions log showed the later full test suite failed because `tests/test_project_state_current.py` requires the exact safety-boundary phrase `does not change runtime behavior`.
+- The PROJECT_STATE wording was reconciled to preserve that exact safety-boundary phrase.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -92,6 +94,8 @@ Gate 5A-1 hardened the Gate 5A operational evidence diagnostic boundary by rejec
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
+
+Gate 5A-1A does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Gate 5A-1 and Gate 5A-1A do not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
