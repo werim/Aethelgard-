@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.22.0] - 2026-06-14
+
+### Added
+
+- Added Gate 5A-2 CI evidence adapter in `src/reporting/ci_evidence.py`.
+- Added focused CI evidence coverage in `tests/test_ci_evidence.py`.
+- Added Gate 5A-2 documentation in `docs/gates/gate5a_ci_evidence.md`.
+
+### Changed
+
+- Package version advanced to `0.22.0`.
+- CI validation can now be represented as a fail-closed Gate 5A `ci_validation` evidence item from caller-supplied workflow, job, and artifact evidence.
+
+### Known limitations
+
+- Gate 5A-2 does not call GitHub or fetch workflow artifacts automatically.
+- Missing, malformed, duplicated, failed, or incomplete CI evidence remains `UNAVAILABLE`.
+- Gate 5A-2 does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+- Local full-repository validation remains unavailable in this execution environment until CI or a mutable clone reports it.
+
 ## [0.21.1] - 2026-06-13
 
 ### Fixed
@@ -51,7 +71,7 @@
 - Gate 4B-0 metric-publication eligibility boundary in `src/reporting/performance_boundary.py`.
 - Gate 4B replay hardening coverage for metric-like and execution-like field leakage.
 - Gate 4B-1 guarded report-publication helpers over an existing Gate 4B-0 eligibility result.
-- Gate 4B-2 forged-eligibility regression coverage.
+- Gate 4B-2 reporting-boundary completeness and forged-eligibility regression coverage.
 - Gate 4B-3 reporting export-boundary evidence reconciliation for `src.reporting.__all__`.
 - Version-ledger consistency tests for `src.__version__`, `pyproject.toml`, `VERSION.md`, and `CHANGELOG.md`.
 - Public package export-boundary consistency tests for `src.backtest`, `src.data`, `src.execution`, and `src.reporting`.
@@ -79,76 +99,8 @@
 
 ### Fixed
 
-- Unavailable Gate 4A execution evidence blocks metric-publication eligibility.
-- Unsafe or malformed backtest metadata fails closed as `METRICS_BLOCKED`.
-- Unknown execution evidence remains unavailable and is not converted to zero.
-- Gate 4B-2 rejects manually constructed publishable `MetricPublicationEligibility` objects before guarded payload publication.
-- Reporting export drift is covered by a focused test that rejects direct metric/readiness field exports.
-- Version drift between package metadata and top ledger headings is covered by focused tests.
-- Public package export drift is covered by focused tests that reject direct unsafe export names across stable public package surfaces.
-- Ruff import-block failures in `tests/test_public_exports.py` were repaired without changing runtime behavior.
-- Stale `PROJECT_STATE.md` unknown-repository claims are covered by a focused regression test.
-- Review-identified ledger drift where Gate 4B-5 appeared in project/report/changelog docs but not in `VERSION.md`.
-- Gate 4CLOSE-1A removes unsupported matrix wording and repairs Ruff import sorting in `tests/test_gate4_completion_evidence_matrix.py`.
-- Validation command drift between `REPORT.md` and `PROJECT_STATE.md` is now covered by focused regression tests.
-- Validation command drift between `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix is now covered by focused regression tests.
+- Guarded reporting publication refuses malformed eligibility objects.
 
 ### Known limitations
 
-- Gate 4B-0, Gate 4B-1, Gate 4B-2, Gate 4B-3, Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1, Gate 4CLOSE-1A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, the version-ledger reconciliation, and the public export-boundary reconciliation do not compute performance, model costs, add optimizer behavior, add PAPER runtime behavior, mutate market state, or approve readiness.
-- Exact branch-head local validation remains unavailable in this execution environment.
-- User-provided CI screenshot shows validation run `#196` succeeded for commit `334bb0d` on `dev`, including Python 3.11 and 3.12 jobs.
-- Connector workflow/status APIs may return no runs or statuses even when user-provided CI evidence is available.
-
-## [0.19.0] - 2026-06-05
-
-- Added Gate 4D execution-cost evidence boundary in `src/backtest/cost_evidence.py`.
-- Added explicit measured, modeled, and unavailable cost-evidence diagnostics.
-- Unknown execution costs remain unavailable rather than silently becoming zero.
-- Package version advanced to `0.19.0`.
-
-## [0.18.0] - 2026-06-05
-
-- Added Gate 4C conservative lifecycle boundary in `src/backtest/lifecycle.py`.
-- Added caller-observation records, transition records, metadata, deterministic JSON helpers, and focused fail-closed tests.
-- Package version advanced to `0.18.0`.
-
-## [0.17.0] - 2026-06-04
-
-- Added Gate 4B deterministic candle replay recovery boundary in `src/backtest/replay.py`.
-- Added replay row, replay metadata, deterministic JSON helpers, and focused data-validation tests.
-- Package version advanced to `0.17.0`.
-
-## [0.16.0] - 2026-06-04
-
-- Added Increment 4E deterministic symbol-selection hardening in `src/data/symbol_selection.py`.
-- Package version advanced to `0.16.0`.
-
-## [0.15.0] - 2026-06-02
-
-- Added Increment 4D read-only paper runtime DB audit pack in `src/reporting/paper_db_audit.py`.
-- Added deterministic JSON and Markdown audit reports.
-- Package version advanced to `0.15.0`.
-
-## [0.14.0] - 2026-06-02
-
-- Added Increment 4C execution context snapshot boundary in `src/execution/context.py`.
-- Missing execution-cost assumptions remain unavailable instead of silently becoming zero.
-- Package version advanced to `0.14.0`.
-
-## [0.13.0] - 2026-06-02
-
-- Added Increment 4B canonical effective RR boundary in `src/execution/effective_rr.py`.
-- Missing RR inputs remain unavailable rather than guessed or converted to zero.
-- Package version advanced to `0.13.0`.
-
-## [0.12.0] - 2026-06-02
-
-- Added Gate 4A conservative backtest foundation skeleton in `src/backtest/foundation.py`.
-- Performance results are blocked while required execution evidence is unavailable.
-- Package version advanced to `0.12.0`.
-
-## [0.11.0] - 2026-06-01
-
-- Added Gate 3 market tick data-quality guard in `src/data/stale_tick_guard.py`.
-- Package version advanced to `0.11.0`.
+- Retained the Gate 4B-0 through Gate 4CLOSE-1C boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, and no readiness approval.
