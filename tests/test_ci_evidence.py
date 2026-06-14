@@ -16,7 +16,6 @@ from src.reporting.operational_evidence import (
     evaluate_operational_evidence_gate,
 )
 
-
 REQUIRED_JOBS = ("validation (3.11)", "validation (3.12)")
 REQUIRED_ARTIFACTS = ("junit-3.11.xml", "junit-3.12.xml")
 
