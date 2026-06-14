@@ -169,9 +169,7 @@ def _ci_evidence_diagnostics(
     if not run.workflow_name.strip():
         diagnostics.append("CI evidence workflow_name is missing")
     if run.conclusion != "success":
-        diagnostics.append(
-            f"CI workflow conclusion is {run.conclusion!r}, not 'success'"
-        )
+        diagnostics.append(f"CI workflow conclusion is {run.conclusion!r}, not 'success'")
     if not run.source.strip():
         diagnostics.append("CI evidence source is missing")
 
@@ -214,13 +212,9 @@ def _canonical_required_names(
             diagnostics.append(f"required CI {label} name is empty")
             continue
         if canonical_name != name:
-            diagnostics.append(
-                f"required CI {label} name {name!r} is non-canonical"
-            )
+            diagnostics.append(f"required CI {label} name {name!r} is non-canonical")
         if canonical_name in seen:
-            diagnostics.append(
-                f"required CI {label} {canonical_name!r} is duplicated"
-            )
+            diagnostics.append(f"required CI {label} {canonical_name!r} is duplicated")
         seen.add(canonical_name)
         canonical_names.append(canonical_name)
     return tuple(canonical_names)
@@ -255,9 +249,7 @@ def _unique_artifact_names(
             diagnostics.append("CI artifact name is empty")
             continue
         if artifact_name != artifact.name:
-            diagnostics.append(
-                f"CI artifact name {artifact.name!r} is non-canonical"
-            )
+            diagnostics.append(f"CI artifact name {artifact.name!r} is non-canonical")
         if artifact_name in artifact_names:
             diagnostics.append(f"CI artifact {artifact_name!r} is duplicated")
         artifact_names.add(artifact_name)
