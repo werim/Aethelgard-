@@ -20,12 +20,11 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD before Gate 5A-2: `9ba80955227fcf9b09071f7a11a615cb780ed241`
+- Verified `dev` HEAD before Gate 5A-3: `e360452f84251084d3f156fd6c37933e6198c22b`
 - Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
-- Previous verified Gate 5A-1B safety-phrase reconciliation commit: `f3041edb4b5b5eb7a2e6c2bcee235502dc56b99f`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
-- Connector-visible workflow evidence for the final Gate 5A-2 head: unavailable through connector; user reported CI green
+- Connector-visible workflow evidence for the final Gate 5A-3 head: unavailable until connector or user-provided CI evidence reports it
 
 ## Current Ledger Position
 
@@ -48,6 +47,7 @@ Current documented sequence includes:
 - Gate 5A-1A diagnostics tuple typing repair and user-reported green validation evidence
 - Gate 5A-1B PROJECT_STATE safety-boundary phrase reconciliation and user-reported green validation evidence
 - Gate 5A-2 CI evidence adapter and user-reported green validation evidence
+- Gate 5A-3 audit/runtime reconciliation evidence adapter
 
 ## Prior Ledger Evidence Retained
 
@@ -55,26 +55,24 @@ Gate 4B-5A — VERSION ledger reconciliation.
 
 Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
 
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, and Gate 5A-1B markers remain present as regression anchors while Gate 5A-2 records the latest safe increment.
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, and Gate 5A-2 markers remain present as regression anchors while Gate 5A-3 records the latest safe increment.
 
 ## Latest Safe Increment Selected
 
-Gate 5A-2 — CI Evidence Adapter.
+Gate 5A-3 — Audit Runtime Reconciliation Evidence Adapter.
 
-Gate 5A-2 adds an offline, deterministic adapter that turns caller-supplied CI/status payloads into a Gate 5A `ci_validation` evidence item. It fails closed when commit SHA, workflow name, workflow success, source, required jobs, or required artifacts are missing, malformed, duplicated, failed, or incomplete.
+Gate 5A-3 adds an offline, deterministic adapter that turns caller-supplied persistence reconciliation reports into Gate 5A evidence items for `audit_trail_integrity` and `paper_runtime_reconciliation`. It fails closed when the report is missing, contains reconciliation issues, has no matched decision audits, or has missing source evidence.
 
 ## Evidence Classification
 
 ### MEASURED
 
-- `dev` resolved through direct GitHub compare/read evidence before Gate 5A-2.
-- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before Gate 5A-2.
-- `src/reporting/ci_evidence.py` was added as a deterministic CI evidence adapter.
-- `tests/test_ci_evidence.py` was added for measured CI evidence, failed jobs, missing artifacts, malformed required payloads, Gate 5A integration, and deterministic JSON safety.
-- `docs/gates/gate5a_ci_evidence.md` was added for Gate 5A-2.
-- `pyproject.toml` and `src/__init__.py` were updated to version `0.22.0`.
-- `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, and `PROJECT_STATE.md` were updated for Gate 5A-2.
-- User reported `Green` after Gate 5A-2 CI style and Black format fixes.
+- `dev` resolved through direct GitHub compare/read evidence before Gate 5A-3.
+- Existing persistence reconciliation semantics were inspected in `src/persistence/reconciliation.py` before adding the adapter.
+- `src/reporting/audit_runtime_evidence.py` was added as a deterministic audit/runtime evidence adapter.
+- `tests/test_audit_runtime_evidence.py` was added for measured reconciliation, missing report, reconciliation issues, empty matched decisions, missing source, Gate 5A integration, and deterministic JSON safety.
+- `docs/gates/gate5a_audit_runtime_evidence.md` was added for Gate 5A-3.
+- Package version was kept at `0.22.0` so the existing VERSION/CHANGELOG heading contract remains stable for this small adapter extension.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -85,17 +83,17 @@ Gate 5A-2 adds an offline, deterministic adapter that turns caller-supplied CI/s
 
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
-- Local Ruff, Black, and Mypy execution in this execution environment.
-- Connector-visible final branch-head GitHub Actions evidence; user-reported CI green is recorded separately as measured user evidence.
+- Local full-repository pytest execution in this execution environment.
+- Final branch-head GitHub Actions evidence until CI reports.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-2 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-3 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
-Gate 5A-2 does not call GitHub, fetch artifacts, request secrets, mutate workflows, compute performance, place exchange orders, enable live trading, or approve production readiness.
+Gate 5A-3 does not read local databases, mutate audit artifacts, run a PAPER runtime, request secrets, compute performance, place exchange orders, enable live trading, or approve production readiness.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -108,7 +106,7 @@ pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
 pytest -q tests/test_public_exports.py
-pytest -q tests/test_ci_evidence.py
+pytest -q tests/test_audit_runtime_evidence.py
 pytest -q
 ruff check .
 black --check .
@@ -119,6 +117,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A-2 green validation evidence is recorded, the next safe increment should remain small and fail-closed: use measured CI/status artifacts only when available, or harden audit/runtime reconciliation tests.
+After Gate 5A-3 is green in CI, the next safe increment should remain small and fail-closed: either wire measured artifact inputs into the Gate 5A evidence matrix or add a focused risk-control enforcement evidence adapter.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
