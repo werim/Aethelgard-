@@ -1,19 +1,19 @@
 import json
 
 from src.reporting.ci_evidence import (
+    assess_ci_evidence_for_gate5a,
     CiArtifactEvidence,
     CiEvidenceStatus,
     CiJobEvidence,
     CiRunEvidence,
-    assess_ci_evidence_for_gate5a,
     ci_evidence_assessment_json,
 )
 from src.reporting.operational_evidence import (
+    evaluate_operational_evidence_gate,
     OperationalDeploymentStatus,
     OperationalEvidenceClassification,
     OperationalEvidenceItem,
     REQUIRED_OPERATIONAL_BLOCKERS,
-    evaluate_operational_evidence_gate,
 )
 
 
@@ -147,7 +147,7 @@ def test_ci_evidence_item_can_feed_gate5a_ci_validation_row() -> None:
     assert result.paper_deployment_blocked is False
 
 
-def test_ci_evidence_json_is_deterministic_and_contains_no_performance_metrics() -> None:
+def test_ci_evidence_json_has_no_performance_metrics() -> None:
     assessment = assess_ci_evidence_for_gate5a(
         _successful_ci_run(),
         required_jobs=REQUIRED_JOBS,
