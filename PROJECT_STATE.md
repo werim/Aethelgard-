@@ -20,9 +20,12 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD before this increment: `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4`
+- Verified `dev` HEAD before Gate 5A-1: `4d641dcb023e0c5e9303c7d0fba32b1d27f2d9e4`
+- Observed Gate 5A-1 merge commit: `b1eabdbaa2564dafc751b9e881a98e9e9634339e`
+- Observed Gate 5A-1A hotfix head: `c8e21c88a004c3a8bde0e942774c6086fa05a240`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
+- Connector-visible workflow evidence for `c8e21c88a004c3a8bde0e942774c6086fa05a240`: unavailable because the connector returned no workflow runs
 
 ## Current Ledger Position
 
@@ -42,6 +45,7 @@ Current documented sequence includes:
 - Gate 4CLOSE-1C validation-command canonicalization guard
 - Gate 5A operational evidence gate / deployment blocker matrix
 - Gate 5A-1 operational evidence input integrity hardening
+- Gate 5A-1A diagnostics tuple typing repair and user-reported green validation evidence
 
 ## Prior Ledger Evidence Retained
 
@@ -49,25 +53,28 @@ Gate 4B-5A — VERSION ledger reconciliation.
 
 Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
 
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, and Gate 5A markers remain present as regression anchors while Gate 5A-1 records the latest safe increment.
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, and Gate 5A-1 markers remain present as regression anchors while Gate 5A-1A records the latest validation evidence.
 
 ## Latest Safe Increment Selected
 
-Gate 5A-1 — Operational Evidence Input Integrity Hardening.
+Gate 5A-1A — Diagnostics Tuple Typing Repair and User-Reported Green Validation Evidence.
 
-This phase hardens the Gate 5A operational evidence diagnostic boundary by rejecting malformed caller-supplied evidence before building the deployment-blocker matrix.
+Gate 5A-1 hardened the Gate 5A operational evidence diagnostic boundary by rejecting malformed caller-supplied evidence before building the deployment-blocker matrix. Gate 5A-1A repaired the successful diagnostics payload so `OperationalEvidenceGateResult.diagnostics` remains `tuple[str, ...]` and added a regression assertion for that shape.
 
 ## Evidence Classification
 
 ### MEASURED
 
 - `dev` resolved through direct GitHub compare/read evidence.
-- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev`.
-- `src/reporting/operational_evidence.py` was updated on the PR branch.
-- `tests/test_operational_evidence_gate.py` was updated on the PR branch.
-- `docs/gates/gate5a_operational_evidence_gate.md` was updated on the PR branch.
-- `pyproject.toml` and `src/__init__.py` were updated to version `0.21.1` on the PR branch.
-- Reconstructed focused validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed`.
+- `PROJECT_STATE.md`, `PLAN.md`, `REPORT.md`, `CHANGELOG.md`, and `VERSION.md` were read from `dev` before Gate 5A-1.
+- `src/reporting/operational_evidence.py` was updated for Gate 5A-1 input validation and Gate 5A-1A diagnostics tuple typing repair.
+- `tests/test_operational_evidence_gate.py` was updated for Gate 5A-1 input-validation coverage and Gate 5A-1A tuple-shape regression coverage.
+- `docs/gates/gate5a_operational_evidence_gate.md` was updated for Gate 5A-1.
+- `pyproject.toml` and `src/__init__.py` were updated to version `0.21.1` for Gate 5A-1.
+- Reconstructed focused validation passed `PYTHONPATH=. python -m compileall -q src tests` and `PYTHONPATH=. pytest -q tests/test_operational_evidence_gate.py` with `10 passed` before the Gate 5A-1A repair.
+- User-provided GitHub Actions log showed Python 3.11 Mypy failed on the Gate 5A successful diagnostics payload because a `str` was supplied where `tuple[str, ...]` was required.
+- Gate 5A-1A changed the successful diagnostics payload from a string to a one-item tuple.
+- User reported `Green` after the Gate 5A-1A diagnostics tuple repair.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -79,14 +86,14 @@ This phase hardens the Gate 5A operational evidence diagnostic boundary by rejec
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local Ruff, Black, and Mypy execution in this execution environment.
-- Final branch-head GitHub Actions evidence until CI reports.
+- Connector-visible workflow evidence for `c8e21c88a004c3a8bde0e942774c6086fa05a240`; connector returned no workflow runs.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-1 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-1 and Gate 5A-1A do not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -106,10 +113,10 @@ black --check .
 mypy .
 ```
 
-Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here.
+Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. The Gate 5A-1A green result is recorded as user-reported CI evidence, not connector-visible workflow evidence.
 
 ## Next Recommended Step
 
-After Gate 5A-1 is green in CI, the next safe increment should remain small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests.
+After Gate 5A-1A green evidence is recorded, the next safe increment should remain small and fail-closed: connect Gate 5A rows to measured CI/status artifacts only if those artifacts are available, or harden audit/runtime reconciliation tests.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
