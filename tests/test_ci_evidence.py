@@ -1,19 +1,19 @@
 import json
 
 from src.reporting.ci_evidence import (
-    assess_ci_evidence_for_gate5a,
     CiArtifactEvidence,
     CiEvidenceStatus,
     CiJobEvidence,
     CiRunEvidence,
+    assess_ci_evidence_for_gate5a,
     ci_evidence_assessment_json,
 )
 from src.reporting.operational_evidence import (
-    evaluate_operational_evidence_gate,
+    REQUIRED_OPERATIONAL_BLOCKERS,
     OperationalDeploymentStatus,
     OperationalEvidenceClassification,
     OperationalEvidenceItem,
-    REQUIRED_OPERATIONAL_BLOCKERS,
+    evaluate_operational_evidence_gate,
 )
 
 
