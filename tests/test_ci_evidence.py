@@ -48,7 +48,10 @@ def test_ci_evidence_is_measured_when_required_jobs_and_artifacts_succeed() -> N
     assert assessment.status is CiEvidenceStatus.CI_MEASURED
     assert assessment.classification is OperationalEvidenceClassification.MEASURED
     assert assessment.evidence_item.blocker_id == "ci_validation"
-    assert assessment.evidence_item.classification is OperationalEvidenceClassification.MEASURED
+    assert (
+        assessment.evidence_item.classification
+        is OperationalEvidenceClassification.MEASURED
+    )
     assert "required jobs and artifacts measured" in assessment.diagnostics[0]
 
 
@@ -96,8 +99,13 @@ def test_ci_evidence_is_unavailable_when_required_artifact_is_missing() -> None:
     )
 
     assert assessment.status is CiEvidenceStatus.CI_UNAVAILABLE
-    assert assessment.evidence_item.classification is OperationalEvidenceClassification.UNAVAILABLE
-    assert "required CI artifact 'junit-3.12.xml' is missing" in assessment.diagnostics
+    assert (
+        assessment.evidence_item.classification
+        is OperationalEvidenceClassification.UNAVAILABLE
+    )
+    assert "required CI artifact 'junit-3.12.xml' is missing" in (
+        assessment.diagnostics
+    )
 
 
 def test_ci_evidence_is_unavailable_for_malformed_required_payloads() -> None:
@@ -110,7 +118,9 @@ def test_ci_evidence_is_unavailable_for_malformed_required_payloads() -> None:
     assert assessment.status is CiEvidenceStatus.CI_UNAVAILABLE
     assert any("non-canonical" in diagnostic for diagnostic in assessment.diagnostics)
     assert any("duplicated" in diagnostic for diagnostic in assessment.diagnostics)
-    assert any("artifact list is empty" in diagnostic for diagnostic in assessment.diagnostics)
+    assert any(
+        "artifact list is empty" in diagnostic for diagnostic in assessment.diagnostics
+    )
 
 
 def test_ci_evidence_item_can_feed_gate5a_ci_validation_row() -> None:
