@@ -52,7 +52,9 @@ class RiskControlEnforcementEvidence:
         """Return a deterministic JSON-compatible evidence payload."""
 
         return {
-            "observed_policies": [policy.payload() for policy in self.observed_policies],
+            "observed_policies": [
+                policy.payload() for policy in self.observed_policies
+            ],
             "required_policy_ids": list(self.required_policy_ids),
             "source": self.source,
         }
@@ -199,10 +201,13 @@ def _observed_policy_map(
             continue
         if policy_id != policy.policy_id:
             diagnostics.append(
-                f"observed risk-control policy id {policy.policy_id!r} is non-canonical"
+                "observed risk-control policy id "
+                f"{policy.policy_id!r} is non-canonical"
             )
         if policy_id in observed_by_id:
-            diagnostics.append(f"observed risk-control policy {policy_id!r} is duplicated")
+            diagnostics.append(
+                f"observed risk-control policy {policy_id!r} is duplicated"
+            )
         observed_by_id[policy_id] = policy.enforced
     return observed_by_id
 
