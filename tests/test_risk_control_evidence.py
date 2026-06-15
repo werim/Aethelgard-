@@ -1,8 +1,8 @@
 import json
 
 from src.reporting.operational_evidence import (
-    OperationalEvidenceClassification,
     OperationalDeploymentStatus,
+    OperationalEvidenceClassification,
     OperationalEvidenceItem,
     evaluate_operational_evidence_gate,
 )
@@ -31,7 +31,9 @@ def _measured_evidence_item(blocker_id: str) -> OperationalEvidenceItem:
     )
 
 
-def _complete_gate_evidence(risk_item: OperationalEvidenceItem) -> tuple[OperationalEvidenceItem, ...]:
+def _complete_gate_evidence(
+    risk_item: OperationalEvidenceItem,
+) -> tuple[OperationalEvidenceItem, ...]:
     return (
         _measured_evidence_item("audit_trail_integrity"),
         _measured_evidence_item("ci_validation"),
