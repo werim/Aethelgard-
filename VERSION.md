@@ -22,6 +22,7 @@
 - Gate 5A-4 evidence ledger consistency audit preserves package-version, implementation-counterpart, unavailable-evidence, and safety-boundary wording across `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, and `docs/gates/gate5a_evidence_ledger.md`.
 - Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation remain recorded as current regression anchors for the version ledger.
 - Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
+- Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after the Ruff import-block repair.
 - Advanced package version to `0.22.0` for Gate 5A-2 and kept it stable for Gate 5A-3 through Gate 5A-5.
 - Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
 
@@ -30,8 +31,9 @@
 - `MEASURED`: connector comparison resolved `dev` HEAD `abb10911765ef53cdcb24fa08a4739151b0da739` before Gate 5A-5.
 - `MEASURED`: `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before this increment.
 - `MEASURED`: connector writes added Gate 5A-5 source, focused tests, documentation, export, and ledger updates on `dev`.
+- `MEASURED`: Gate 5A-5 user-reported green validation evidence is recorded for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair.
 - `MEASURED`: Gate 5A-4 user-reported green validation evidence remains recorded as measured user evidence.
-- `UNAVAILABLE`: Gate 5A-5 connector-visible CI and local validation remain unavailable in this execution environment.
+- `UNAVAILABLE`: Gate 5A-5 connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
 - `UNAVAILABLE`: direct mutable local clone evidence because repository operations were performed through the GitHub connector.
 - `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
 - `MODELED`: none.
