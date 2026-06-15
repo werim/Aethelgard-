@@ -49,40 +49,49 @@
 | Gate 5A-1A — Diagnostics Tuple Typing Repair | `GREEN_BY_USER_REPORTED_VALIDATION` | Successful diagnostics payload remains `tuple[str, ...]`. |
 | Gate 5A-1B — PROJECT_STATE Safety Phrase Reconciliation | `GREEN_BY_USER_REPORTED_VALIDATION` | Exact safety-boundary phrase restored. |
 | Gate 5A-2 — CI Evidence Adapter | `IMPLEMENTED_PENDING_REMOTE_VALIDATION` | Caller-supplied CI/status evidence maps fail-closed into `ci_validation`. |
+| Gate 5A-3 — Audit/Runtime Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied audit/runtime reconciliation maps fail-closed into Gate 5A evidence. |
+| Gate 5A-4 — Evidence Ledger Consistency Audit | `GREEN_BY_USER_REPORTED_VALIDATION` | Keeps user-reported green separate from connector-visible CI evidence. |
+| Gate 5A-5 — Risk-Control Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied risk-control policy evidence maps fail-closed into Gate 5A evidence. |
+| Gate 5A-6 — Data-Freshness Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied freshness/selector evidence maps fail-closed into Gate 5A evidence. |
+| Gate 5A-7 — Workflow Artifact Evidence Ledger | `DOCUMENTED_PENDING_VALIDATION` | Records screenshot-backed green evidence while direct workflow artifacts remain unavailable. |
 
-## Gate 5A-2 — CI Evidence Adapter
+## Gate 5A-7 — Workflow Artifact Evidence Ledger
 
-**Status:** `IMPLEMENTED_PENDING_REMOTE_VALIDATION`.
+**Status:** `DOCUMENTED_PENDING_VALIDATION`.
 
 ### Scope
 
-- Add `src/reporting/ci_evidence.py`.
-- Convert caller-supplied workflow, job, artifact, commit, and source evidence into a Gate 5A `ci_validation` evidence item.
-- Classify CI evidence as `MEASURED` only when workflow conclusion is `success`, every required job succeeds, every required artifact exists, and required names are canonical and unique.
-- Classify missing, malformed, duplicated, failed, incomplete, or non-canonical evidence as `UNAVAILABLE`.
-- Add focused tests in `tests/test_ci_evidence.py`.
-- Update Gate 5A-2 documentation, version ledger, changelog, report, and project state.
+- Add `docs/gates/gate5a_workflow_artifact_evidence_ledger.md`.
+- Extend `docs/gates/gate5a_evidence_ledger.md`.
+- Extend `tests/test_evidence_ledger_consistency.py`.
+- Record user-provided screenshot evidence for validation runs 309, 310, 311, 312, and 313.
+- Preserve that connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
+- Preserve that screenshot evidence is not direct workflow artifact proof.
 
 ### Evidence classification
 
-- `MEASURED`: starting `dev` resolved to `9ba80955227fcf9b09071f7a11a615cb780ed241` through connector comparison.
-- `MEASURED`: Gate 5A-2 source, tests, docs, version ledger, changelog, report, project-state updates, and package version bumps were written to `dev` through the GitHub connector.
+- `MEASURED`: commit metadata for `3f5cb4ea89fa3c12661e020d802796439d3a064c` was fetched through the GitHub connector.
+- `MEASURED`: user-provided screenshot shows validation runs 309 through 313 green on `dev`.
+- `MEASURED`: Gate 5A-7 docs and focused ledger guard were written through the GitHub connector.
 - `UNAVAILABLE`: mutable local clone validation in this execution environment.
 - `UNAVAILABLE`: exact branch-head full local validation, Ruff, Black, and Mypy in this execution environment.
+- `UNAVAILABLE`: connector-visible workflow runs, workflow artifacts, and job logs for the Gate 5A-6 green-by-user-report head.
 - `UNAVAILABLE`: atomic multi-file commit evidence; connector contents writes were performed as separate commits.
-- `UNVERIFIED`: exact final branch-head remote CI until GitHub Actions reports.
 - `MODELED`: none.
 
 ### Validation commands
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_evidence_ledger_consistency.py
 pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
 pytest -q tests/test_public_exports.py
-pytest -q tests/test_ci_evidence.py
+pytest -q tests/test_audit_runtime_evidence.py
+pytest -q tests/test_risk_control_evidence.py
+pytest -q tests/test_data_freshness_evidence.py
 pytest -q
 ruff check .
 black --check .
@@ -91,10 +100,8 @@ mypy .
 
 ### Boundary limit
 
-Gate 5A-2 is a CI evidence adapter only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
-
-It does not call GitHub, fetch artifacts, request secrets, mutate workflows, compute performance, place exchange orders, enable live trading, or approve production readiness.
+Gate 5A-7 is a documentation and ledger-consistency guard only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 ## Next recommended step
 
-After Gate 5A-2 is green in CI, keep the next increment small and fail-closed: use measured CI/status artifacts only when available, or harden audit/runtime reconciliation tests. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
+After Gate 5A-7 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
