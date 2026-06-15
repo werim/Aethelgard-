@@ -11,6 +11,8 @@
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
 - Observed `dev` HEAD before Gate 5A-4: `c8b5b1852f297863940f45b7e927a35bf983cd88`
+- Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
+- Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Previous safe increment: Gate 5A-3 audit/runtime reconciliation evidence adapter with user-reported green validation evidence.
 - Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, Gate 5A-1B safety-phrase reconciliation, Gate 5A-2 CI evidence, and Gate 5A-3 audit/runtime evidence.
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-3 documentation, and package metadata were read from `dev` before this increment.
@@ -37,12 +39,16 @@ Gate 5A-4 also records that Gate 5A-3 has source, test, and documentation counte
 
 Gate 5A-3 retains user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
+Gate 5A-4 now also has user-reported green validation evidence after the `VERSION.md` Gate 4B-5 anchor repair at `e6b4f28285da0a488e40f84ff47395b89059ff11`. This is recorded as measured user evidence, not connector-visible workflow evidence.
+
 ## Evidence classification
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
 | Branch base | `dev` resolved to `c8b5b1852f297863940f45b7e927a35bf983cd88` before Gate 5A-4 | `MEASURED` connector evidence |
+| Version-ledger repair | `VERSION.md` restored Gate 4B-5 and Gate 4B-5A anchors at `e6b4f28285da0a488e40f84ff47395b89059ff11` | `MEASURED` connector evidence |
+| Gate 5A-4 validation | user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` | `MEASURED` user-reported evidence |
 | Source boundary | Gate 5A-4 evidence ledger consistency guard added | `MEASURED` connector evidence |
 | Test coverage | Focused Gate 5A-4 ledger consistency test added | `MEASURED` connector evidence |
 | Documentation | Gate 5A-4 documentation and ledgers updated | `MEASURED` connector evidence |
@@ -78,7 +84,7 @@ black --check .
 mypy .
 ```
 
-Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-3 green remains user-reported green validation evidence, not connector-visible workflow evidence.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-4 green remains user-reported green validation evidence, not connector-visible workflow evidence.
 
 ## Operational readiness
 
