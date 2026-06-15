@@ -2,7 +2,7 @@
 
 ## 0.22.0 - 2026-06-14
 
-**Engineering milestone:** Gate 5A-2 CI evidence adapter with Gate 5A-3 audit/runtime evidence adapter and Gate 5A-4 evidence ledger consistency audit.
+**Engineering milestone:** Gate 5A-2 CI evidence adapter with Gate 5A-3 audit/runtime evidence adapter, Gate 5A-4 evidence ledger consistency audit, and Gate 5A-5 risk-control enforcement evidence adapter.
 
 - Added `src/reporting/ci_evidence.py` as a deterministic, offline CI evidence adapter for the Gate 5A `ci_validation` blocker row.
 - Added CI evidence payload models for workflow conclusion, required jobs, required artifacts, commit SHA, and source evidence.
@@ -13,23 +13,25 @@
 - Added `tests/test_audit_runtime_evidence.py` for measured reconciliation, missing report, reconciliation issues, empty matched decisions, missing source, Gate 5A integration, and deterministic JSON safety.
 - Added `docs/gates/gate5a_audit_runtime_evidence.md`.
 - Added Gate 5A-4 evidence ledger consistency audit in `tests/test_evidence_ledger_consistency.py` and `docs/gates/gate5a_evidence_ledger.md`.
+- Added Gate 5A-5 risk-control enforcement evidence adapter in `src/reporting/risk_control_evidence.py`.
+- Added focused Gate 5A-5 risk-control evidence tests in `tests/test_risk_control_evidence.py`.
+- Added Gate 5A-5 documentation in `docs/gates/gate5a_risk_control_evidence.md`.
+- Exported Gate 5A-5 risk-control evidence helpers from `src.reporting`.
 - Gate 5A-3 source/test/doc counterparts are recorded as `src/reporting/audit_runtime_evidence.py`, `tests/test_audit_runtime_evidence.py`, and `docs/gates/gate5a_audit_runtime_evidence.md`.
 - Gate 5A-3 retains user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 - Gate 5A-4 evidence ledger consistency audit preserves package-version, implementation-counterpart, unavailable-evidence, and safety-boundary wording across `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, and `docs/gates/gate5a_evidence_ledger.md`.
 - Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation remain recorded as current regression anchors for the version ledger.
 - Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
-- Advanced package version to `0.22.0` for Gate 5A-2 and kept it stable for Gate 5A-3 and Gate 5A-4.
+- Advanced package version to `0.22.0` for Gate 5A-2 and kept it stable for Gate 5A-3 through Gate 5A-5.
 - Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
 
 ## Validation evidence
 
-- `MEASURED`: connector comparison resolved `dev` HEAD `c8b5b1852f297863940f45b7e927a35bf983cd88` before Gate 5A-4.
-- `MEASURED`: `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-3 documentation, and package metadata were read from `dev` before this increment.
-- `MEASURED`: connector writes added Gate 5A-4 focused test, documentation, and ledger updates on `dev`.
-- `MEASURED`: Gate 5A-3 user-reported green validation evidence remains recorded as measured user evidence.
-- `MEASURED`: Gate 4B-5 and Gate 4B-5A version-ledger regression anchors are restored in `VERSION.md` after CI reported their absence.
-- `MEASURED`: Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11`.
-- `UNAVAILABLE`: connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
+- `MEASURED`: connector comparison resolved `dev` HEAD `abb10911765ef53cdcb24fa08a4739151b0da739` before Gate 5A-5.
+- `MEASURED`: `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before this increment.
+- `MEASURED`: connector writes added Gate 5A-5 source, focused tests, documentation, export, and ledger updates on `dev`.
+- `MEASURED`: Gate 5A-4 user-reported green validation evidence remains recorded as measured user evidence.
+- `UNAVAILABLE`: Gate 5A-5 connector-visible CI and local validation remain unavailable in this execution environment.
 - `UNAVAILABLE`: direct mutable local clone evidence because repository operations were performed through the GitHub connector.
 - `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
 - `MODELED`: none.
