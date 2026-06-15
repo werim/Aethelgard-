@@ -1,5 +1,12 @@
 """Aethelgard reporting boundaries for research-only evidence ledgers."""
 
+from src.reporting.data_freshness_evidence import (
+    DataFreshnessEvidence,
+    DataFreshnessEvidenceAssessment,
+    DataFreshnessEvidenceStatus,
+    assess_data_freshness_for_gate5a,
+    data_freshness_evidence_assessment_json,
+)
 from src.reporting.operational_evidence import (
     DeploymentBlockerMatrixRow,
     DeploymentBlockerStatus,
@@ -41,6 +48,9 @@ from src.reporting.risk_control_evidence import (
 )
 
 __all__ = [
+    "DataFreshnessEvidence",
+    "DataFreshnessEvidenceAssessment",
+    "DataFreshnessEvidenceStatus",
     "DeploymentBlockerMatrixRow",
     "DeploymentBlockerStatus",
     "MetricPublicationEligibility",
@@ -60,8 +70,10 @@ __all__ = [
     "RiskControlPolicyEvidence",
     "assert_operational_deployment_not_blocked",
     "assert_paper_db_audit_clean",
+    "assess_data_freshness_for_gate5a",
     "assess_risk_control_enforcement_for_gate5a",
     "audit_paper_runtime_database",
+    "data_freshness_evidence_assessment_json",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",
     "guarded_performance_report_json",
