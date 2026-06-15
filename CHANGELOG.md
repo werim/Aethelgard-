@@ -37,7 +37,8 @@
 - Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
 - Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair.
 - Gate 5A-5 connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
-- Gate 5A-6 is implemented pending validation; connector-visible CI and local validation remain UNAVAILABLE in this execution environment.
+- Gate 5A-6 green is recorded as user-reported green validation evidence for `3f5cb4ea89fa3c12661e020d802796439d3a064c` after Ruff and Black formatting repairs.
+- Gate 5A-6 connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
 
 ### Known limitations
 
@@ -110,7 +111,7 @@
 - Gate 4CLOSE-1 completion evidence matrix in `docs/gates/gate4_completion_evidence_matrix.md`.
 - Gate 4CLOSE-1A focused matrix wording reconciliation and regression coverage in `tests/test_gate4_completion_evidence_matrix.py`.
 - Gate 4CLOSE-1B validation-command ledger consistency regression coverage in `tests/test_validation_command_ledger_consistency.py`.
-- Gate 4CLOSE-1C validation-command canonicalization coverage across `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix.
+- Gate 4CLOSE-1C canonicalization coverage across `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix.
 
 ### Changed
 
