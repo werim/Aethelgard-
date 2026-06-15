@@ -15,6 +15,7 @@
 - Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, Gate 5A-1B safety-phrase reconciliation, Gate 5A-2 CI evidence, Gate 5A-3 audit/runtime evidence, and Gate 5A-4 evidence ledger consistency.
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before this increment.
 - Mutable local clone validation remains unavailable in this execution environment because repository writes were performed through the GitHub connector.
+- Gate 5A-4 green remains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
 ## Gate 5A-5 risk-control enforcement evidence adapter
 
@@ -45,8 +46,8 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 | Test coverage | Focused Gate 5A-5 risk-control evidence tests added | `MEASURED` connector evidence |
 | Documentation | Gate 5A-5 documentation and ledgers updated | `MEASURED` connector evidence |
 | Package version | kept at `0.22.0` for this Gate 5A adapter increment | `MEASURED` connector evidence |
-| Gate 5A-4 validation | user-reported green validation evidence retained | `MEASURED` user-reported evidence |
-| Connector-visible CI after Gate 5A-5 writes | not observed in this execution environment | `UNAVAILABLE` connector evidence |
+| Gate 5A-4 validation | user-reported green validation evidence retained; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence | `MEASURED` user-reported evidence |
+| Connector-visible CI after Gate 5A-5 writes | connector-visible CI remains UNAVAILABLE | `UNAVAILABLE` connector evidence |
 | Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
@@ -54,6 +55,8 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 ## Safety boundary
 
 Gate 5A-5 is an evidence adapter only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
+Gate 5A-5 does not place exchange orders.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
