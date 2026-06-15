@@ -31,7 +31,8 @@
 - Gate 5A-3 has user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 - Gate 5A-4 evidence ledger consistency audit preserves the evidence wording across `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, and `docs/gates/gate5a_evidence_ledger.md`.
 - Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
-- Gate 5A-5 is implemented pending validation; connector-visible CI and local validation remain UNAVAILABLE in this execution environment.
+- Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair.
+- Gate 5A-5 connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
 
 ### Known limitations
 
