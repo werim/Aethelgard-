@@ -20,17 +20,14 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD before Gate 5A-6: `15fc057c0b9625936b2c0f7e9670a235d6c4f589`
-- Verified Gate 5A-6 green-by-user-report head after Ruff and Black formatting repairs: `3f5cb4ea89fa3c12661e020d802796439d3a064c`
-- Verified Gate 5A-5 green-by-user-report head after Ruff import-block repair: `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`
-- Verified Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
-- Verified Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
-- Verified Gate 5A-3 green-by-user-report head: `9d428bd0855f30e20f6bed7009f11d7a681b4af7`
-- Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
-- Branch evidence source: direct GitHub compare/read operations against `dev`
+- Verified Gate 5A-6 green-by-user-report head: `3f5cb4ea89fa3c12661e020d802796439d3a064c`
+- Verified Gate 5A-6 commit title: `Gate 5A-6: apply black formatting to data freshness tests`
+- User-provided screenshot shows validation runs 309, 310, 311, 312, and 313 green on `dev`.
+- Connector workflow lookup for `3f5cb4ea89fa3c12661e020d802796439d3a064c` returned no workflow runs.
+- Branch evidence source: direct GitHub read operations against `dev` and commit metadata lookup.
 - Mutable local clone validation in this execution environment: unavailable
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-6 head until CI or a mutable clone reports it.
-- Gate 5A-4 green remains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+- Gate 5A-7 records user-reported green validation evidence; it is not connector-visible workflow evidence or direct workflow artifact proof.
 
 ## Current Ledger Position
 
@@ -57,44 +54,33 @@ Current documented sequence includes:
 - Gate 5A-4 evidence ledger consistency audit and user-reported green validation evidence
 - Gate 5A-5 risk-control enforcement evidence adapter and user-reported green validation evidence
 - Gate 5A-6 data-freshness evidence adapter and user-reported green validation evidence
-
-## Prior Ledger Evidence Retained
-
-Gate 4B-5A — VERSION ledger reconciliation.
-
-Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
-
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, Gate 5A-2, Gate 5A-3, Gate 5A-4, Gate 5A-5, and Gate 5A-6 markers remain present as regression anchors.
+- Gate 5A-7 workflow artifact evidence ledger
 
 ## Latest Safe Increment Selected
 
-Gate 5A-6 — Data-Freshness Evidence Adapter.
+Gate 5A-7 — Workflow Artifact Evidence Ledger.
 
-Gate 5A-6 adds a focused fail-closed adapter and documentation ledger so caller-supplied dataset freshness and selector-consistency evidence can be classified for the Gate 5A `data_freshness` blocker.
+Gate 5A-7 records the evidence boundary around Gate 5A-6 green validation. It preserves the distinction between user-reported screenshot evidence and connector-visible workflow artifact evidence.
 
-Gate 5A-6 records these counterparts:
+Gate 5A-7 records these counterparts:
 
-- `src/reporting/data_freshness_evidence.py`
-- `tests/test_data_freshness_evidence.py`
-- `docs/gates/gate5a_data_freshness_evidence.md`
-- `src/reporting/__init__.py`
+- `docs/gates/gate5a_workflow_artifact_evidence_ledger.md`
+- `docs/gates/gate5a_evidence_ledger.md`
+- `tests/test_evidence_ledger_consistency.py`
 
-Gate 5A-6 has user-reported green validation evidence for `3f5cb4ea89fa3c12661e020d802796439d3a064c` after the Ruff and Black formatting repairs. This is measured user evidence, not connector-visible workflow evidence.
+Gate 5A-7 has user-reported green validation evidence from the screenshot showing validation runs 309 through 313 green on `dev`. Connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
 ## Evidence Classification
 
 ### MEASURED
 
-- `dev` resolved through direct GitHub compare/read evidence before Gate 5A-6.
-- `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-5 documentation, Gate 5A-4 documentation, and package metadata were read from `dev` before Gate 5A-6.
-- `src/reporting/data_freshness_evidence.py` was added.
-- `tests/test_data_freshness_evidence.py` was added.
-- `docs/gates/gate5a_data_freshness_evidence.md` was added.
-- `src.reporting.__all__` now exposes the Gate 5A-6 data-freshness evidence adapter.
-- Gate 5A-6 green is recorded as user-reported green validation evidence for `3f5cb4ea89fa3c12661e020d802796439d3a064c`.
-- Package version was kept at `0.22.0` for this Gate 5A adapter increment.
-- Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`.
-- Gate 5A-4 retains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+- `dev` project ledgers were read through the GitHub connector before Gate 5A-7.
+- Commit metadata for `3f5cb4ea89fa3c12661e020d802796439d3a064c` was fetched through the GitHub connector.
+- User-provided screenshot shows validation runs 309, 310, 311, 312, and 313 green on `dev`.
+- `docs/gates/gate5a_workflow_artifact_evidence_ledger.md` was added.
+- `docs/gates/gate5a_evidence_ledger.md` was updated.
+- `tests/test_evidence_ledger_consistency.py` was extended to guard Gate 5A-6 and Gate 5A-7 wording.
+- Package version was kept at `0.22.0` for this evidence-ledger increment.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -107,15 +93,14 @@ Gate 5A-6 has user-reported green validation evidence for `3f5cb4ea89fa3c12661e0
 - Exact branch-head full local command execution in this execution environment.
 - Local full-repository pytest execution in this execution environment.
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-6 head.
+- Direct workflow artifacts, workflow job logs, and downloaded CI artifacts are unavailable through the connector in this increment.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-6 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
-
-Gate 5A-6 does not fetch market data, connect to exchanges, or place exchange orders.
+Gate 5A-7 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -123,25 +108,25 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 
 ```bash
 python -m compileall -q src tests main.py
-pytest -q tests/test_data_freshness_evidence.py
-pytest -q tests/test_risk_control_evidence.py
-pytest -q tests/test_public_exports.py
 pytest -q tests/test_evidence_ledger_consistency.py
 pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
+pytest -q tests/test_public_exports.py
 pytest -q tests/test_audit_runtime_evidence.py
+pytest -q tests/test_risk_control_evidence.py
+pytest -q tests/test_data_freshness_evidence.py
 pytest -q
 ruff check .
 black --check .
 mypy .
 ```
 
-Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-6 green remains user-reported green validation evidence, not connector-visible workflow evidence.
+Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-7 keeps user-reported green validation evidence separate from connector-visible workflow evidence.
 
 ## Next Recommended Step
 
-After Gate 5A-6 validation evidence is recorded, the next safe increment should remain small and fail-closed: add a focused Gate 5A-6 ledger consistency guard or select the next missing Gate 5A measured-evidence adapter.
+After Gate 5A-7 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
 
-No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
+No optimizer, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
