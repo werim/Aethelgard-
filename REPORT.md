@@ -4,66 +4,56 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-4 evidence ledger consistency audit.
+- Active increment: Gate 5A-5 risk-control enforcement evidence adapter.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
-- Observed `dev` HEAD before Gate 5A-4: `c8b5b1852f297863940f45b7e927a35bf983cd88`
-- Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
-- Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
-- Previous safe increment: Gate 5A-3 audit/runtime reconciliation evidence adapter with user-reported green validation evidence.
-- Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, Gate 5A-1B safety-phrase reconciliation, Gate 5A-2 CI evidence, and Gate 5A-3 audit/runtime evidence.
-- `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-3 documentation, and package metadata were read from `dev` before this increment.
+- Observed `dev` HEAD before Gate 5A-5: `abb10911765ef53cdcb24fa08a4739151b0da739`
+- Previous safe increment: Gate 5A-4 evidence ledger consistency audit with user-reported green validation evidence.
+- Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, Gate 5A-1B safety-phrase reconciliation, Gate 5A-2 CI evidence, Gate 5A-3 audit/runtime evidence, and Gate 5A-4 evidence ledger consistency.
+- `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before this increment.
 - Mutable local clone validation remains unavailable in this execution environment because repository writes were performed through the GitHub connector.
 
-## Gate 5A-4 evidence ledger consistency audit
+## Gate 5A-5 risk-control enforcement evidence adapter
 
-Gate 5A-4 adds a focused fail-closed test that keeps evidence language consistent across the current ledgers. It prevents user-reported green validation evidence from being restated as connector-visible CI or readiness evidence.
+Gate 5A-5 adds a deterministic, fail-closed adapter that converts caller-supplied risk-control policy evidence into a Gate 5A `risk_control_enforcement` evidence item.
 
 Implemented files:
 
-- `tests/test_evidence_ledger_consistency.py`
-- `docs/gates/gate5a_evidence_ledger.md`
+- `src/reporting/risk_control_evidence.py`
+- `tests/test_risk_control_evidence.py`
+- `docs/gates/gate5a_risk_control_evidence.md`
+- `src/reporting/__init__.py`
 - `PROJECT_STATE.md`
 - `REPORT.md`
 - `VERSION.md`
 - `CHANGELOG.md`
 
-Gate 5A-4 also records that Gate 5A-3 has source, test, and documentation counterparts:
+The adapter classifies risk-control evidence as `MEASURED` only when caller-supplied required policies are present, canonical, unique, observed, and enforced. Missing, malformed, duplicated, non-canonical, or unenforced policy evidence remains `UNAVAILABLE`.
 
-- `src/reporting/audit_runtime_evidence.py`
-- `tests/test_audit_runtime_evidence.py`
-- `docs/gates/gate5a_audit_runtime_evidence.md`
-
-Gate 5A-3 retains user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
-
-Gate 5A-4 now also has user-reported green validation evidence after the `VERSION.md` Gate 4B-5 anchor repair at `e6b4f28285da0a488e40f84ff47395b89059ff11`. This is recorded as measured user evidence, not connector-visible workflow evidence.
+Gate 5A-5 is implemented pending validation. No local or connector-visible CI result has been observed for the final Gate 5A-5 head in this execution environment.
 
 ## Evidence classification
 
 | Check | Result | Classification |
 | --- | --- | --- |
 | Repository access | GitHub connector read/write access available for `werim/Aethelgard-` | `MEASURED` connector evidence |
-| Branch base | `dev` resolved to `c8b5b1852f297863940f45b7e927a35bf983cd88` before Gate 5A-4 | `MEASURED` connector evidence |
-| Version-ledger repair | `VERSION.md` restored Gate 4B-5 and Gate 4B-5A anchors at `e6b4f28285da0a488e40f84ff47395b89059ff11` | `MEASURED` connector evidence |
-| Gate 5A-4 validation | user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` | `MEASURED` user-reported evidence |
-| Source boundary | Gate 5A-4 evidence ledger consistency guard added | `MEASURED` connector evidence |
-| Test coverage | Focused Gate 5A-4 ledger consistency test added | `MEASURED` connector evidence |
-| Documentation | Gate 5A-4 documentation and ledgers updated | `MEASURED` connector evidence |
-| Package version | kept at `0.22.0` for this ledger-only guard | `MEASURED` connector evidence |
-| Gate 5A-3 CI validation | user-reported green validation evidence retained | `MEASURED` user-reported evidence |
-| Connector-visible CI after Gate 5A-4 writes | connector-visible CI remains UNAVAILABLE | `UNAVAILABLE` connector evidence |
+| Branch base | `dev` resolved to `abb10911765ef53cdcb24fa08a4739151b0da739` before Gate 5A-5 | `MEASURED` connector evidence |
+| Source boundary | Gate 5A-5 risk-control evidence adapter added | `MEASURED` connector evidence |
+| Test coverage | Focused Gate 5A-5 risk-control evidence tests added | `MEASURED` connector evidence |
+| Documentation | Gate 5A-5 documentation and ledgers updated | `MEASURED` connector evidence |
+| Package version | kept at `0.22.0` for this Gate 5A adapter increment | `MEASURED` connector evidence |
+| Gate 5A-4 validation | user-reported green validation evidence retained | `MEASURED` user-reported evidence |
+| Connector-visible CI after Gate 5A-5 writes | not observed in this execution environment | `UNAVAILABLE` connector evidence |
 | Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
 | Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 5A-4 is a ledger consistency guard only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
-
-It does not read local databases, mutate audit artifacts, run a PAPER runtime, request secrets, compute performance, place exchange orders, enable live trading, or approve production readiness.
+Gate 5A-5 is an evidence adapter only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -71,12 +61,13 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_risk_control_evidence.py
+pytest -q tests/test_public_exports.py
 pytest -q tests/test_evidence_ledger_consistency.py
 pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
-pytest -q tests/test_public_exports.py
 pytest -q tests/test_audit_runtime_evidence.py
 pytest -q
 ruff check .
@@ -84,16 +75,16 @@ black --check .
 mypy .
 ```
 
-Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-4 green remains user-reported green validation evidence, not connector-visible workflow evidence.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-5 validation remains unavailable until CI or a mutable clone reports it.
 
 ## Operational readiness
 
 Operational readiness: `PAPER ONLY / RESEARCH ONLY / NOT LIVE READY`
 
-Reason: Gate 5A-4 guards ledger language and evidence classification, but it does not prove execution realism, strategy performance, risk survivability, capital safety, long-running PAPER runtime behavior, live safety, or production readiness.
+Reason: Gate 5A-5 classifies caller-supplied risk-control enforcement evidence, but it does not prove execution realism, strategy performance, risk survivability, capital safety, long-running PAPER runtime behavior, live safety, or production readiness.
 
 ## Next step
 
-After Gate 5A-4 validation evidence is available, keep the next safe increment small and fail-closed: use measured reconciliation artifacts only when available, or add a focused risk-control enforcement evidence adapter.
+After Gate 5A-5 validation evidence is available, keep the next safe increment small and fail-closed: either record user-reported green validation evidence or add a measured data-freshness evidence adapter.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
