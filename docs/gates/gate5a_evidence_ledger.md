@@ -10,6 +10,8 @@ Gate 5A-4 adds a fail-closed ledger consistency guard for the evidence language 
 
 The goal is to prevent documentation drift where user-reported green validation evidence is restated as connector-visible CI evidence or readiness evidence.
 
+Gate 5A-7 extends the same guard to `docs/gates/gate5a_workflow_artifact_evidence_ledger.md` so screenshot-backed green validation evidence is not restated as direct workflow artifact proof.
+
 ## Evidence boundary
 
 Gate 5A-4 records that Gate 5A-3 has source, test, and documentation counterparts:
@@ -18,7 +20,15 @@ Gate 5A-4 records that Gate 5A-3 has source, test, and documentation counterpart
 - `tests/test_audit_runtime_evidence.py`
 - `docs/gates/gate5a_audit_runtime_evidence.md`
 
-Gate 5A-4 does not prove those tests passed in this execution environment. It preserves the distinction that Gate 5A-3 has user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+Gate 5A-6 records that the data-freshness evidence adapter has source, test, and documentation counterparts:
+
+- `src/reporting/data_freshness_evidence.py`
+- `tests/test_data_freshness_evidence.py`
+- `docs/gates/gate5a_data_freshness_evidence.md`
+
+Gate 5A-4 does not prove those tests passed in this execution environment. It preserves the distinction that Gate 5A-3 and Gate 5A-6 have user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+
+Gate 5A-7 records that user-provided screenshot evidence shows green validation runs 309 through 313 for `dev`, but direct workflow artifacts, job logs, and connector-visible workflow runs remain unavailable through the connector in this environment.
 
 ## Consistency checks
 
@@ -27,13 +37,16 @@ The focused guard in `tests/test_evidence_ledger_consistency.py` checks:
 - package version alignment across `pyproject.toml`, `src.__version__`, `VERSION.md`, and `CHANGELOG.md`;
 - Gate 5A-4 ledger text across the current documentation surfaces;
 - Gate 5A-3 source, test, and documentation counterparts;
+- Gate 5A-6 source, test, and documentation counterparts;
+- Gate 5A-7 workflow evidence boundary wording;
 - user-reported green evidence language;
 - connector-visible CI remains UNAVAILABLE and not connector-visible workflow evidence;
+- screenshot evidence is not restated as direct workflow artifact proof;
 - safety phrases for PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ## Safety boundary
 
-Gate 5A-4 is a ledger consistency guard only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-4 and Gate 5A-7 are ledger consistency guards only. They do not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -48,6 +61,8 @@ pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
 pytest -q tests/test_public_exports.py
 pytest -q tests/test_audit_runtime_evidence.py
+pytest -q tests/test_risk_control_evidence.py
+pytest -q tests/test_data_freshness_evidence.py
 pytest -q
 ruff check .
 black --check .
