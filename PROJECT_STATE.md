@@ -28,6 +28,7 @@ RESEARCH_ONLY
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-5 head until CI or a mutable clone reports it.
+- Gate 5A-4 green remains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
 ## Current Ledger Position
 
@@ -88,7 +89,7 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 - `docs/gates/gate5a_risk_control_evidence.md` was added.
 - `src/reporting.__all__` now exposes the Gate 5A-5 risk-control evidence adapter.
 - Package version was kept at `0.22.0` for this Gate 5A adapter increment.
-- Gate 5A-4 retains user-reported green validation evidence.
+- Gate 5A-4 retains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -100,7 +101,7 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local full-repository pytest execution in this execution environment.
-- connector-visible CI for the final Gate 5A-5 head.
+- connector-visible CI remains UNAVAILABLE for the final Gate 5A-5 head.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
@@ -108,6 +109,8 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
 Gate 5A-5 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
+Gate 5A-5 does not place exchange orders.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
