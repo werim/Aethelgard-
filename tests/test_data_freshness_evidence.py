@@ -127,9 +127,10 @@ def test_malformed_data_freshness_evidence_remains_unavailable() -> None:
 
     assert assessment.status is DataFreshnessEvidenceStatus.UNAVAILABLE
     assert "data-freshness evidence source is missing" in assessment.diagnostics
-    assert "data-freshness dataset id ' binance_futures_klines_1m' is non-canonical" in (
-        assessment.diagnostics
-    )
+    assert (
+        "data-freshness dataset id ' binance_futures_klines_1m' "
+        "is non-canonical"
+    ) in assessment.diagnostics
     assert "data-freshness expected selector id is missing" in assessment.diagnostics
     assert "data-freshness latest closed bar timestamp is missing" in (
         assessment.diagnostics
@@ -140,7 +141,7 @@ def test_malformed_data_freshness_evidence_remains_unavailable() -> None:
     )
 
 
-def test_data_freshness_evidence_json_is_deterministic_and_non_performance() -> None:
+def test_data_freshness_json_is_deterministic_and_non_performance() -> None:
     assessment = assess_data_freshness_for_gate5a(_fresh_data_evidence())
 
     payload = json.loads(data_freshness_evidence_assessment_json(assessment))
