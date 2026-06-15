@@ -7,18 +7,33 @@
 - Added Gate 5A-2 CI evidence adapter in `src/reporting/ci_evidence.py`.
 - Added focused CI evidence coverage in `tests/test_ci_evidence.py`.
 - Added Gate 5A-2 documentation in `docs/gates/gate5a_ci_evidence.md`.
+- Added Gate 5A-3 audit/runtime evidence adapter in `src/reporting/audit_runtime_evidence.py`.
+- Added focused audit/runtime evidence coverage in `tests/test_audit_runtime_evidence.py`.
+- Added Gate 5A-3 documentation in `docs/gates/gate5a_audit_runtime_evidence.md`.
+- Added Gate 5A-4 evidence ledger consistency audit in `tests/test_evidence_ledger_consistency.py`.
+- Added Gate 5A-4 documentation in `docs/gates/gate5a_evidence_ledger.md`.
 
 ### Changed
 
-- Package version advanced to `0.22.0`.
+- Package version advanced to `0.22.0` for Gate 5A-2 and kept stable for Gate 5A-3 and Gate 5A-4.
 - CI validation can now be represented as a fail-closed Gate 5A `ci_validation` evidence item from caller-supplied workflow, job, and artifact evidence.
+- Gate 5A-3 audit/runtime reconciliation evidence can now be represented as fail-closed Gate 5A evidence items from caller-supplied persistence reconciliation reports.
+- Gate 5A-4 keeps user-reported green validation evidence separate from connector-visible CI evidence.
+
+### Evidence ledger
+
+- Gate 5A-3 source/test/doc counterparts are recorded as `src/reporting/audit_runtime_evidence.py`, `tests/test_audit_runtime_evidence.py`, and `docs/gates/gate5a_audit_runtime_evidence.md`.
+- Gate 5A-3 has user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+- Gate 5A-4 evidence ledger consistency audit preserves the evidence wording across `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, and `docs/gates/gate5a_evidence_ledger.md`.
 
 ### Known limitations
 
 - Gate 5A-2 does not call GitHub or fetch workflow artifacts automatically.
 - Missing, malformed, duplicated, failed, or incomplete CI evidence remains `UNAVAILABLE`.
-- Gate 5A-2 does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+- Gate 5A-3 does not read local databases or run a PAPER runtime; it only classifies caller-supplied reconciliation reports.
+- Gate 5A-4 does not run local validation or prove connector-visible CI.
 - Local full-repository validation remains unavailable in this execution environment until CI or a mutable clone reports it.
+- The Gate 5A-2 through Gate 5A-4 boundary does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
 
 ## [0.21.1] - 2026-06-13
 
@@ -80,7 +95,7 @@
 - Gate 4CLOSE-1 completion evidence matrix in `docs/gates/gate4_completion_evidence_matrix.md`.
 - Gate 4CLOSE-1A focused matrix wording reconciliation and regression coverage in `tests/test_gate4_completion_evidence_matrix.py`.
 - Gate 4CLOSE-1B validation-command ledger consistency regression coverage in `tests/test_validation_command_ledger_consistency.py`.
-- Gate 4CLOSE-1C validation-command canonicalization coverage across `REPORT.md`, `PROJECT_STATE.md`, and `docs/gates/gate4_completion_evidence_matrix.md`.
+- Gate 4CLOSE-1C validation-command canonicalization coverage across `REPORT.md`, `PROJECT_STATE.md`, and the Gate 4 completion matrix.
 
 ### Changed
 
