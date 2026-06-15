@@ -4,13 +4,14 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-5 risk-control enforcement evidence adapter.
+- Active increment: Gate 5A-5 risk-control enforcement evidence adapter with user-reported green validation evidence.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
 - Observed `dev` HEAD before Gate 5A-5: `abb10911765ef53cdcb24fa08a4739151b0da739`
+- Gate 5A-5 green-by-user-report head after Ruff import-block repair: `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`
 - Previous safe increment: Gate 5A-4 evidence ledger consistency audit with user-reported green validation evidence.
 - Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 4CLOSE-1B validation-command ledger consistency, Gate 4CLOSE-1C validation-command canonicalization, Gate 5A operational evidence gate, Gate 5A-1 input integrity, Gate 5A-1A typing repair, Gate 5A-1B safety-phrase reconciliation, Gate 5A-2 CI evidence, Gate 5A-3 audit/runtime evidence, and Gate 5A-4 evidence ledger consistency.
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before this increment.
@@ -34,7 +35,7 @@ Implemented files:
 
 The adapter classifies risk-control evidence as `MEASURED` only when caller-supplied required policies are present, canonical, unique, observed, and enforced. Missing, malformed, duplicated, non-canonical, or unenforced policy evidence remains `UNAVAILABLE`.
 
-Gate 5A-5 is implemented pending validation. No local or connector-visible CI result has been observed for the final Gate 5A-5 head in this execution environment.
+Gate 5A-5 has user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after the Ruff import-block repair. This is measured user evidence, not connector-visible workflow evidence.
 
 ## Evidence classification
 
@@ -46,6 +47,7 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 | Test coverage | Focused Gate 5A-5 risk-control evidence tests added | `MEASURED` connector evidence |
 | Documentation | Gate 5A-5 documentation and ledgers updated | `MEASURED` connector evidence |
 | Package version | kept at `0.22.0` for this Gate 5A adapter increment | `MEASURED` connector evidence |
+| Gate 5A-5 validation | user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair | `MEASURED` user-reported evidence |
 | Gate 5A-4 validation | user-reported green validation evidence retained; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence | `MEASURED` user-reported evidence |
 | Connector-visible CI after Gate 5A-5 writes | connector-visible CI remains UNAVAILABLE | `UNAVAILABLE` connector evidence |
 | Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
@@ -78,7 +80,7 @@ black --check .
 mypy .
 ```
 
-Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-5 validation remains unavailable until CI or a mutable clone reports it.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-5 green remains user-reported green validation evidence, not connector-visible workflow evidence.
 
 ## Operational readiness
 
@@ -88,6 +90,6 @@ Reason: Gate 5A-5 classifies caller-supplied risk-control enforcement evidence, 
 
 ## Next step
 
-After Gate 5A-5 validation evidence is available, keep the next safe increment small and fail-closed: either record user-reported green validation evidence or add a measured data-freshness evidence adapter.
+After Gate 5A-5 validation evidence is recorded, keep the next safe increment small and fail-closed: add a measured data-freshness evidence adapter or a focused ledger consistency guard for Gate 5A-5 evidence language.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
