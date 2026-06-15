@@ -10,6 +10,8 @@ Gate 5A-7 records the current validation evidence boundary for Gate 5A-6 without
 
 The original target was to record direct workflow artifact evidence. The GitHub connector workflow lookup for the Gate 5A-6 green-by-user-report head returned no workflow runs, so direct workflow artifact evidence remains unavailable in this environment. Gate 5A-7 therefore records the evidence boundary explicitly instead of fabricating artifact proof.
 
+Gate 5A-4 evidence ledger consistency audit remains the anchor for keeping user-reported green validation separate from connector-visible CI evidence. Connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+
 ## Evidence recorded
 
 - Gate 5A-6 green-by-user-report head: `3f5cb4ea89fa3c12661e020d802796439d3a064c`.
