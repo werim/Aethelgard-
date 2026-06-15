@@ -4,13 +4,14 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-6 data-freshness evidence adapter.
+- Active increment: Gate 5A-6 data-freshness evidence adapter with user-reported green validation evidence.
 
 ## Baseline
 
 - Repository: `werim/Aethelgard-`
 - Base branch: `dev`
 - Observed `dev` HEAD before Gate 5A-6: `15fc057c0b9625936b2c0f7e9670a235d6c4f589`
+- Gate 5A-6 green-by-user-report head after Ruff and Black formatting repairs: `3f5cb4ea89fa3c12661e020d802796439d3a064c`
 - Previous safe increment: Gate 5A-5 risk-control enforcement evidence adapter with user-reported green validation evidence.
 - Gate 5A-5 green-by-user-report head after Ruff import-block repair: `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`
 - Gate 5A-4 evidence ledger consistency audit with user-reported green validation evidence remains recorded.
@@ -36,7 +37,7 @@ Implemented files:
 
 The adapter classifies data-freshness evidence as `MEASURED` only when caller-supplied evidence has a source, canonical dataset id, matching canonical selector ids, a latest closed bar timestamp, non-negative observed age, positive max age, and observed age no greater than max age. Missing, stale, malformed, or selector-mismatched evidence remains `UNAVAILABLE`.
 
-Gate 5A-6 is implemented pending validation. No local or connector-visible CI result has been observed for the final Gate 5A-6 head in this execution environment.
+Gate 5A-6 has user-reported green validation evidence for `3f5cb4ea89fa3c12661e020d802796439d3a064c` after the Ruff and Black formatting repairs. This is measured user evidence, not connector-visible workflow evidence.
 
 ## Evidence classification
 
@@ -48,6 +49,7 @@ Gate 5A-6 is implemented pending validation. No local or connector-visible CI re
 | Test coverage | Focused Gate 5A-6 data-freshness evidence tests added | `MEASURED` connector evidence |
 | Documentation | Gate 5A-6 documentation and ledgers updated | `MEASURED` connector evidence |
 | Package version | kept at `0.22.0` for this Gate 5A adapter increment | `MEASURED` connector evidence |
+| Gate 5A-6 validation | user-reported green validation evidence for `3f5cb4ea89fa3c12661e020d802796439d3a064c` after Ruff and Black formatting repairs | `MEASURED` user-reported evidence |
 | Gate 5A-5 validation | user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair | `MEASURED` user-reported evidence |
 | Gate 5A-4 validation | user-reported green validation evidence retained; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence | `MEASURED` user-reported evidence |
 | Connector-visible CI after Gate 5A-6 writes | connector-visible CI remains UNAVAILABLE | `UNAVAILABLE` connector evidence |
@@ -82,7 +84,7 @@ black --check .
 mypy .
 ```
 
-Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-6 validation remains unavailable until CI or a mutable clone reports it.
+Commands not directly run in this execution environment remain local-execution `UNAVAILABLE` here and should not be restated as locally passed. Gate 5A-6 green remains user-reported green validation evidence, not connector-visible workflow evidence.
 
 ## Operational readiness
 
@@ -92,6 +94,6 @@ Reason: Gate 5A-6 classifies caller-supplied data-freshness evidence, but it doe
 
 ## Next step
 
-After Gate 5A-6 validation evidence is available, keep the next safe increment small and fail-closed: record validation evidence or add a focused Gate 5A-6 ledger consistency guard.
+After Gate 5A-6 validation evidence is recorded, keep the next safe increment small and fail-closed: add a focused Gate 5A-6 ledger consistency guard or select the next missing Gate 5A measured-evidence adapter.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
