@@ -15,15 +15,19 @@
 - Added Gate 5A-5 risk-control enforcement evidence adapter in `src/reporting/risk_control_evidence.py`.
 - Added focused Gate 5A-5 risk-control evidence coverage in `tests/test_risk_control_evidence.py`.
 - Added Gate 5A-5 documentation in `docs/gates/gate5a_risk_control_evidence.md`.
+- Added Gate 5A-6 data-freshness evidence adapter in `src/reporting/data_freshness_evidence.py`.
+- Added focused Gate 5A-6 data-freshness evidence coverage in `tests/test_data_freshness_evidence.py`.
+- Added Gate 5A-6 documentation in `docs/gates/gate5a_data_freshness_evidence.md`.
 
 ### Changed
 
-- Package version advanced to `0.22.0` for Gate 5A-2 and kept stable for Gate 5A-3 through Gate 5A-5.
+- Package version advanced to `0.22.0` for Gate 5A-2 and kept stable for Gate 5A-3 through Gate 5A-6.
 - CI validation can now be represented as a fail-closed Gate 5A `ci_validation` evidence item from caller-supplied workflow, job, and artifact evidence.
 - Gate 5A-3 audit/runtime reconciliation evidence can now be represented as fail-closed Gate 5A evidence items from caller-supplied persistence reconciliation reports.
 - Gate 5A-4 keeps user-reported green validation evidence separate from connector-visible CI evidence.
 - Gate 5A-5 risk-control enforcement evidence can now be represented as a fail-closed Gate 5A `risk_control_enforcement` evidence item from caller-supplied policy evidence.
-- `src.reporting.__all__` now exposes Gate 5A-5 risk-control evidence helpers.
+- Gate 5A-6 data-freshness evidence can now be represented as a fail-closed Gate 5A `data_freshness` evidence item from caller-supplied freshness and selector-consistency evidence.
+- `src.reporting.__all__` now exposes Gate 5A-5 risk-control and Gate 5A-6 data-freshness evidence helpers.
 
 ### Evidence ledger
 
@@ -33,6 +37,7 @@
 - Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
 - Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after Ruff import-block repair.
 - Gate 5A-5 connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
+- Gate 5A-6 is implemented pending validation; connector-visible CI and local validation remain UNAVAILABLE in this execution environment.
 
 ### Known limitations
 
@@ -41,8 +46,9 @@
 - Gate 5A-3 does not read local databases or run a PAPER runtime; it only classifies caller-supplied reconciliation reports.
 - Gate 5A-4 does not run local validation or prove connector-visible CI.
 - Gate 5A-5 does not execute risk controls; it only classifies caller-supplied risk-control policy evidence.
+- Gate 5A-6 does not fetch market data or connect to exchanges; it only classifies caller-supplied freshness and selector-consistency evidence.
 - Local full-repository validation remains unavailable in this execution environment until CI or a mutable clone reports it.
-- The Gate 5A-2 through Gate 5A-5 boundary does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
+- The Gate 5A-2 through Gate 5A-6 boundary does not compute performance, model costs, add optimizer behavior, add strategy logic, add PAPER runtime behavior, mutate exchange state, approve readiness, or enable live trading.
 
 ## [0.21.1] - 2026-06-13
 
