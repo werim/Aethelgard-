@@ -14,7 +14,6 @@ from src.reporting.risk_control_evidence import (
     risk_control_evidence_assessment_json,
 )
 
-
 REQUIRED_POLICIES = (
     "max_position_notional",
     "max_daily_loss",
