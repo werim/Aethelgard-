@@ -21,10 +21,11 @@ RESEARCH_ONLY
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
 - Verified `dev` HEAD before Gate 5A-3: `e360452f84251084d3f156fd6c37933e6198c22b`
+- Verified Gate 5A-3 green-by-user-report head: `9d428bd0855f30e20f6bed7009f11d7a681b4af7`
 - Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
-- Connector-visible workflow evidence for the final Gate 5A-3 head: unavailable until connector or user-provided CI evidence reports it
+- Connector-visible workflow evidence for the final Gate 5A-3 head: unavailable through connector; user reported CI green
 
 ## Current Ledger Position
 
@@ -47,7 +48,7 @@ Current documented sequence includes:
 - Gate 5A-1A diagnostics tuple typing repair and user-reported green validation evidence
 - Gate 5A-1B PROJECT_STATE safety-boundary phrase reconciliation and user-reported green validation evidence
 - Gate 5A-2 CI evidence adapter and user-reported green validation evidence
-- Gate 5A-3 audit/runtime reconciliation evidence adapter
+- Gate 5A-3 audit/runtime reconciliation evidence adapter and user-reported green validation evidence
 
 ## Prior Ledger Evidence Retained
 
@@ -55,7 +56,7 @@ Gate 4B-5A — VERSION ledger reconciliation.
 
 Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
 
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, and Gate 5A-2 markers remain present as regression anchors while Gate 5A-3 records the latest safe increment.
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, Gate 5A-2, and Gate 5A-3 markers remain present as regression anchors.
 
 ## Latest Safe Increment Selected
 
@@ -73,6 +74,7 @@ Gate 5A-3 adds an offline, deterministic adapter that turns caller-supplied pers
 - `tests/test_audit_runtime_evidence.py` was added for measured reconciliation, missing report, reconciliation issues, empty matched decisions, missing source, Gate 5A integration, and deterministic JSON safety.
 - `docs/gates/gate5a_audit_runtime_evidence.md` was added for Gate 5A-3.
 - Package version was kept at `0.22.0` so the existing VERSION/CHANGELOG heading contract remains stable for this small adapter extension.
+- User reported `Green` after Gate 5A-3 CI validation.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -84,7 +86,7 @@ Gate 5A-3 adds an offline, deterministic adapter that turns caller-supplied pers
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local full-repository pytest execution in this execution environment.
-- Final branch-head GitHub Actions evidence until CI reports.
+- Connector-visible final branch-head GitHub Actions evidence; user-reported CI green is recorded separately as measured user evidence.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
@@ -117,6 +119,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A-3 is green in CI, the next safe increment should remain small and fail-closed: either wire measured artifact inputs into the Gate 5A evidence matrix or add a focused risk-control enforcement evidence adapter.
+After Gate 5A-3 green validation evidence is recorded, the next safe increment should remain small and fail-closed: either wire measured artifact inputs into the Gate 5A evidence matrix or add a focused risk-control enforcement evidence adapter.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
