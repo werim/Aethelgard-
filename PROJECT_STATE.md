@@ -25,7 +25,7 @@ RESEARCH_ONLY
 - Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
-- Connector-visible CI remains UNAVAILABLE for the final Gate 5A-3 and Gate 5A-4 heads; user-reported green validation evidence is not connector-visible workflow evidence.
+- connector-visible CI remains UNAVAILABLE for the final Gate 5A-3 and Gate 5A-4 heads; user-reported green validation evidence is not connector-visible workflow evidence.
 
 ## Current Ledger Position
 
@@ -92,7 +92,7 @@ Gate 5A-4 records these Gate 5A-3 counterparts:
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local full-repository pytest execution in this execution environment.
-- Connector-visible CI remains UNAVAILABLE; user-reported green validation evidence is recorded separately as measured user evidence.
+- connector-visible CI remains UNAVAILABLE; user-reported green validation evidence is recorded separately as measured user evidence.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
