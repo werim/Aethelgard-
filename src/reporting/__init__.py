@@ -31,6 +31,14 @@ from src.reporting.performance_boundary import (
     guarded_performance_report_payload,
     metric_publication_eligibility_json,
 )
+from src.reporting.risk_control_evidence import (
+    RiskControlEnforcementEvidence,
+    RiskControlEvidenceAssessment,
+    RiskControlEvidenceStatus,
+    RiskControlPolicyEvidence,
+    assess_risk_control_enforcement_for_gate5a,
+    risk_control_evidence_assessment_json,
+)
 
 __all__ = [
     "DeploymentBlockerMatrixRow",
@@ -46,8 +54,13 @@ __all__ = [
     "PaperDbAuditIssue",
     "PaperDbAuditReport",
     "PaperDbAuditStatus",
+    "RiskControlEnforcementEvidence",
+    "RiskControlEvidenceAssessment",
+    "RiskControlEvidenceStatus",
+    "RiskControlPolicyEvidence",
     "assert_operational_deployment_not_blocked",
     "assert_paper_db_audit_clean",
+    "assess_risk_control_enforcement_for_gate5a",
     "audit_paper_runtime_database",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",
@@ -58,4 +71,5 @@ __all__ = [
     "paper_db_audit_json",
     "render_deployment_blocker_matrix_markdown",
     "render_paper_db_audit_markdown",
+    "risk_control_evidence_assessment_json",
 ]
