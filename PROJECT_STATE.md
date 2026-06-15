@@ -21,6 +21,7 @@ RESEARCH_ONLY
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
 - Verified `dev` HEAD before Gate 5A-5: `abb10911765ef53cdcb24fa08a4739151b0da739`
+- Verified Gate 5A-5 green-by-user-report head after Ruff import-block repair: `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`
 - Verified Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Verified Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Verified Gate 5A-3 green-by-user-report head: `9d428bd0855f30e20f6bed7009f11d7a681b4af7`
@@ -53,7 +54,7 @@ Current documented sequence includes:
 - Gate 5A-2 CI evidence adapter and user-reported green validation evidence
 - Gate 5A-3 audit/runtime reconciliation evidence adapter and user-reported green validation evidence
 - Gate 5A-4 evidence ledger consistency audit and user-reported green validation evidence
-- Gate 5A-5 risk-control enforcement evidence adapter
+- Gate 5A-5 risk-control enforcement evidence adapter and user-reported green validation evidence
 
 ## Prior Ledger Evidence Retained
 
@@ -76,7 +77,7 @@ Gate 5A-5 records these counterparts:
 - `docs/gates/gate5a_risk_control_evidence.md`
 - `src/reporting/__init__.py`
 
-Gate 5A-5 is implemented pending validation. No local or connector-visible CI result has been observed for the final Gate 5A-5 head in this execution environment.
+Gate 5A-5 has user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49` after the Ruff import-block repair. This is measured user evidence, not connector-visible workflow evidence.
 
 ## Evidence Classification
 
@@ -88,6 +89,7 @@ Gate 5A-5 is implemented pending validation. No local or connector-visible CI re
 - `tests/test_risk_control_evidence.py` was added.
 - `docs/gates/gate5a_risk_control_evidence.md` was added.
 - `src/reporting.__all__` now exposes the Gate 5A-5 risk-control evidence adapter.
+- Gate 5A-5 green is recorded as user-reported green validation evidence for `07becd0c773cde6a50c40c5d9c4fe5da4c29ad49`.
 - Package version was kept at `0.22.0` for this Gate 5A adapter increment.
 - Gate 5A-4 retains user-reported green validation evidence; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
@@ -132,10 +134,10 @@ black --check .
 mypy .
 ```
 
-Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-5 validation remains unavailable until CI or a mutable clone reports it.
+Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-5 green remains user-reported green validation evidence, not connector-visible workflow evidence.
 
 ## Next Recommended Step
 
-After Gate 5A-5 validation evidence is available, the next safe increment should remain small and fail-closed: record validation evidence or add a measured data-freshness evidence adapter.
+After Gate 5A-5 validation evidence is recorded, the next safe increment should remain small and fail-closed: add a measured data-freshness evidence adapter or a focused ledger consistency guard for Gate 5A-5 evidence language.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
