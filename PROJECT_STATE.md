@@ -21,6 +21,8 @@ RESEARCH_ONLY
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
 - Verified `dev` HEAD before Gate 5A-4: `c8b5b1852f297863940f45b7e927a35bf983cd88`
+- Verified Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
+- Verified Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Verified Gate 5A-3 green-by-user-report head: `9d428bd0855f30e20f6bed7009f11d7a681b4af7`
 - Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
@@ -49,7 +51,7 @@ Current documented sequence includes:
 - Gate 5A-1B PROJECT_STATE safety-boundary phrase reconciliation and user-reported green validation evidence
 - Gate 5A-2 CI evidence adapter and user-reported green validation evidence
 - Gate 5A-3 audit/runtime reconciliation evidence adapter and user-reported green validation evidence
-- Gate 5A-4 evidence ledger consistency audit
+- Gate 5A-4 evidence ledger consistency audit and user-reported green validation evidence
 
 ## Prior Ledger Evidence Retained
 
@@ -71,6 +73,8 @@ Gate 5A-4 records these Gate 5A-3 counterparts:
 - `tests/test_audit_runtime_evidence.py`
 - `docs/gates/gate5a_audit_runtime_evidence.md`
 
+Gate 5A-4 now has user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the `VERSION.md` Gate 4B-5 anchor repair. This is measured user evidence, not connector-visible workflow evidence.
+
 ## Evidence Classification
 
 ### MEASURED
@@ -79,6 +83,8 @@ Gate 5A-4 records these Gate 5A-3 counterparts:
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-3 documentation, and package metadata were read from `dev` before Gate 5A-4.
 - `tests/test_evidence_ledger_consistency.py` was added for version, evidence-language, Gate 5A-3 counterpart, and safety-phrase consistency.
 - `docs/gates/gate5a_evidence_ledger.md` was added for Gate 5A-4.
+- `VERSION.md` restored Gate 4B-5 and Gate 4B-5A anchors at `e6b4f28285da0a488e40f84ff47395b89059ff11`.
+- Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11`.
 - Package version was kept at `0.22.0` for this ledger-only guard.
 - Gate 5A-3 retains user-reported green validation evidence.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
@@ -101,8 +107,6 @@ Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
 Gate 5A-4 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
-Gate 5A-4 does not read local databases, mutate audit artifacts, run a PAPER runtime, request secrets, compute performance, place exchange orders, enable live trading, or approve production readiness.
-
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
 ## Validation Required For This Increment
@@ -122,7 +126,7 @@ black --check .
 mypy .
 ```
 
-Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here.
+Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-4 green remains user-reported green validation evidence, not connector-visible workflow evidence.
 
 ## Next Recommended Step
 
