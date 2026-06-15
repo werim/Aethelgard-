@@ -152,7 +152,11 @@ def _data_freshness_diagnostics(
         diagnostics=diagnostics,
     )
 
-    if expected_selector and observed_selector and expected_selector != observed_selector:
+    if (
+        expected_selector
+        and observed_selector
+        and expected_selector != observed_selector
+    ):
         diagnostics.append(
             "data selector mismatch: expected "
             f"{expected_selector!r}, observed {observed_selector!r}"
