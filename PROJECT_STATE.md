@@ -111,9 +111,9 @@ Gate 5A-6 is implemented pending validation. No local or connector-visible CI re
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-6 does not fetch market data, connect to exchanges, change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-6 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
-Gate 5A-6 does not place exchange orders.
+Gate 5A-6 does not fetch market data, connect to exchanges, or place exchange orders.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
