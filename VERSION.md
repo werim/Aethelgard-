@@ -17,6 +17,7 @@
 - Gate 5A-3 retains user-reported green validation evidence, while connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 - Gate 5A-4 evidence ledger consistency audit preserves package-version, implementation-counterpart, unavailable-evidence, and safety-boundary wording across `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, and `docs/gates/gate5a_evidence_ledger.md`.
 - Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A VERSION ledger reconciliation remain recorded as current regression anchors for the version ledger.
+- Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the Gate 4B-5 VERSION anchor repair.
 - Advanced package version to `0.22.0` for Gate 5A-2 and kept it stable for Gate 5A-3 and Gate 5A-4.
 - Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
 
@@ -27,6 +28,7 @@
 - `MEASURED`: connector writes added Gate 5A-4 focused test, documentation, and ledger updates on `dev`.
 - `MEASURED`: Gate 5A-3 user-reported green validation evidence remains recorded as measured user evidence.
 - `MEASURED`: Gate 4B-5 and Gate 4B-5A version-ledger regression anchors are restored in `VERSION.md` after CI reported their absence.
+- `MEASURED`: Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11`.
 - `UNAVAILABLE`: connector-visible CI remains UNAVAILABLE and user-reported green validation evidence is not connector-visible workflow evidence.
 - `UNAVAILABLE`: direct mutable local clone evidence because repository operations were performed through the GitHub connector.
 - `UNAVAILABLE`: exact branch-head full-repository local validation, Ruff, Black, and Mypy in this execution environment.
@@ -40,7 +42,7 @@
 - Preserved the Gate 5A deployment-blocker matrix behavior: only `MEASURED` evidence clears required PAPER operational diagnostic blocker rows.
 - Added focused tests covering duplicate evidence, unsupported evidence, empty and non-canonical blocker IDs, empty summaries, and empty sources.
 - Advanced package version to `0.21.1`.
-- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no LIVE readiness, and no production-readiness approval.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no LIVE readiness, and no production-readiness approval.
 
 ## Validation evidence
 
