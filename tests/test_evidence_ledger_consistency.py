@@ -10,12 +10,19 @@ LEDGER_PATHS = (
     "VERSION.md",
     "CHANGELOG.md",
     "docs/gates/gate5a_evidence_ledger.md",
+    "docs/gates/gate5a_workflow_artifact_evidence_ledger.md",
 )
 
 GATE5A3_IMPLEMENTED_FILES = (
     "src/reporting/audit_runtime_evidence.py",
     "tests/test_audit_runtime_evidence.py",
     "docs/gates/gate5a_audit_runtime_evidence.md",
+)
+
+GATE5A6_IMPLEMENTED_FILES = (
+    "src/reporting/data_freshness_evidence.py",
+    "tests/test_data_freshness_evidence.py",
+    "docs/gates/gate5a_data_freshness_evidence.md",
 )
 
 SAFETY_PHRASES = (
@@ -28,6 +35,9 @@ SAFETY_PHRASES = (
     "place exchange orders",
     "production readiness",
 )
+
+GATE5A6_GREEN_HEAD = "3f5cb4ea89fa3c12661e020d802796439d3a064c"
+GREEN_RUN_NUMBERS = ("309", "310", "311", "312", "313")
 
 
 def _read(path: str) -> str:
@@ -62,6 +72,30 @@ def test_gate5a3_implemented_claim_has_source_test_and_doc_counterparts() -> Non
     for path in GATE5A3_IMPLEMENTED_FILES:
         assert (PROJECT_ROOT / path).exists(), f"{path} is missing"
         assert path in combined_ledger, f"{path} missing from ledger text"
+
+
+def test_gate5a6_implemented_claim_has_source_test_and_doc_counterparts() -> None:
+    combined_ledger = "\n".join(_read(path) for path in LEDGER_PATHS)
+
+    for path in GATE5A6_IMPLEMENTED_FILES:
+        assert (PROJECT_ROOT / path).exists(), f"{path} is missing"
+        assert path in combined_ledger, f"{path} missing from ledger text"
+
+
+def test_gate5a7_keeps_workflow_artifact_evidence_unavailable() -> None:
+    combined_ledger = "\n".join(_read(path) for path in LEDGER_PATHS)
+
+    assert "Gate 5A-7 workflow artifact evidence ledger" in combined_ledger
+    assert GATE5A6_GREEN_HEAD in combined_ledger
+    assert "Commit title: `Gate 5A-6: apply black formatting" in combined_ledger
+    assert "connector-visible workflow evidence remains unavailable" in (
+        combined_ledger.lower()
+    )
+    assert "not connector-visible workflow evidence" in combined_ledger.lower()
+    assert "direct workflow artifact proof" in combined_ledger
+
+    for run_number in GREEN_RUN_NUMBERS:
+        assert run_number in combined_ledger
 
 
 def test_green_evidence_language_cannot_become_connector_ci_claim() -> None:
