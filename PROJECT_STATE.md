@@ -20,14 +20,14 @@ RESEARCH_ONLY
 
 - Repository: `werim/Aethelgard-`
 - Target branch: `dev`
-- Verified `dev` HEAD before Gate 5A-4: `c8b5b1852f297863940f45b7e927a35bf983cd88`
+- Verified `dev` HEAD before Gate 5A-5: `abb10911765ef53cdcb24fa08a4739151b0da739`
 - Verified Gate 5A-4 version-ledger repair head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Verified Gate 5A-4 green-by-user-report head: `e6b4f28285da0a488e40f84ff47395b89059ff11`
 - Verified Gate 5A-3 green-by-user-report head: `9d428bd0855f30e20f6bed7009f11d7a681b4af7`
 - Verified Gate 5A-2 green-by-user-report head: `53fbb4ddbc8d53f3b18b00150b9c7cf84fe57040`
 - Branch evidence source: direct GitHub compare/read operations against `dev`
 - Mutable local clone validation in this execution environment: unavailable
-- connector-visible CI remains UNAVAILABLE for the final Gate 5A-3 and Gate 5A-4 heads; user-reported green validation evidence is not connector-visible workflow evidence.
+- connector-visible CI remains UNAVAILABLE for the final Gate 5A-5 head until CI or a mutable clone reports it.
 
 ## Current Ledger Position
 
@@ -52,6 +52,7 @@ Current documented sequence includes:
 - Gate 5A-2 CI evidence adapter and user-reported green validation evidence
 - Gate 5A-3 audit/runtime reconciliation evidence adapter and user-reported green validation evidence
 - Gate 5A-4 evidence ledger consistency audit and user-reported green validation evidence
+- Gate 5A-5 risk-control enforcement evidence adapter
 
 ## Prior Ledger Evidence Retained
 
@@ -59,34 +60,35 @@ Gate 4B-5A — VERSION ledger reconciliation.
 
 Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
 
-The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, Gate 5A-2, Gate 5A-3, and Gate 5A-4 markers remain present as regression anchors.
+The Gate 4B-5, Gate 4B-5A, Gate 4CLOSE-1B, Gate 4CLOSE-1C, Gate 5A, Gate 5A-1, Gate 5A-1A, Gate 5A-1B, Gate 5A-2, Gate 5A-3, Gate 5A-4, and Gate 5A-5 markers remain present as regression anchors.
 
 ## Latest Safe Increment Selected
 
-Gate 5A-4 — Evidence Ledger Consistency Audit.
+Gate 5A-5 — Risk-Control Enforcement Evidence Adapter.
 
-Gate 5A-4 adds a focused fail-closed test and documentation ledger so user-reported green validation evidence cannot drift into a connector-visible CI claim. It keeps package version, Gate 5A-3 source/test/doc counterparts, safety phrases, and unavailable-evidence language aligned.
+Gate 5A-5 adds a focused fail-closed adapter and documentation ledger so caller-supplied risk-control policy evidence can be classified for the Gate 5A `risk_control_enforcement` blocker.
 
-Gate 5A-4 records these Gate 5A-3 counterparts:
+Gate 5A-5 records these counterparts:
 
-- `src/reporting/audit_runtime_evidence.py`
-- `tests/test_audit_runtime_evidence.py`
-- `docs/gates/gate5a_audit_runtime_evidence.md`
+- `src/reporting/risk_control_evidence.py`
+- `tests/test_risk_control_evidence.py`
+- `docs/gates/gate5a_risk_control_evidence.md`
+- `src/reporting/__init__.py`
 
-Gate 5A-4 now has user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11` after the `VERSION.md` Gate 4B-5 anchor repair. This is measured user evidence, not connector-visible workflow evidence.
+Gate 5A-5 is implemented pending validation. No local or connector-visible CI result has been observed for the final Gate 5A-5 head in this execution environment.
 
 ## Evidence Classification
 
 ### MEASURED
 
-- `dev` resolved through direct GitHub compare/read evidence before Gate 5A-4.
-- `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-3 documentation, and package metadata were read from `dev` before Gate 5A-4.
-- `tests/test_evidence_ledger_consistency.py` was added for version, evidence-language, Gate 5A-3 counterpart, and safety-phrase consistency.
-- `docs/gates/gate5a_evidence_ledger.md` was added for Gate 5A-4.
-- `VERSION.md` restored Gate 4B-5 and Gate 4B-5A anchors at `e6b4f28285da0a488e40f84ff47395b89059ff11`.
-- Gate 5A-4 green is recorded as user-reported green validation evidence for `e6b4f28285da0a488e40f84ff47395b89059ff11`.
-- Package version was kept at `0.22.0` for this ledger-only guard.
-- Gate 5A-3 retains user-reported green validation evidence.
+- `dev` resolved through direct GitHub compare/read evidence before Gate 5A-5.
+- `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, Gate 5A-4 documentation, and package metadata were read from `dev` before Gate 5A-5.
+- `src/reporting/risk_control_evidence.py` was added.
+- `tests/test_risk_control_evidence.py` was added.
+- `docs/gates/gate5a_risk_control_evidence.md` was added.
+- `src/reporting.__all__` now exposes the Gate 5A-5 risk-control evidence adapter.
+- Package version was kept at `0.22.0` for this Gate 5A adapter increment.
+- Gate 5A-4 retains user-reported green validation evidence.
 - The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
 
 ### MODELED
@@ -98,14 +100,14 @@ Gate 5A-4 now has user-reported green validation evidence for `e6b4f28285da0a488
 - Exact local `git status` from a mutable clone in this execution environment.
 - Exact branch-head full local command execution in this execution environment.
 - Local full-repository pytest execution in this execution environment.
-- connector-visible CI remains UNAVAILABLE; user-reported green validation evidence is recorded separately as measured user evidence.
+- connector-visible CI for the final Gate 5A-5 head.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
 
 ## Current Safety Boundary
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-4 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-5 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -113,12 +115,13 @@ Unknown execution costs are not zero. Missing evidence remains unavailable. Back
 
 ```bash
 python -m compileall -q src tests main.py
+pytest -q tests/test_risk_control_evidence.py
+pytest -q tests/test_public_exports.py
 pytest -q tests/test_evidence_ledger_consistency.py
 pytest -q tests/test_validation_command_ledger_consistency.py
 pytest -q tests/test_gate4_completion_evidence_matrix.py
 pytest -q tests/test_gate4_public_safety_exports.py
 pytest -q tests/test_cost_evidence.py
-pytest -q tests/test_public_exports.py
 pytest -q tests/test_audit_runtime_evidence.py
 pytest -q
 ruff check .
@@ -126,10 +129,10 @@ black --check .
 mypy .
 ```
 
-Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-4 green remains user-reported green validation evidence, not connector-visible workflow evidence.
+Any command not directly run in this execution environment remains local-execution `UNAVAILABLE` here. Gate 5A-5 validation remains unavailable until CI or a mutable clone reports it.
 
 ## Next Recommended Step
 
-After Gate 5A-4 validation evidence is available, the next safe increment should remain small and fail-closed: either wire measured artifact inputs into the Gate 5A evidence matrix or add a focused risk-control enforcement evidence adapter.
+After Gate 5A-5 validation evidence is available, the next safe increment should remain small and fail-closed: record validation evidence or add a measured data-freshness evidence adapter.
 
 No optimizer, non-paper exchange mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.
