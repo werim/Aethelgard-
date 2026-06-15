@@ -128,8 +128,7 @@ def test_malformed_data_freshness_evidence_remains_unavailable() -> None:
     assert assessment.status is DataFreshnessEvidenceStatus.UNAVAILABLE
     assert "data-freshness evidence source is missing" in assessment.diagnostics
     assert (
-        "data-freshness dataset id ' binance_futures_klines_1m' "
-        "is non-canonical"
+        "data-freshness dataset id ' binance_futures_klines_1m' " "is non-canonical"
     ) in assessment.diagnostics
     assert "data-freshness expected selector id is missing" in assessment.diagnostics
     assert "data-freshness latest closed bar timestamp is missing" in (
