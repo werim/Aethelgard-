@@ -10,24 +10,31 @@ This repository is not a profit promise and not a live trading system.
 
 ## Non-negotiable safety boundary
 
-- Default and permitted operational mode is `PAPER_ONLY` / `RESEARCH_ONLY` unless a future, separately reviewed governance change states otherwise.
-- Never enable LIVE trading.
-- Never create code paths that submit real exchange orders.
-- Never store or expose credentials, tokens, API secrets, or private data.
-- Never fabricate alpha, profitability, fills, readiness, validation, costs, or market evidence.
-- Unknown execution costs are not zero; record them as unavailable or modeled assumptions.
-- Missing, stale, corrupt, contradictory, or unverifiable critical evidence must fail closed.
+* Default and permitted operational mode is `PAPER_ONLY` / `RESEARCH_ONLY` unless a future, separately reviewed governance change states otherwise.
+* Never enable LIVE trading.
+* Never create code paths that submit real exchange orders.
+* Never store or expose credentials, tokens, API secrets, or private data.
+* Never fabricate alpha, profitability, fills, readiness, validation, costs, or market evidence.
+* Unknown execution costs are not zero; record them as unavailable or modeled assumptions.
+* Missing, stale, corrupt, contradictory, or unverifiable critical evidence must fail closed.
 
 ## Branch and task discipline
 
-- Start every implementation task from the current remote `dev` branch.
-- Refresh repository state before any edit.
-- Inspect active pull requests affecting `dev` and avoid duplicate work.
-- Do not assume the repository is still at a prior milestone. Establish the actual baseline first.
-- Implement exactly one smallest coherent next increment per task.
-- Do not broaden scope, begin later subsystems early, or refactor unrelated stable code.
-- Use a feature branch for each increment and target `dev` with one focused PR.
-- Never merge automatically unless the human repository owner explicitly enables that policy after reviewing the safety implications.
+* The canonical integration branch for this project is `dev`.
+* Implementation PRs should target `dev` unless the human repository owner explicitly selects another base branch for the task.
+* In normal Git environments, start every implementation task from the current remote `dev` branch and refresh repository state before any edit.
+* In Codex or other managed sandbox environments, the local checkout may be on a temporary branch such as `work`, and `origin` may be unavailable or hidden.
+* Do not stop solely because the local branch is named `work`.
+* Do not stop solely because `git remote -v` shows no `origin`, if the Codex task UI or connector-selected repository and base branch identify the intended repository and branch.
+* Treat the Codex-selected repository and base branch as the authoritative starting target when local remote metadata is unavailable.
+* Still record the observed local branch, commit SHA, working tree status, and whether remote/CI evidence was visible.
+* If remote, PR, or CI visibility is unavailable, classify that evidence as `UNAVAILABLE`; do not fabricate it.
+* Inspect active pull requests affecting the selected base branch when PR visibility is available.
+* Do not assume the repository is still at a prior milestone. Establish the actual baseline from the checked-out files first.
+* Implement exactly one smallest coherent next increment per task.
+* Do not broaden scope, begin later subsystems early, or refactor unrelated stable code.
+* Use a feature branch for each increment when the environment supports branch creation; otherwise make changes in the managed Codex workspace branch and target the selected base branch with one focused PR.
+* Never merge automatically unless the human repository owner explicitly enables that policy after reviewing the safety implications.
 
 ## Required starting inspection for every run
 
@@ -42,37 +49,48 @@ Before modifying code, read and reconcile:
 7. root project/tooling configuration
 8. workflows/CI definitions
 9. the relevant `src/`, `tests/`, `config/`, `reports/`, and `data/` boundaries
-10. open PRs, branch/head status, and visible CI status for the starting `dev` commit
+10. open PRs, branch/head status, and visible CI status for the selected base branch when available
 
 Record in the task summary:
 
-- repository URL
-- starting branch
-- starting commit SHA
-- working tree status
-- open PRs relevant to `dev`
-- visible CI/workflow status
-- authoritative milestone discovered from repository documentation
-- the single chosen next increment and why it is the smallest safe step
+* repository URL
+* selected repository and selected base branch
+* observed local branch
+* starting commit SHA
+* working tree status
+* open PRs relevant to the selected base branch, or `UNAVAILABLE`
+* visible CI/workflow status, or `UNAVAILABLE`
+* authoritative milestone discovered from repository documentation
+* the single chosen next increment and why it is the smallest safe step
 
-If repository access, branch access, required-file access, write access, or test execution is unavailable, stop implementation and report the blocker truthfully.
+If repository identity, selected base branch, required-file access, write access, or local test execution is unavailable, stop implementation and report the blocker truthfully.
+
+In Codex or managed sandbox environments, missing `origin` remote metadata or a temporary local branch name such as `work` is not by itself a blocker, provided that:
+
+* the selected repository is unambiguous
+* the selected base branch is unambiguous
+* required files can be inspected locally
+* the working tree is clean before edits
+* the requested change does not violate the `PAPER_ONLY` / `RESEARCH_ONLY` / `NOT_LIVE_READY` boundary
+
+When remote PR or CI evidence cannot be inspected, continue only if the task can be safely completed from local repository evidence, and classify PR/CI evidence as `UNAVAILABLE`.
 
 ## Architecture boundaries
 
 Maintain separated responsibilities:
 
-- `src/data`
-- `src/features`
-- `src/strategies`
-- `src/risk`
-- `src/execution`
-- `src/backtest`
-- `src/persistence`
-- `src/reporting`
-- `tests`
-- `config`
-- `reports`
-- `data`
+* `src/data`
+* `src/features`
+* `src/strategies`
+* `src/risk`
+* `src/execution`
+* `src/backtest`
+* `src/persistence`
+* `src/reporting`
+* `tests`
+* `config`
+* `reports`
+* `data`
 
 Do not collapse unrelated responsibilities into one file or create speculative abstractions.
 
@@ -98,14 +116,14 @@ Later stages must not be implemented merely because they are interesting. A late
 
 Historical market-data work must validate and test as applicable:
 
-- timestamp format, ordering, interval alignment, duplicates, and gaps
-- malformed/non-finite/negative numeric fields and OHLC consistency
-- request selectors and timeframe/interval consistency
-- provenance and fetch metadata
-- deterministic hashes and immutable local artifact readback
-- stale-data rejection
-- pagination boundaries, retry behavior, rate-limit handling, and deterministic acquisition behavior
-- explicit treatment of unsupported intervals, unavailable external completeness, and exchange/API uncertainty
+* timestamp format, ordering, interval alignment, duplicates, and gaps
+* malformed/non-finite/negative numeric fields and OHLC consistency
+* request selectors and timeframe/interval consistency
+* provenance and fetch metadata
+* deterministic hashes and immutable local artifact readback
+* stale-data rejection
+* pagination boundaries, retry behavior, rate-limit handling, and deterministic acquisition behavior
+* explicit treatment of unsupported intervals, unavailable external completeness, and exchange/API uncertainty
 
 Never claim exchange authenticity or completeness unless evidence directly establishes it.
 
@@ -113,12 +131,12 @@ Never claim exchange authenticity or completeness unless evidence directly estab
 
 When those phases are reached, simulated results must explicitly model or mark unavailable:
 
-- fees
-- spread
-- slippage
-- latency assumptions
-- funding costs where available
-- rejection/non-fill behavior and lifecycle evidence
+* fees
+* spread
+* slippage
+* latency assumptions
+* funding costs where available
+* rejection/non-fill behavior and lifecycle evidence
 
 No cost field may silently default to zero when evidence is missing.
 
@@ -130,28 +148,28 @@ Do not introduce deep learning, aggressive optimization, broad hyperparameter sw
 
 Require, when the strategy stage is reached:
 
-- train/validation/test separation
-- walk-forward validation
-- deterministic seeds and run metadata
-- probabilistic output with uncertainty awareness
-- truthful performance diagnostics after modeled execution costs
+* train/validation/test separation
+* walk-forward validation
+* deterministic seeds and run metadata
+* probabilistic output with uncertainty awareness
+* truthful performance diagnostics after modeled execution costs
 
 ## Risk rules
 
 When risk implementation is the next justified phase, implement and test:
 
-- capped fractional Kelly sizing
-- volatility targeting
-- exposure caps
-- concentration limits
-- drawdown controls
-- regime handling
-- circuit breakers
+* capped fractional Kelly sizing
+* volatility targeting
+* exposure caps
+* concentration limits
+* drawdown controls
+* regime handling
+* circuit breakers
 
 Required daily drawdown circuit breaker:
 
-- if daily drawdown exceeds 3%, close PAPER positions and halt new PAPER entries for 24 hours
-- preserve reconstructable evidence of trigger, actions, and halt period
+* if daily drawdown exceeds 3%, close PAPER positions and halt new PAPER entries for 24 hours
+* preserve reconstructable evidence of trigger, actions, and halt period
 
 ## Required validation after each meaningful increment
 
@@ -173,48 +191,72 @@ If a required test or safety check fails, fix within current scope or stop with 
 
 Update in the same PR:
 
-- `VERSION.md`
-- `CHANGELOG.md`
-- `REPORT.md`
+* `VERSION.md`
+* `CHANGELOG.md`
+* `REPORT.md`
 
 Documentation must distinguish:
 
-- measured evidence
-- modeled/simulated estimates
-- unavailable or unverified evidence
-- remaining blockers
-- what cannot yet be proven
+* measured evidence
+* modeled/simulated estimates
+* unavailable or unverified evidence
+* remaining blockers
+* what cannot yet be proven
 
 No readiness level may be upgraded without supporting evidence.
 
 ## Commit and pull request rules
 
-Each implementation task should produce one coherent branch and focused PR to `dev`.
+Each implementation task should produce one coherent branch and focused PR to the selected base branch, normally `dev`.
 
 PR description must include:
 
-- starting baseline and chosen increment
-- changed files and architectural boundary
-- validation commands actually executed and exact results
-- evidence classification
-- safety boundary confirmation: PAPER-only and no real orders
-- remaining risks and blocked claims
-- next recommended smallest increment
+* starting baseline and chosen increment
+* selected repository and selected base branch
+* observed local branch and starting commit SHA
+* changed files and architectural boundary
+* validation commands actually executed and exact results
+* evidence classification
+* unavailable PR/CI/remote evidence, if any
+* safety boundary confirmation: PAPER-only and no real orders
+* remaining risks and blocked claims
+* next recommended smallest increment
 
 Do not mix unrelated fixes or future roadmap implementation into the same PR.
+Do not create a PR if no files were changed.
+Do not claim remote CI, workflow artifact, or open PR evidence unless it was actually visible and inspected.
 
 ## Review guidelines
 
 Treat the following as release-blocking findings:
 
-- any path capable of live order submission
-- weakened PAPER-only protection
-- silent zero-cost assumptions
-- missing stale-data/reproducibility controls in implemented data boundaries
-- claims unsupported by executed tests or persisted evidence
-- validation leakage or test/validation optimization
-- undocumented changes to risk or readiness classification
-- secrets or credential exposure
+* any path capable of live order submission
+* weakened PAPER-only protection
+* silent zero-cost assumptions
+* missing stale-data/reproducibility controls in implemented data boundaries
+* claims unsupported by executed tests or persisted evidence
+* validation leakage or test/validation optimization
+* undocumented changes to risk or readiness classification
+* secrets or credential exposure
+
+## Codex task guidance
+
+When using Codex or another managed coding agent, include the selected repository and base branch explicitly in the task prompt.
+
+Recommended prompt header:
+
+```text
+Repo: github.com/werim/Aethelgard-
+Base branch: dev
+Mode: PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+Codex workspace may use a temporary local branch named `work`, and `origin` may not be visible.
+Do not stop solely because of local branch name `work` or missing `origin`.
+Use the selected Codex repository and base branch as the authoritative target.
+Classify unavailable remote PR/CI evidence as `UNAVAILABLE`; do not fabricate it.
+```
+
+This Codex compatibility rule does not weaken the safety boundary. It only prevents false blockers caused by managed sandbox branch or remote metadata behavior.
 
 ## Current known baseline note
 
