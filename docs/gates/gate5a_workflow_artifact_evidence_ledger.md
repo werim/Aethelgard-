@@ -10,7 +10,7 @@ Gate 5A-7 records the current validation evidence boundary for Gate 5A-6 without
 
 The original target was to record direct workflow artifact evidence. The GitHub connector workflow lookup for the Gate 5A-6 green-by-user-report head returned no workflow runs, so direct workflow artifact evidence remains unavailable in this environment. Gate 5A-7 therefore records the evidence boundary explicitly instead of fabricating artifact proof.
 
-Gate 5A-4 evidence ledger consistency audit remains the anchor for keeping user-reported green validation separate from connector-visible CI evidence. Connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+Gate 5A-4 evidence ledger consistency audit remains the anchor for keeping user-reported green validation separate from connector-visible CI evidence. connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
 ## Evidence recorded
 
@@ -36,6 +36,7 @@ The focused ledger test must keep these facts visible across the project ledgers
 
 - Gate 5A-7 is documentation/test-only evidence ledger work.
 - Green validation for Gate 5A-6 remains user-reported screenshot evidence.
+- connector-visible CI remains UNAVAILABLE.
 - Connector-visible workflow evidence remains unavailable.
 - Screenshot evidence must not be restated as direct workflow artifact proof.
 - PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY remains unchanged.
