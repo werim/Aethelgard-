@@ -4,7 +4,7 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-7 workflow artifact evidence ledger.
+- Active increment: Gate 5A-8 documentation evidence reconciliation.
 
 ## Baseline
 
@@ -16,12 +16,12 @@
 - Previous safe increment: Gate 5A-6 data-freshness evidence adapter with user-reported green validation evidence.
 - Prior ledger anchors retained: Gate 4B-5 project-state ledger reconciliation, Gate 4B-5A VERSION ledger reconciliation, Gate 5A-4 evidence ledger consistency audit, Gate 5A-5 risk-control evidence, and Gate 5A-6 data-freshness evidence.
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, and Gate 5A evidence docs were read from `dev` before this increment.
-- Mutable local clone validation remains unavailable in this execution environment because repository writes were performed through the GitHub connector.
-- connector-visible CI remains UNAVAILABLE for Gate 5A-7; user-reported green validation is not connector-visible workflow evidence.
+- Local workspace is available for Gate 5A-8 documentation reconciliation; starting branch `work`, starting commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, and clean starting status were observed.
+- Remote `origin`, open PR visibility, selected-base branch refresh, and connector-visible CI remain UNAVAILABLE for Gate 5A-8; user-reported green validation is not connector-visible workflow evidence.
 
-## Gate 5A-7 workflow artifact evidence ledger
+## Gate 5A-8 documentation evidence reconciliation
 
-Gate 5A-7 records the validation evidence boundary for Gate 5A-6. The user-provided screenshot shows GitHub Actions validation runs 309, 310, 311, 312, and 313 green on `dev`, but connector-visible workflow artifacts and job logs remain unavailable.
+Gate 5A-8 compares documented claims against the current local code, tests, and ledger files. It corrects stale local-execution claims from the prior connector-only increment while preserving that the Gate 5A-6 green screenshot is user-reported and not connector-visible workflow evidence. The user-provided screenshot shows GitHub Actions validation runs 309, 310, 311, 312, and 313 green on `dev`, but connector-visible workflow artifacts and job logs remain unavailable.
 
 Implemented files:
 
@@ -48,14 +48,14 @@ Gate 5A-7 keeps the evidence boundary explicit: screenshot-backed green validati
 | Connector workflow lookup | Workflow lookup for `3f5cb4ea89fa3c12661e020d802796439d3a064c` returned no runs | `UNAVAILABLE` connector evidence |
 | Workflow artifacts and job logs | not visible through connector in this increment | `UNAVAILABLE` |
 | Test coverage | `tests/test_evidence_ledger_consistency.py` extended to guard Gate 5A-6 and Gate 5A-7 wording | `MEASURED` connector evidence |
-| Exact branch-head full local command execution | not directly run in this execution environment | `UNAVAILABLE` |
-| Local mutable clone validation | not available in this execution environment | `UNAVAILABLE` |
+| Gate 5A-8 local starting state | branch `work`, commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, clean status | `MEASURED` local evidence |
+| Remote branch refresh and open PR visibility | `origin` is unavailable in this workspace | `UNAVAILABLE` |
 | connector-visible CI | connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence | `UNAVAILABLE` connector evidence |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
 
-Gate 5A-7 is a documentation and regression-coverage evidence ledger only. It does not change runtime behavior, strategy logic, optimizer behavior, cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, market-state mutation, or readiness status.
+Gate 5A-8 is a documentation and regression-coverage evidence reconciliation only. It does not change runtime behavior, strategy logic, optimizer behavior, cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, market-state mutation, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
@@ -88,6 +88,6 @@ Reason: Gate 5A-7 records and guards validation-evidence wording, but it does no
 
 ## Next step
 
-After Gate 5A-7 validation evidence is checked, keep the next safe increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+After Gate 5A-8 validation evidence is checked, keep the next safe increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
 
 No optimizer, non-paper market-state mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.

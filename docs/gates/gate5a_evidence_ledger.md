@@ -10,7 +10,7 @@ Gate 5A-4 adds a fail-closed ledger consistency guard for the evidence language 
 
 The goal is to prevent documentation drift where user-reported green validation evidence is restated as connector-visible CI evidence or readiness evidence.
 
-Gate 5A-7 extends the same guard to `docs/gates/gate5a_workflow_artifact_evidence_ledger.md` so screenshot-backed green validation evidence is not restated as direct workflow artifact proof.
+Gate 5A-7 extends the same guard to `docs/gates/gate5a_workflow_artifact_evidence_ledger.md` so screenshot-backed green validation evidence is not restated as direct workflow artifact proof. Gate 5A-8 preserves those anchors while correcting stale documentation evidence classes against the current local repo state.
 
 ## Evidence boundary
 
@@ -39,6 +39,7 @@ The focused guard in `tests/test_evidence_ledger_consistency.py` checks:
 - Gate 5A-3 source, test, and documentation counterparts;
 - Gate 5A-6 source, test, and documentation counterparts;
 - Gate 5A-7 workflow evidence boundary wording;
+- Gate 5A-8 documentation evidence reconciliation wording;
 - user-reported green evidence language;
 - connector-visible CI remains UNAVAILABLE and not connector-visible workflow evidence;
 - screenshot evidence is not restated as direct workflow artifact proof;
@@ -46,7 +47,7 @@ The focused guard in `tests/test_evidence_ledger_consistency.py` checks:
 
 ## Safety boundary
 
-Gate 5A-4 and Gate 5A-7 are ledger consistency guards only. They do not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+Gate 5A-4, Gate 5A-7, and Gate 5A-8 are ledger consistency guards only. They do not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 

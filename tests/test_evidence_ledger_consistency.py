@@ -31,6 +31,13 @@ SAFETY_PHRASES = (
     "Missing evidence remains unavailable",
     "Backtest performance alone does not prove production readiness",
     "does not change runtime behavior",
+    "strategy logic",
+    "optimizer behavior",
+    "execution-cost modeling",
+    "performance calculation",
+    "PAPER runtime behavior",
+    "exchange mutation",
+    "readiness status",
     "no optimizer",
     "place exchange orders",
     "production readiness",
@@ -113,3 +120,17 @@ def test_safety_boundary_phrases_remain_visible() -> None:
 
     for phrase in SAFETY_PHRASES:
         assert phrase in combined_ledger
+
+
+def test_gate5a8_records_documentation_reconciliation_without_runtime_claims() -> None:
+    combined_ledger = "\n".join(_read(path) for path in LEDGER_PATHS)
+
+    assert "gate 5a-8 documentation evidence reconciliation" in combined_ledger.lower()
+    assert "documentation/test-only evidence reconciliation" in combined_ledger
+    assert "Gate 4B-5" in combined_ledger
+    assert "Gate 4B-5A" in combined_ledger
+    assert "Gate 5A-7" in combined_ledger
+    assert "remote `origin`" in combined_ledger
+    assert "open PR" in combined_ledger
+    assert "direct workflow artifact" in combined_ledger
+    assert "UNAVAILABLE" in combined_ledger

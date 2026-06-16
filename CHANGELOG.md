@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.22.0] - 2026-06-16
+
+### Changed
+
+- Reconciled documentation evidence claims with the current local repository state.
+- Corrected stale connector-only local-validation wording from Gate 5A-7 where this workspace now has measured local branch, commit, working-tree status, and validation-command evidence.
+- Kept connector-visible CI, direct workflow artifacts, workflow logs, remote PR visibility, and `origin` refresh evidence classified as `UNAVAILABLE`.
+- Preserved Gate 4B-5, Gate 4B-5A, Gate 5A-4, Gate 5A-6, and Gate 5A-7 regression anchors.
+
+### Safety
+
+- Documentation/test-only reconciliation; does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
+- Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+### Evidence classification
+
+- `MEASURED`: local branch `work`, starting commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, clean starting working tree, required file inspection, and local validation command outputs for this workspace.
+- `USER_REPORTED`: Gate 5A-6 screenshot-backed green validation remains user-reported and is not connector-visible workflow evidence.
+- `UNAVAILABLE`: remote `origin`, open PRs for `dev`, connector-visible CI, direct workflow artifacts, and workflow job logs.
+
 ## [0.22.0] - 2026-06-14
 
 ### Added

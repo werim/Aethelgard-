@@ -1,5 +1,25 @@
 # Version History
 
+## 0.22.0 - 2026-06-16
+
+**Engineering milestone:** Gate 5A-8 documentation evidence reconciliation.
+
+- Reconciled current documentation claims against local repository code, tests, and evidence ledgers.
+- Corrected stale Gate 5A-7 connector-only local-execution wording where this workspace now provides measured local branch, commit, status, and validation-command evidence.
+- Preserved Gate 4B-5, Gate 4B-5A, Gate 5A-4, Gate 5A-6, and Gate 5A-7 regression anchors.
+- Preserved that Gate 5A-6 green validation remains user-reported screenshot evidence and not connector-visible workflow evidence or direct workflow artifact proof.
+- Package version remains `0.22.0`; this is documentation/test-only evidence reconciliation and does not publish a runtime package increment.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no readiness approval.
+
+## Validation evidence
+
+- `MEASURED`: local workspace inspection observed branch `work`, starting commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, and clean starting status.
+- `MEASURED`: local files under `src/`, `tests/`, `docs/gates/`, and root project ledgers were read before documentation edits.
+- `MEASURED`: Gate 5A-8 changes are limited to documentation and evidence-ledger guard tests.
+- `USER_REPORTED`: Gate 5A-6 green validation remains screenshot/user-reported evidence for runs 309, 310, 311, 312, and 313 on `dev`.
+- `UNAVAILABLE`: remote `origin` fetch/checkout/pull, open PR visibility, connector-visible CI, direct workflow artifacts, and workflow job logs remain unavailable in this workspace.
+- `MODELED`: none.
+
 ## 0.22.0 - 2026-06-14
 
 **Engineering milestone:** Gate 5A-2 CI evidence adapter with Gate 5A-3 audit/runtime evidence adapter, Gate 5A-4 evidence ledger consistency audit, Gate 5A-5 risk-control enforcement evidence adapter, Gate 5A-6 data-freshness evidence adapter, and Gate 5A-7 workflow artifact evidence ledger.

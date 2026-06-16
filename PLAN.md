@@ -54,6 +54,7 @@
 | Gate 5A-5 — Risk-Control Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied risk-control policy evidence maps fail-closed into Gate 5A evidence. |
 | Gate 5A-6 — Data-Freshness Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied freshness/selector evidence maps fail-closed into Gate 5A evidence. |
 | Gate 5A-7 — Workflow Artifact Evidence Ledger | `DOCUMENTED_PENDING_VALIDATION` | Records screenshot-backed green evidence while direct workflow artifacts remain unavailable. |
+| Gate 5A-8 — Documentation Evidence Reconciliation | `DOCUMENTED_PENDING_VALIDATION` | Corrects stale documentation evidence classes without runtime changes. |
 
 ## Gate 5A-7 — Workflow Artifact Evidence Ledger
 
@@ -102,6 +103,21 @@ mypy .
 
 Gate 5A-7 is a documentation and ledger-consistency guard only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
 
+## Gate 5A-8 — Documentation Evidence Reconciliation
+
+**Status:** `DOCUMENTED_PENDING_VALIDATION`.
+
+### Scope
+
+- Compare documentation claims against current local code, tests, and evidence ledgers.
+- Correct stale or over-strong evidence wording only.
+- Preserve Gate 4B-5, Gate 4B-5A, Gate 5A-4, Gate 5A-6, and Gate 5A-7 anchors.
+- Keep connector-visible CI, direct workflow artifacts, workflow job logs, remote PR visibility, and `origin` refresh evidence `UNAVAILABLE` unless directly observed.
+
+### Boundary limit
+
+Gate 5A-8 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
 ## Next recommended step
 
-After Gate 5A-7 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
+After Gate 5A-8 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
