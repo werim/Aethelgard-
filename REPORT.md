@@ -4,6 +4,63 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
+- Active increment: Gate 5A-11 exchange mutation boundary evidence adapter.
+
+## Gate 5A-11 baseline and chosen increment
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch before edits: `work`
+- Starting commit SHA before edits: `0a9a75264d3f31e053b674df710a41c8558436ea`
+- Starting working tree status before edits: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit before edits: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5A-10 PR / Branch-head provenance evidence adapter on package version `0.22.0` with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary.
+- Chosen smallest safe increment: Gate 5A-11 exchange mutation boundary evidence adapter, because Gate 5A-10 hardened repository provenance and the next bounded evidence gap is exchange mutation boundary classification.
+
+## Gate 5A-11 evidence classification
+
+### MEASURED evidence
+
+- Local required repository files and gate documents were read before edits.
+- Local branch, starting commit, and working-tree status were measured before edits.
+- Runtime surfaces under `src/execution`, `src/risk`, `config`, `main.py`, and tests were inspected for exchange mutation surfaces.
+- Gate 5A-11 source, tests, and documentation were added locally.
+
+### USER_REPORTED evidence
+
+- User requested work on GitHub repo `werim/aethelgard-` targeting `dev`.
+- User statements about no live use classify only as `USER_REPORTED_NO_LIVE_USE` unless source, test, exchange-audit, and runtime proof are measured.
+
+### MODELED assumptions
+
+- None.
+
+### UNAVAILABLE evidence
+
+- Remote `origin` refresh evidence is unavailable in this workspace.
+- Open PR visibility for `dev` is unavailable.
+- Connector-visible CI/workflow status, direct workflow artifacts, and job logs for this workspace commit are unavailable.
+- Missing exchange audit evidence remains `UNAVAILABLE_EXCHANGE_AUDIT`; missing runtime proof remains `UNAVAILABLE_RUNTIME_PROOF`.
+
+### VIOLATIONS
+
+- No violation was introduced by Gate 5A-11. The adapter classifies any unguarded real order placement or exchange mutation capability as `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+
+## Safety boundary
+
+Gate 5A-11 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation capability, or readiness status. No live trading is enabled. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
+## Prior report content
+
+# Aethelgard Engineering Report
+
+## Current classification
+
+- Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
+- Operating mode: `PAPER_ONLY`
 - Active increment: Gate 5A-10 PR / Branch-head provenance evidence adapter.
 
 ## Gate 5A-10 baseline and chosen increment

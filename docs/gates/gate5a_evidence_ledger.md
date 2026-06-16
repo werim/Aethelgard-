@@ -87,3 +87,20 @@ Gate 5A-10 preserves these fail-closed evidence boundaries:
 - docs cannot claim merged-to-`dev` unless `MEASURED_MERGED_TO_BRANCH` evidence is present.
 
 Gate 5A-10 is a reporting-boundary/test/documentation increment only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
+
+## Gate 5A-11 exchange mutation boundary evidence note
+
+Gate 5A-11 adds `src/reporting/exchange_mutation_boundary_evidence.py`, `tests/test_exchange_mutation_boundary_evidence.py`, and `docs/gates/gate5a_exchange_mutation_boundary_evidence.md` as the exchange mutation boundary evidence adapter.
+
+Gate 5A-11 preserves these fail-closed evidence boundaries:
+
+- PAPER_ONLY evidence does not imply live readiness.
+- Missing exchange audit evidence remains `UNAVAILABLE_EXCHANGE_AUDIT`.
+- Missing runtime proof remains `UNAVAILABLE_RUNTIME_PROOF`.
+- User-reported no-live-use remains `USER_REPORTED_NO_LIVE_USE`, not measured proof.
+- A measured no-mutation path is classified as `MEASURED_NO_MUTATION_PATH` only from source and test evidence.
+- A guarded PAPER-only mutation surface is classified as `MEASURED_PAPER_ONLY_GUARD` only when source/test evidence, exchange audit evidence, and runtime proof are present.
+- Unguarded exchange mutation capability remains `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+- Docs cannot claim production readiness from exchange mutation boundary evidence.
+
+Gate 5A-11 is a reporting-boundary/test/documentation increment only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation capability, or readiness status.

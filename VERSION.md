@@ -2,6 +2,25 @@
 
 ## 0.22.0 - 2026-06-16
 
+**Engineering milestone:** Gate 5A-11 exchange mutation boundary evidence adapter.
+
+- Added a fail-closed exchange mutation boundary evidence adapter for `MEASURED_NO_MUTATION_PATH`, `MEASURED_PAPER_ONLY_GUARD`, `USER_REPORTED_NO_LIVE_USE`, `UNAVAILABLE_EXCHANGE_AUDIT`, `UNAVAILABLE_RUNTIME_PROOF`, and `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+- Hardened evidence classification so PAPER_ONLY evidence does not imply live readiness, user statements stay user-reported, missing audit/runtime proof stays unavailable, and unguarded mutation surfaces classify as violations.
+- Added focused tests and a Gate 5A-11 ledger document.
+- Package version remains `0.22.0`; this is a reporting-boundary/test/documentation increment and does not publish a runtime package increment.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation capability, no readiness approval.
+
+## Validation evidence
+
+- `MEASURED_LOCAL`: Gate 5A-11 source, tests, and documentation were changed in this workspace.
+- `USER_REPORTED`: user-reported no-live-use statements remain separate from measured source/test/runtime proof.
+- `UNAVAILABLE`: remote `origin`, open PR visibility, connector-visible CI, direct workflow artifacts, missing exchange audit evidence, and missing runtime proof remain unavailable unless directly measured.
+- `VIOLATION`: unguarded exchange mutation capability is classified as `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+- `MODELED`: none.
+
+
+## 0.22.0 - 2026-06-16
+
 **Engineering milestone:** Gate 5A-10 PR / Branch-head provenance evidence adapter.
 
 - Added a fail-closed repository provenance evidence adapter for `USER_REPORTED_PR`, `USER_REPORTED_COMMIT`, `MEASURED_PR_VISIBLE`, `MEASURED_BRANCH_HEAD`, `MEASURED_BRANCH_CONTAINS`, `MEASURED_MERGED_TO_BRANCH`, `UNAVAILABLE_PR_VISIBILITY`, `UNAVAILABLE_BRANCH_REFRESH`, and `UNAVAILABLE_MERGE_EVIDENCE`.
