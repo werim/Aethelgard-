@@ -56,6 +56,14 @@ Current documented sequence includes:
 - Gate 5A-6 data-freshness evidence adapter and user-reported green validation evidence
 - Gate 5A-7 workflow artifact evidence ledger
 
+## Prior Ledger Evidence Retained
+
+Gate 4B-5A — VERSION ledger reconciliation.
+
+Gate 4B-5 was recorded in `CHANGELOG.md`, `REPORT.md`, and `PROJECT_STATE.md`, while `VERSION.md` still described only Gate 4B-0 before the Gate 4B-5A reconciliation.
+
+The Gate 4B-5, Gate 4B-5A, Gate 5A-4 evidence ledger consistency audit, Gate 5A-6, and Gate 5A-7 markers remain present as regression anchors.
+
 ## Latest Safe Increment Selected
 
 Gate 5A-7 — Workflow Artifact Evidence Ledger.
@@ -100,7 +108,7 @@ Gate 5A-7 has user-reported green validation evidence from the screenshot showin
 
 Aethelgard remains PAPER ONLY and RESEARCH ONLY.
 
-Gate 5A-7 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, or readiness status.
+Gate 5A-7 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
 
 Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
