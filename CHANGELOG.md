@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Added Gate 5A-9 CI/validation evidence boundary adapter for `MEASURED_LOCAL`, `USER_REPORTED`, `CONNECTOR_VISIBLE_CI`, and `UNAVAILABLE` provenance.
+- Hardened validation evidence classification so missing workflow runs and empty combined statuses remain `UNAVAILABLE`, and user screenshots/statements remain `USER_REPORTED`.
 - Reconciled documentation evidence claims with the current local repository state.
 - Corrected stale connector-only local-validation wording from Gate 5A-7 where this workspace now has measured local branch, commit, working-tree status, and validation-command evidence.
 - Kept connector-visible CI, direct workflow artifacts, workflow logs, remote PR visibility, and `origin` refresh evidence classified as `UNAVAILABLE`.
@@ -11,11 +13,13 @@
 
 ### Safety
 
+- Gate 5A-9 is reporting-boundary/test/documentation work only; it does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
 - Documentation/test-only reconciliation; does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
 - Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
 
 ### Evidence classification
 
+- `MEASURED_LOCAL`: Gate 5A-9 source/tests/docs changed locally and focused validation evidence boundary tests run in this workspace.
 - `MEASURED`: local branch `work`, starting commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, clean starting working tree, required file inspection, and local validation command outputs for this workspace.
 - `USER_REPORTED`: Gate 5A-6 screenshot-backed green validation remains user-reported and is not connector-visible workflow evidence.
 - `UNAVAILABLE`: remote `origin`, open PRs for `dev`, connector-visible CI, direct workflow artifacts, and workflow job logs.

@@ -26,6 +26,74 @@ class CiEvidenceStatus(StrEnum):
     CI_UNAVAILABLE = "CI_UNAVAILABLE"
 
 
+class ValidationEvidenceSource(StrEnum):
+    """Fail-closed validation evidence source classifications."""
+
+    MEASURED_LOCAL = "MEASURED_LOCAL"
+    USER_REPORTED = "USER_REPORTED"
+    CONNECTOR_VISIBLE_CI = "CONNECTOR_VISIBLE_CI"
+    UNAVAILABLE = "UNAVAILABLE"
+
+
+class ValidationEvidenceStatus(StrEnum):
+    """Validation boundary adapter status values."""
+
+    VALIDATION_MEASURED = "VALIDATION_MEASURED"
+    VALIDATION_USER_REPORTED = "VALIDATION_USER_REPORTED"
+    VALIDATION_UNAVAILABLE = "VALIDATION_UNAVAILABLE"
+
+
+@dataclass(frozen=True)
+class ConnectorCiSnapshot:
+    """Connector-visible CI evidence snapshot for a branch-head commit."""
+
+    commit_sha: str
+    workflow_runs: tuple[CiRunEvidence, ...] = ()
+    combined_status_state: str | None = None
+    status_contexts: tuple[str, ...] = ()
+    source: str = ""
+
+
+@dataclass(frozen=True)
+class UserReportedValidationEvidence:
+    """User-supplied validation statement or screenshot reference."""
+
+    summary: str
+    source: str
+
+
+@dataclass(frozen=True)
+class LocalValidationEvidence:
+    """Locally observed validation command evidence."""
+
+    command: str
+    exit_code: int
+    output_excerpt: str
+    source: str
+
+
+@dataclass(frozen=True)
+class ValidationEvidenceBoundaryAssessment:
+    """Fail-closed classification for validation evidence provenance."""
+
+    status: ValidationEvidenceStatus
+    source_classification: ValidationEvidenceSource
+    gate_classification: OperationalEvidenceClassification
+    diagnostics: tuple[str, ...]
+    evidence_item: OperationalEvidenceItem
+
+    def payload(self) -> dict[str, object]:
+        """Return a deterministic JSON-compatible assessment payload."""
+
+        return {
+            "diagnostics": list(self.diagnostics),
+            "evidence_item": self.evidence_item.payload(),
+            "gate_classification": self.gate_classification.value,
+            "source_classification": self.source_classification.value,
+            "status": self.status.value,
+        }
+
+
 @dataclass(frozen=True)
 class CiJobEvidence:
     """Caller-supplied evidence for one required CI job."""
@@ -125,6 +193,142 @@ def assess_ci_evidence_for_gate5a(
             classification=OperationalEvidenceClassification.MEASURED,
             summary=summary,
             source=run.source,
+        ),
+    )
+
+
+def classify_connector_visible_ci_evidence(
+    snapshot: ConnectorCiSnapshot,
+) -> ValidationEvidenceBoundaryAssessment:
+    """Classify connector-visible CI evidence without promoting empty payloads."""
+
+    diagnostics: list[str] = []
+    if not snapshot.commit_sha.strip():
+        diagnostics.append("connector-visible CI commit_sha is missing")
+    if not snapshot.source.strip():
+        diagnostics.append("connector-visible CI source is missing")
+    if not snapshot.workflow_runs:
+        diagnostics.append("connector-visible CI workflow runs are unavailable")
+    combined_status = snapshot.combined_status_state
+    if combined_status is None or not combined_status.strip():
+        diagnostics.append("connector-visible CI combined status is unavailable")
+    elif combined_status != "success":
+        diagnostics.append(
+            "connector-visible CI combined status state is "
+            f"{combined_status!r}, not 'success'"
+        )
+    if not snapshot.status_contexts:
+        diagnostics.append("connector-visible CI status contexts are unavailable")
+
+    failed_runs = tuple(
+        run
+        for run in snapshot.workflow_runs
+        if run.commit_sha != snapshot.commit_sha or run.conclusion != "success"
+    )
+    for run in failed_runs:
+        if run.commit_sha != snapshot.commit_sha:
+            diagnostics.append(
+                f"workflow {run.workflow_name!r} targets {run.commit_sha!r}, "
+                f"not {snapshot.commit_sha!r}"
+            )
+        if run.conclusion != "success":
+            diagnostics.append(
+                f"workflow {run.workflow_name!r} conclusion is {run.conclusion!r}, "
+                "not 'success'"
+            )
+
+    if diagnostics:
+        return _build_validation_boundary_assessment(
+            status=ValidationEvidenceStatus.VALIDATION_UNAVAILABLE,
+            source_classification=ValidationEvidenceSource.UNAVAILABLE,
+            gate_classification=OperationalEvidenceClassification.UNAVAILABLE,
+            diagnostics=tuple(diagnostics),
+            source=snapshot.source,
+        )
+
+    summary = f"connector-visible CI succeeded for commit {snapshot.commit_sha}"
+    return _build_validation_boundary_assessment(
+        status=ValidationEvidenceStatus.VALIDATION_MEASURED,
+        source_classification=ValidationEvidenceSource.CONNECTOR_VISIBLE_CI,
+        gate_classification=OperationalEvidenceClassification.MEASURED,
+        diagnostics=(summary,),
+        source=snapshot.source,
+    )
+
+
+def classify_user_reported_validation_evidence(
+    evidence: UserReportedValidationEvidence,
+) -> ValidationEvidenceBoundaryAssessment:
+    """Keep screenshots and user statements separate from measured validation."""
+
+    diagnostics = (
+        evidence.summary.strip()
+        or "user-reported validation evidence has an empty summary",
+    )
+    return _build_validation_boundary_assessment(
+        status=ValidationEvidenceStatus.VALIDATION_USER_REPORTED,
+        source_classification=ValidationEvidenceSource.USER_REPORTED,
+        gate_classification=OperationalEvidenceClassification.UNAVAILABLE,
+        diagnostics=diagnostics,
+        source=evidence.source,
+    )
+
+
+def classify_local_validation_evidence(
+    evidence: LocalValidationEvidence,
+) -> ValidationEvidenceBoundaryAssessment:
+    """Classify locally measured command evidence, failing closed on gaps."""
+
+    diagnostics: list[str] = []
+    if not evidence.command.strip():
+        diagnostics.append("local validation command is missing")
+    if evidence.exit_code != 0:
+        diagnostics.append(f"local validation exit code is {evidence.exit_code}, not 0")
+    if not evidence.output_excerpt.strip():
+        diagnostics.append("local validation output excerpt is missing")
+    if not evidence.source.strip():
+        diagnostics.append("local validation source is missing")
+    if diagnostics:
+        return _build_validation_boundary_assessment(
+            status=ValidationEvidenceStatus.VALIDATION_UNAVAILABLE,
+            source_classification=ValidationEvidenceSource.UNAVAILABLE,
+            gate_classification=OperationalEvidenceClassification.UNAVAILABLE,
+            diagnostics=tuple(diagnostics),
+            source=evidence.source,
+        )
+
+    summary = f"local validation command measured: {evidence.command}"
+    return _build_validation_boundary_assessment(
+        status=ValidationEvidenceStatus.VALIDATION_MEASURED,
+        source_classification=ValidationEvidenceSource.MEASURED_LOCAL,
+        gate_classification=OperationalEvidenceClassification.MEASURED,
+        diagnostics=(summary,),
+        source=evidence.source,
+    )
+
+
+def _build_validation_boundary_assessment(
+    *,
+    status: ValidationEvidenceStatus,
+    source_classification: ValidationEvidenceSource,
+    gate_classification: OperationalEvidenceClassification,
+    diagnostics: tuple[str, ...],
+    source: str,
+) -> ValidationEvidenceBoundaryAssessment:
+    safe_source = source.strip() or "UNAVAILABLE: missing validation evidence source"
+    summary = (
+        "; ".join(diagnostics) if diagnostics else "validation evidence unavailable"
+    )
+    return ValidationEvidenceBoundaryAssessment(
+        status=status,
+        source_classification=source_classification,
+        gate_classification=gate_classification,
+        diagnostics=diagnostics,
+        evidence_item=OperationalEvidenceItem(
+            blocker_id="ci_validation",
+            classification=gate_classification,
+            summary=summary,
+            source=safe_source,
         ),
     )
 

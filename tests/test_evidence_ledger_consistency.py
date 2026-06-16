@@ -134,3 +134,17 @@ def test_gate5a8_records_documentation_reconciliation_without_runtime_claims() -
     assert "open PR" in combined_ledger
     assert "direct workflow artifact" in combined_ledger
     assert "UNAVAILABLE" in combined_ledger
+
+
+def test_gate5a9_validation_boundary_keeps_unavailable_ci_unavailable() -> None:
+    gate5a9_paths = (*LEDGER_PATHS, "docs/gates/gate5a_validation_evidence_boundary.md")
+    combined_ledger = "\n".join(_read(path) for path in gate5a9_paths)
+
+    assert "Gate 5A-9 CI/validation evidence boundary adapter" in combined_ledger
+    assert "MEASURED_LOCAL" in combined_ledger
+    assert "USER_REPORTED" in combined_ledger
+    assert "CONNECTOR_VISIBLE_CI" in combined_ledger
+    assert "No workflow runs means `UNAVAILABLE`" in combined_ledger
+    assert "Empty combined status means `UNAVAILABLE`" in combined_ledger
+    assert "Unavailable connector-visible CI is never promoted" in combined_ledger
+    assert "connector-visible ci remains unavailable" in combined_ledger.lower()
