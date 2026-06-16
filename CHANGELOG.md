@@ -4,6 +4,27 @@
 
 ### Changed
 
+- Added Gate 5A-10 PR / Branch-head provenance evidence adapter for PR visibility, branch head, commit ancestry, merge, and unavailable remote evidence classification.
+- Kept user-reported PR and commit evidence separate from measured PR visibility, measured branch containment, and measured merge evidence.
+- Added focused repository provenance tests and Gate 5A-10 evidence-ledger wording.
+
+### Safety
+
+- Gate 5A-10 is reporting-boundary/test/documentation work only; it does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
+- Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+### Evidence classification
+
+- `MEASURED_LOCAL`: Gate 5A-10 source/tests/docs changed locally and validation commands run in this workspace.
+- `USER_REPORTED`: user-reported PR/commit statements remain user-reported and are not measured branch or merge evidence.
+- `UNAVAILABLE`: remote `origin`, open PRs for `dev`, branch refresh evidence, compare/ancestry evidence, connector-visible CI, direct workflow artifacts, and workflow job logs.
+- `MODELED`: none.
+
+
+## [0.22.0] - 2026-06-16
+
+### Changed
+
 - Added Gate 5A-9 CI/validation evidence boundary adapter for `MEASURED_LOCAL`, `USER_REPORTED`, `CONNECTOR_VISIBLE_CI`, and `UNAVAILABLE` provenance.
 - Hardened validation evidence classification so missing workflow runs and empty combined statuses remain `UNAVAILABLE`, and user screenshots/statements remain `USER_REPORTED`.
 - Reconciled documentation evidence claims with the current local repository state.

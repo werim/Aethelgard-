@@ -1,3 +1,29 @@
+# Aethelgard Plan
+
+## Current increment
+
+Gate 5A-10 — PR / Branch-head provenance evidence adapter.
+
+This is the smallest safe next step after Gate 5A-9 because it only hardens repository provenance evidence classification for PR visibility, branch head refresh, commit ancestry, merge evidence, and unavailable remote evidence. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
+
+## Evidence rules preserved
+
+- User-reported PR creation remains `USER_REPORTED_PR`, not `MEASURED_PR_VISIBLE`.
+- User-reported commit evidence remains `USER_REPORTED_COMMIT`, not branch containment or merge evidence.
+- Commit SHA visibility alone is not merge evidence.
+- `dev` containment requires measured branch/compare evidence.
+- Missing PR lookup remains `UNAVAILABLE_PR_VISIBILITY`.
+- Missing branch refresh remains `UNAVAILABLE_BRANCH_REFRESH`.
+- Missing compare/ancestry evidence remains `UNAVAILABLE_MERGE_EVIDENCE`.
+- Docs cannot claim merged-to-`dev` unless measured merge evidence exists.
+
+## Next recommended smallest increment
+
+After Gate 5A-10 is validated, continue with the next missing Gate 5A measured-evidence adapter or ledger consistency hardening. Do not add optimizer behavior, strategy alpha logic, lifecycle simulation expansion, performance calculation changes, exchange mutation, or readiness approval.
+
+
+## Prior report content
+
 # Aethelgard Implementation Ledger
 
 ## Readiness boundary

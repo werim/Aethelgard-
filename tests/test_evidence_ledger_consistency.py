@@ -148,3 +148,20 @@ def test_gate5a9_validation_boundary_keeps_unavailable_ci_unavailable() -> None:
     assert "Empty combined status means `UNAVAILABLE`" in combined_ledger
     assert "Unavailable connector-visible CI is never promoted" in combined_ledger
     assert "connector-visible ci remains unavailable" in combined_ledger.lower()
+
+
+def test_gate5a10_repository_provenance_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5a_pr_branch_provenance_evidence.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5A-10 PR / Branch-head provenance evidence adapter" in combined_ledger
+    assert "src/reporting/repository_provenance_evidence.py" in combined_ledger
+    assert "tests/test_repository_provenance_evidence.py" in combined_ledger
+    assert "USER_REPORTED_PR" in combined_ledger
+    assert "MEASURED_PR_VISIBLE" in combined_ledger
+    assert "UNAVAILABLE_PR_VISIBILITY" in combined_ledger
+    assert "UNAVAILABLE_BRANCH_REFRESH" in combined_ledger
+    assert "UNAVAILABLE_MERGE_EVIDENCE" in combined_ledger
+    assert "MEASURED_MERGED_TO_BRANCH" in combined_ledger
+    assert "commit SHA visibility alone is not merge evidence" in combined_ledger
+    assert "docs cannot claim merged-to-`dev` unless" in combined_ledger

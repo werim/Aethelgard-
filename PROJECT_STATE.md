@@ -6,6 +6,95 @@ Aethelgard
 
 ## Current Mode
 
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Live Status
+
+NOT READY
+
+## Operational Classification
+
+RESEARCH_ONLY
+
+## Current Verified Repository State
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Target branch: `dev`
+- Observed local branch before Gate 5A-10 edits: `work`
+- Starting commit before Gate 5A-10 edits: `7f5e6c5440d82321546abd6e4b6ab0cf1b232598`
+- Starting working tree before Gate 5A-10 edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Remote branch refresh evidence: `UNAVAILABLE_BRANCH_REFRESH`
+- Compare/ancestry and merge evidence for this workspace commit on `dev`: `UNAVAILABLE_MERGE_EVIDENCE`
+- Visible CI/workflow status for this workspace commit: `UNAVAILABLE`
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5A-9 CI/validation evidence boundary adapter and Gate 5A-10 PR / Branch-head provenance evidence adapter. Gate 5A-10 adds fail-closed repository provenance classification for branch-head evidence, PR visibility evidence, merge evidence, commit ancestry evidence, and unavailable remote evidence.
+
+## Evidence Classification
+
+### MEASURED
+
+- Local required repository files were read before Gate 5A-10 edits.
+- Local branch `work`, starting commit `7f5e6c5440d82321546abd6e4b6ab0cf1b232598`, and clean starting working tree were observed before edits.
+- Gate 5A-10 source, tests, and documentation were added locally.
+- The safety boundary remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+
+### USER_REPORTED
+
+- User selected GitHub repo `werim/aethelgard-` and base branch `dev`.
+- User-reported PR and commit statements remain `USER_REPORTED_PR` or `USER_REPORTED_COMMIT` unless directly measured.
+
+### MODELED
+
+- None.
+
+### UNAVAILABLE
+
+- Open PRs relevant to `dev`.
+- Remote `origin` fetch, checkout, pull, and branch refresh evidence.
+- Connector-visible branch compare/ancestry evidence for this workspace commit on `dev`.
+- Merge evidence for this workspace commit on `dev`.
+- Connector-visible CI/workflow status for this workspace commit.
+- Direct workflow artifacts, workflow job logs, and downloaded CI artifacts.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+
+Gate 5A-10 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status. It does not place exchange orders or enable live trading. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Validation Required For This Increment
+
+```bash
+python -m compileall -q src tests main.py
+pytest -q tests/test_repository_provenance_evidence.py
+pytest -q tests/test_evidence_ledger_consistency.py
+pytest -q
+ruff check .
+black --check .
+mypy .
+```
+
+## Next Recommended Step
+
+After Gate 5A-10 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+
+No optimizer, strategy alpha logic, lifecycle simulation expansion, performance calculation, exchange mutation, or readiness approval should be added.
+
+
+## Prior report content
+
+# PROJECT_STATE.md
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
 BACKTEST / PAPER only
 
 ## Live Status
