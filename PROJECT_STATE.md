@@ -25,7 +25,7 @@ RESEARCH_ONLY
 - User-provided screenshot shows validation runs 309, 310, 311, 312, and 313 green on `dev`.
 - Connector workflow lookup for `3f5cb4ea89fa3c12661e020d802796439d3a064c` returned no workflow runs.
 - Branch evidence source: direct GitHub read operations against `dev` and commit metadata lookup.
-- Mutable local clone validation in this execution environment: unavailable
+- Mutable local clone validation from prior connector-only Gate 5A-7 evidence: unavailable for that prior increment
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-6 head until CI or a mutable clone reports it.
 - Gate 5A-7 records user-reported green validation evidence; it is not connector-visible workflow evidence or direct workflow artifact proof.
 
@@ -55,6 +55,7 @@ Current documented sequence includes:
 - Gate 5A-5 risk-control enforcement evidence adapter and user-reported green validation evidence
 - Gate 5A-6 data-freshness evidence adapter and user-reported green validation evidence
 - Gate 5A-7 workflow artifact evidence ledger
+- Gate 5A-8 documentation evidence reconciliation
 
 ## Prior Ledger Evidence Retained
 
@@ -66,22 +67,32 @@ The Gate 4B-5, Gate 4B-5A, Gate 5A-4 evidence ledger consistency audit, Gate 5A-
 
 ## Latest Safe Increment Selected
 
-Gate 5A-7 — Workflow Artifact Evidence Ledger.
+Gate 5A-8 — Documentation Evidence Reconciliation.
 
-Gate 5A-7 records the evidence boundary around Gate 5A-6 green validation. It preserves the distinction between user-reported screenshot evidence and connector-visible workflow artifact evidence.
+Gate 5A-8 compares the repository documentation, tests, and code surfaces and corrects stale execution-environment claims without changing runtime behavior. It preserves the Gate 5A-7 distinction between user-reported screenshot evidence and connector-visible workflow artifact evidence.
 
-Gate 5A-7 records these counterparts:
+Gate 5A-8 reconciles these current documentation and guard counterparts:
 
-- `docs/gates/gate5a_workflow_artifact_evidence_ledger.md`
+- `PROJECT_STATE.md`
+- `REPORT.md`
+- `VERSION.md`
+- `CHANGELOG.md`
+- `PLAN.md`
 - `docs/gates/gate5a_evidence_ledger.md`
+- `docs/gates/gate5a_workflow_artifact_evidence_ledger.md`
 - `tests/test_evidence_ledger_consistency.py`
 
-Gate 5A-7 has user-reported green validation evidence from the screenshot showing validation runs 309 through 313 green on `dev`. Connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+Gate 5A-8 records that the current local workspace is on branch `work` at `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`; `origin` is unavailable, so selected base branch `dev`, open PRs, remote CI, and connector-visible workflow artifacts remain UNAVAILABLE. Gate 5A-7 still has user-reported green validation evidence from the screenshot showing validation runs 309 through 313 green on `dev`. Connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
 
 ## Evidence Classification
 
 ### MEASURED
 
+- Local required repository files were read in this workspace before Gate 5A-8.
+- Local branch before edits: `work`.
+- Local starting commit before edits: `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`.
+- Local starting working tree was clean.
+- Runtime-relevant source modules and tests were inventoried; Gate 5A-8 changes documentation and ledger guards only.
 - `dev` project ledgers were read through the GitHub connector before Gate 5A-7.
 - Commit metadata for `3f5cb4ea89fa3c12661e020d802796439d3a064c` was fetched through the GitHub connector.
 - User-provided screenshot shows validation runs 309, 310, 311, 312, and 313 green on `dev`.
@@ -97,9 +108,9 @@ Gate 5A-7 has user-reported green validation evidence from the screenshot showin
 
 ### UNAVAILABLE
 
-- Exact local `git status` from a mutable clone in this execution environment.
-- Exact branch-head full local command execution in this execution environment.
-- Local full-repository pytest execution in this execution environment.
+- Remote `origin` fetch, checkout, and pull evidence for `dev`; `origin` is unavailable in this workspace.
+- Open PRs relevant to `dev`; remote PR visibility is unavailable.
+- Connector-visible CI/workflow status for this Gate 5A-8 commit.
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-6 head.
 - Direct workflow artifacts, workflow job logs, and downloaded CI artifacts are unavailable through the connector in this increment.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
@@ -135,6 +146,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A-7 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+After Gate 5A-8 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
 
 No optimizer, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.

@@ -69,3 +69,6 @@ mypy .
 ```
 
 Commands unavailable in an environment must be reported as UNAVAILABLE, not passed. Connector writes alone do not prove local or CI validation.
+## Gate 5A-8 reconciliation note
+
+Gate 5A-8 rechecked this ledger against the current local repository state. The Gate 5A-7 workflow artifact boundary remains unchanged: user-reported green evidence is not connector-visible workflow evidence, direct workflow artifact proof remains UNAVAILABLE, and connector-visible CI remains UNAVAILABLE. Gate 5A-8 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
