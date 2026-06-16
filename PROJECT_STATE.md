@@ -56,6 +56,7 @@ Current documented sequence includes:
 - Gate 5A-6 data-freshness evidence adapter and user-reported green validation evidence
 - Gate 5A-7 workflow artifact evidence ledger
 - Gate 5A-8 documentation evidence reconciliation
+- Gate 5A-9 CI/validation evidence boundary adapter
 
 ## Prior Ledger Evidence Retained
 
@@ -67,9 +68,9 @@ The Gate 4B-5, Gate 4B-5A, Gate 5A-4 evidence ledger consistency audit, Gate 5A-
 
 ## Latest Safe Increment Selected
 
-Gate 5A-8 — Documentation Evidence Reconciliation.
+Gate 5A-9 — CI/Validation Evidence Boundary Adapter.
 
-Gate 5A-8 compares the repository documentation, tests, and code surfaces and corrects stale execution-environment claims without changing runtime behavior. It preserves the Gate 5A-7 distinction between user-reported screenshot evidence and connector-visible workflow artifact evidence.
+Gate 5A-9 hardens the validation evidence boundary so MEASURED_LOCAL, USER_REPORTED, CONNECTOR_VISIBLE_CI, and UNAVAILABLE evidence cannot be conflated. It fails closed when workflow runs are missing or combined statuses are empty, and it keeps user screenshots/statements separate from measured validation. Gate 5A-8 compared the repository documentation, tests, and code surfaces and corrected stale execution-environment claims without changing runtime behavior. It preserves the Gate 5A-7 distinction between user-reported screenshot evidence and connector-visible workflow artifact evidence.
 
 Gate 5A-8 reconciles these current documentation and guard counterparts:
 
@@ -88,7 +89,8 @@ Gate 5A-8 records that the current local workspace is on branch `work` at `0e017
 
 ### MEASURED
 
-- Local required repository files were read in this workspace before Gate 5A-8.
+- Local required repository files were read in this workspace before Gate 5A-9.
+- Gate 5A-9 validation evidence boundary adapter source, tests, and documentation were added locally.
 - Local branch before edits: `work`.
 - Local starting commit before edits: `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`.
 - Local starting working tree was clean.
@@ -110,7 +112,8 @@ Gate 5A-8 records that the current local workspace is on branch `work` at `0e017
 
 - Remote `origin` fetch, checkout, and pull evidence for `dev`; `origin` is unavailable in this workspace.
 - Open PRs relevant to `dev`; remote PR visibility is unavailable.
-- Connector-visible CI/workflow status for this Gate 5A-8 commit.
+- Connector-visible CI/workflow status for this Gate 5A-9 commit.
+- Connector-visible combined status and workflow runs for this workspace commit.
 - connector-visible CI remains UNAVAILABLE for the final Gate 5A-6 head.
 - Direct workflow artifacts, workflow job logs, and downloaded CI artifacts are unavailable through the connector in this increment.
 - Atomic multi-file commit evidence: unavailable through the connector contents API used here; files were written as separate connector commits.
@@ -146,6 +149,6 @@ Any command not directly run in this execution environment remains local-executi
 
 ## Next Recommended Step
 
-After Gate 5A-8 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+After Gate 5A-9 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
 
 No optimizer, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.

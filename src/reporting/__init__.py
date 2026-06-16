@@ -1,5 +1,16 @@
 """Aethelgard reporting boundaries for research-only evidence ledgers."""
 
+from src.reporting.ci_evidence import (
+    ConnectorCiSnapshot,
+    LocalValidationEvidence,
+    UserReportedValidationEvidence,
+    ValidationEvidenceBoundaryAssessment,
+    ValidationEvidenceSource,
+    ValidationEvidenceStatus,
+    classify_connector_visible_ci_evidence,
+    classify_local_validation_evidence,
+    classify_user_reported_validation_evidence,
+)
 from src.reporting.data_freshness_evidence import (
     DataFreshnessEvidence,
     DataFreshnessEvidenceAssessment,
@@ -48,11 +59,13 @@ from src.reporting.risk_control_evidence import (
 )
 
 __all__ = [
+    "ConnectorCiSnapshot",
     "DataFreshnessEvidence",
     "DataFreshnessEvidenceAssessment",
     "DataFreshnessEvidenceStatus",
     "DeploymentBlockerMatrixRow",
     "DeploymentBlockerStatus",
+    "LocalValidationEvidence",
     "MetricPublicationEligibility",
     "MetricPublicationStatus",
     "OperationalDeploymentStatus",
@@ -68,11 +81,18 @@ __all__ = [
     "RiskControlEvidenceAssessment",
     "RiskControlEvidenceStatus",
     "RiskControlPolicyEvidence",
+    "UserReportedValidationEvidence",
+    "ValidationEvidenceBoundaryAssessment",
+    "ValidationEvidenceSource",
+    "ValidationEvidenceStatus",
     "assert_operational_deployment_not_blocked",
     "assert_paper_db_audit_clean",
     "assess_data_freshness_for_gate5a",
     "assess_risk_control_enforcement_for_gate5a",
     "audit_paper_runtime_database",
+    "classify_connector_visible_ci_evidence",
+    "classify_local_validation_evidence",
+    "classify_user_reported_validation_evidence",
     "data_freshness_evidence_assessment_json",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",

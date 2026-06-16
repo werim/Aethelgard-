@@ -2,6 +2,24 @@
 
 ## 0.22.0 - 2026-06-16
 
+**Engineering milestone:** Gate 5A-9 CI/validation evidence boundary adapter.
+
+- Added a fail-closed validation evidence boundary adapter for `MEASURED_LOCAL`, `USER_REPORTED`, `CONNECTOR_VISIBLE_CI`, and `UNAVAILABLE` validation provenance.
+- Hardened CI evidence classification so missing workflow runs and empty combined statuses remain `UNAVAILABLE`.
+- Preserved user screenshots and user statements as `USER_REPORTED`, not measured local validation or connector-visible CI.
+- Added focused regression coverage and a Gate 5A-9 ledger document.
+- Package version remains `0.22.0`; this is a reporting-boundary/test/documentation increment and does not publish a runtime package increment.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no readiness approval.
+
+## Validation evidence
+
+- `MEASURED_LOCAL`: Gate 5A-9 source, tests, and documentation were changed in this workspace and focused tests were run locally.
+- `USER_REPORTED`: prior Gate 5A-6 green validation screenshot evidence remains user-reported and separate from measured evidence.
+- `UNAVAILABLE`: remote `origin`, open PR visibility, connector-visible CI, direct workflow artifacts, workflow job logs, and connector-visible combined status for this workspace commit remain unavailable.
+- `MODELED`: none.
+
+## 0.22.0 - 2026-06-16
+
 **Engineering milestone:** Gate 5A-8 documentation evidence reconciliation.
 
 - Reconciled current documentation claims against local repository code, tests, and evidence ledgers.

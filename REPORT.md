@@ -4,7 +4,7 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
-- Active increment: Gate 5A-8 documentation evidence reconciliation.
+- Active increment: Gate 5A-9 CI/validation evidence boundary adapter.
 
 ## Baseline
 
@@ -18,6 +18,25 @@
 - `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, and Gate 5A evidence docs were read from `dev` before this increment.
 - Local workspace is available for Gate 5A-8 documentation reconciliation; starting branch `work`, starting commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, and clean starting status were observed.
 - Remote `origin`, open PR visibility, selected-base branch refresh, and connector-visible CI remain UNAVAILABLE for Gate 5A-8; user-reported green validation is not connector-visible workflow evidence.
+
+## Gate 5A-9 CI/validation evidence boundary adapter
+
+Gate 5A-9 adds a fail-closed validation evidence boundary adapter that separates `MEASURED_LOCAL`, `USER_REPORTED`, `CONNECTOR_VISIBLE_CI`, and `UNAVAILABLE` validation provenance. Missing workflow runs, empty combined statuses, empty status contexts, user screenshots, and user statements cannot be promoted into measured connector-visible CI evidence.
+
+Implemented files:
+
+- `src/reporting/ci_evidence.py`
+- `src/reporting/__init__.py`
+- `tests/test_validation_evidence_boundary.py`
+- `tests/test_evidence_ledger_consistency.py`
+- `docs/gates/gate5a_validation_evidence_boundary.md`
+- `PROJECT_STATE.md`
+- `REPORT.md`
+- `VERSION.md`
+- `CHANGELOG.md`
+- `PLAN.md`
+
+Gate 5A-9 is the smallest safe step because it hardens evidence classification for the existing Gate 5A `ci_validation` boundary without changing runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
 
 ## Gate 5A-8 documentation evidence reconciliation
 
@@ -51,6 +70,8 @@ Gate 5A-7 keeps the evidence boundary explicit: screenshot-backed green validati
 | Gate 5A-8 local starting state | branch `work`, commit `0e01736c2f17ed47cd0b9ec4f2bd5cf155699872`, clean status | `MEASURED` local evidence |
 | Remote branch refresh and open PR visibility | `origin` is unavailable in this workspace | `UNAVAILABLE` |
 | connector-visible CI | connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence | `UNAVAILABLE` connector evidence |
+| Gate 5A-9 local adapter tests | focused validation evidence boundary tests added for missing workflow runs, empty combined status, user-reported evidence separation, and local measured evidence | `MEASURED_LOCAL` |
+| Gate 5A-9 connector-visible CI | no connector-visible workflow run, combined status, or job log evidence visible for this workspace commit | `UNAVAILABLE` |
 | Modeled evidence | none used | `MODELED: none` |
 
 ## Safety boundary
@@ -88,6 +109,6 @@ Reason: Gate 5A-7 records and guards validation-evidence wording, but it does no
 
 ## Next step
 
-After Gate 5A-8 validation evidence is checked, keep the next safe increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+After Gate 5A-9 validation evidence is checked, keep the next safe increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
 
 No optimizer, non-paper market-state mutation, strategy alpha logic, lifecycle simulation expansion, performance calculation, or readiness approval should be added.

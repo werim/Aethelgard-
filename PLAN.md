@@ -55,6 +55,7 @@
 | Gate 5A-6 — Data-Freshness Evidence Adapter | `GREEN_BY_USER_REPORTED_VALIDATION` | Caller-supplied freshness/selector evidence maps fail-closed into Gate 5A evidence. |
 | Gate 5A-7 — Workflow Artifact Evidence Ledger | `DOCUMENTED_PENDING_VALIDATION` | Records screenshot-backed green evidence while direct workflow artifacts remain unavailable. |
 | Gate 5A-8 — Documentation Evidence Reconciliation | `DOCUMENTED_PENDING_VALIDATION` | Corrects stale documentation evidence classes without runtime changes. |
+| Gate 5A-9 — CI/Validation Evidence Boundary Adapter | `IMPLEMENTED_PENDING_VALIDATION` | Separates MEASURED_LOCAL, USER_REPORTED, CONNECTOR_VISIBLE_CI, and UNAVAILABLE validation evidence. |
 
 ## Gate 5A-7 — Workflow Artifact Evidence Ledger
 
@@ -120,4 +121,4 @@ Gate 5A-8 does not change runtime behavior, strategy logic, optimizer behavior, 
 
 ## Next recommended step
 
-After Gate 5A-8 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
+After Gate 5A-9 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
