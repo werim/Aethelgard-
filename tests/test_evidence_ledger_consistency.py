@@ -165,3 +165,20 @@ def test_gate5a10_repository_provenance_boundary_fails_closed() -> None:
     assert "MEASURED_MERGED_TO_BRANCH" in combined_ledger
     assert "commit SHA visibility alone is not merge evidence" in combined_ledger
     assert "docs cannot claim merged-to-`dev` unless" in combined_ledger
+
+
+def test_gate5a11_exchange_mutation_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5a_exchange_mutation_boundary_evidence.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5A-11 exchange mutation boundary evidence adapter" in combined_ledger
+    assert "src/reporting/exchange_mutation_boundary_evidence.py" in combined_ledger
+    assert "tests/test_exchange_mutation_boundary_evidence.py" in combined_ledger
+    assert "MEASURED_NO_MUTATION_PATH" in combined_ledger
+    assert "MEASURED_PAPER_ONLY_GUARD" in combined_ledger
+    assert "USER_REPORTED_NO_LIVE_USE" in combined_ledger
+    assert "UNAVAILABLE_EXCHANGE_AUDIT" in combined_ledger
+    assert "UNAVAILABLE_RUNTIME_PROOF" in combined_ledger
+    assert "VIOLATION_EXCHANGE_MUTATION_ALLOWED" in combined_ledger
+    assert "PAPER_ONLY evidence does not imply live readiness" in combined_ledger
+    assert "Docs cannot claim production readiness" in combined_ledger

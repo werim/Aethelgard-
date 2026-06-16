@@ -2,6 +2,27 @@
 
 ## [0.22.0] - 2026-06-16
 
+### Added
+
+- Added Gate 5A-11 exchange mutation boundary evidence adapter for measured no-mutation paths, measured PAPER_ONLY guards, user-reported no-live-use, unavailable audit/runtime proof, and unguarded mutation violations.
+- Added focused exchange mutation boundary tests and Gate 5A-11 evidence-ledger wording.
+
+### Safety
+
+- Gate 5A-11 is reporting-boundary/test/documentation work only; it does not add live trading, real exchange order placement, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.
+- PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY remains unchanged. Unknown execution costs are not zero. Missing evidence remains unavailable.
+
+### Evidence
+
+- `MEASURED_LOCAL`: Gate 5A-11 source/tests/docs changed locally.
+- `USER_REPORTED`: user statements remain user-reported no-live-use only.
+- `UNAVAILABLE`: missing exchange audit evidence and runtime proof remain unavailable.
+- `VIOLATION`: unguarded exchange mutation capability classifies as `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+- `MODELED`: none.
+
+
+## [0.22.0] - 2026-06-16
+
 ### Changed
 
 - Added Gate 5A-10 PR / Branch-head provenance evidence adapter for PR visibility, branch head, commit ancestry, merge, and unavailable remote evidence classification.

@@ -18,6 +18,13 @@ from src.reporting.data_freshness_evidence import (
     assess_data_freshness_for_gate5a,
     data_freshness_evidence_assessment_json,
 )
+from src.reporting.exchange_mutation_boundary_evidence import (
+    ExchangeMutationBoundaryAssessment,
+    ExchangeMutationBoundaryClassification,
+    ExchangeMutationBoundaryEvidence,
+    classify_exchange_mutation_boundary_evidence,
+    docs_may_claim_production_ready,
+)
 from src.reporting.operational_evidence import (
     DeploymentBlockerMatrixRow,
     DeploymentBlockerStatus,
@@ -82,6 +89,9 @@ __all__ = [
     "DataFreshnessEvidenceStatus",
     "DeploymentBlockerMatrixRow",
     "DeploymentBlockerStatus",
+    "ExchangeMutationBoundaryAssessment",
+    "ExchangeMutationBoundaryClassification",
+    "ExchangeMutationBoundaryEvidence",
     "LocalValidationEvidence",
     "MetricPublicationEligibility",
     "MetricPublicationStatus",
@@ -115,6 +125,7 @@ __all__ = [
     "classify_branch_head_evidence",
     "classify_commit_ancestry_evidence",
     "classify_connector_visible_ci_evidence",
+    "classify_exchange_mutation_boundary_evidence",
     "classify_local_validation_evidence",
     "classify_pr_visibility_evidence",
     "classify_user_reported_commit_evidence",
@@ -122,6 +133,7 @@ __all__ = [
     "classify_user_reported_validation_evidence",
     "data_freshness_evidence_assessment_json",
     "docs_may_claim_merged_to_branch",
+    "docs_may_claim_production_ready",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",
     "guarded_performance_report_json",

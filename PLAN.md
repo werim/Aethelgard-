@@ -2,6 +2,31 @@
 
 ## Current increment
 
+Gate 5A-11 — Exchange Mutation Boundary Evidence Adapter.
+
+This is the smallest safe next step after Gate 5A-10 because it only hardens exchange mutation boundary evidence classification for measured no-mutation paths, measured PAPER_ONLY guards, user-reported no-live-use, unavailable exchange audit evidence, unavailable runtime proof, and unguarded mutation violations. It does not add live trading, real exchange order placement, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.
+
+## Evidence rules preserved
+
+- PAPER_ONLY evidence does not imply live readiness.
+- Missing exchange audit evidence remains `UNAVAILABLE_EXCHANGE_AUDIT`.
+- Missing runtime proof remains `UNAVAILABLE_RUNTIME_PROOF`.
+- User-reported no-live-use remains `USER_REPORTED_NO_LIVE_USE`, not measured proof.
+- Unguarded exchange mutation surfaces classify as `VIOLATION_EXCHANGE_MUTATION_ALLOWED`.
+- Guarded PAPER-only execution classifies as `MEASURED_PAPER_ONLY_GUARD` only when source/test evidence, exchange audit evidence, and runtime proof are present.
+- Docs cannot claim production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5A-11 is validated, continue with the next missing Gate 5A measured-evidence adapter or ledger consistency hardening. Do not add optimizer behavior, strategy alpha logic, lifecycle simulation expansion, performance calculation changes, exchange mutation, or readiness approval.
+
+
+## Prior report content
+
+# Aethelgard Plan
+
+## Current increment
+
 Gate 5A-10 — PR / Branch-head provenance evidence adapter.
 
 This is the smallest safe next step after Gate 5A-9 because it only hardens repository provenance evidence classification for PR visibility, branch head refresh, commit ancestry, merge evidence, and unavailable remote evidence. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, or readiness status.
