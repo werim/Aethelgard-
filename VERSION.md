@@ -2,6 +2,24 @@
 
 ## 0.22.0 - 2026-06-16
 
+**Engineering milestone:** Gate 5A-10 PR / Branch-head provenance evidence adapter.
+
+- Added a fail-closed repository provenance evidence adapter for `USER_REPORTED_PR`, `USER_REPORTED_COMMIT`, `MEASURED_PR_VISIBLE`, `MEASURED_BRANCH_HEAD`, `MEASURED_BRANCH_CONTAINS`, `MEASURED_MERGED_TO_BRANCH`, `UNAVAILABLE_PR_VISIBILITY`, `UNAVAILABLE_BRANCH_REFRESH`, and `UNAVAILABLE_MERGE_EVIDENCE`.
+- Hardened PR, branch-head, commit ancestry, and merge evidence classification so user-reported PRs/commits and commit SHA visibility cannot be promoted to measured PR visibility, branch containment, or merge evidence.
+- Added focused tests and a Gate 5A-10 ledger document.
+- Package version remains `0.22.0`; this is a reporting-boundary/test/documentation increment and does not publish a runtime package increment.
+- Retained the safety boundary: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no readiness approval.
+
+## Validation evidence
+
+- `MEASURED_LOCAL`: Gate 5A-10 source, tests, and documentation were changed in this workspace and validation commands were run locally.
+- `USER_REPORTED`: user-reported PR/commit statements remain separate from measured repository provenance.
+- `UNAVAILABLE`: remote `origin`, open PR visibility, branch refresh evidence, connector-visible CI, direct workflow artifacts, and compare/ancestry evidence for this workspace commit on `dev` remain unavailable.
+- `MODELED`: none.
+
+
+## 0.22.0 - 2026-06-16
+
 **Engineering milestone:** Gate 5A-9 CI/validation evidence boundary adapter.
 
 - Added a fail-closed validation evidence boundary adapter for `MEASURED_LOCAL`, `USER_REPORTED`, `CONNECTOR_VISIBLE_CI`, and `UNAVAILABLE` validation provenance.

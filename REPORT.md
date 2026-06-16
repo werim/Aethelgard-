@@ -4,6 +4,60 @@
 
 - Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
 - Operating mode: `PAPER_ONLY`
+- Active increment: Gate 5A-10 PR / Branch-head provenance evidence adapter.
+
+## Gate 5A-10 baseline and chosen increment
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch before edits: `work`
+- Starting commit SHA before edits: `7f5e6c5440d82321546abd6e4b6ab0cf1b232598`
+- Starting working tree status before edits: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit before edits: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5A-9 CI/validation evidence boundary adapter on package version `0.22.0` with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary.
+- Chosen smallest safe increment: Gate 5A-10 PR / Branch-head provenance evidence adapter, because Gate 5A-9 hardened validation evidence and the next bounded evidence gap is repository provenance classification for PR, branch, merge, ancestry, and unavailable remote evidence.
+
+## Gate 5A-10 evidence classification
+
+### MEASURED evidence
+
+- Local required repository files and gate documents were read before edits.
+- Local branch, starting commit, and working-tree status were measured before edits.
+- Gate 5A-10 source, tests, and documentation were added locally.
+- Validation commands listed in this report were run locally after the changes.
+
+### USER_REPORTED evidence
+
+- User requested work on GitHub repo `werim/aethelgard-` targeting `dev`.
+- Any user-reported PR creation or commit existence remains `USER_REPORTED_PR` or `USER_REPORTED_COMMIT` unless directly measured.
+
+### MODELED assumptions
+
+- None.
+
+### UNAVAILABLE evidence
+
+- Remote `origin` refresh evidence is unavailable in this workspace.
+- Open PR visibility for `dev` is unavailable.
+- Branch containment and compare/ancestry evidence for this workspace commit on `dev` are unavailable.
+- Merge evidence for this workspace commit on `dev` is unavailable.
+- Connector-visible CI/workflow status, direct workflow artifacts, and job logs for this workspace commit are unavailable.
+
+## Safety boundary
+
+Gate 5A-10 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status. No live trading is enabled. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
+## Prior report content
+
+# Aethelgard Engineering Report
+
+## Current classification
+
+- Operational readiness: `PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY`
+- Operating mode: `PAPER_ONLY`
 - Active increment: Gate 5A-9 CI/validation evidence boundary adapter.
 
 ## Baseline

@@ -71,3 +71,19 @@ mypy .
 ```
 
 Commands unavailable in an environment must be reported as UNAVAILABLE, not passed. Connector writes alone do not prove local or CI validation.
+## Gate 5A-10 repository provenance evidence note
+
+Gate 5A-10 adds `src/reporting/repository_provenance_evidence.py`, `tests/test_repository_provenance_evidence.py`, and `docs/gates/gate5a_pr_branch_provenance_evidence.md` as the PR / Branch-head provenance evidence adapter.
+
+Gate 5A-10 preserves these fail-closed evidence boundaries:
+
+- user-reported PR creation remains `USER_REPORTED_PR`, not `MEASURED_PR_VISIBLE`;
+- user-reported commit evidence remains `USER_REPORTED_COMMIT`, not branch containment or merge evidence;
+- commit SHA visibility alone is not merge evidence;
+- `dev` branch containment requires measured branch/compare evidence;
+- missing PR lookup remains `UNAVAILABLE_PR_VISIBILITY`;
+- missing branch refresh remains `UNAVAILABLE_BRANCH_REFRESH`;
+- missing compare/ancestry evidence remains `UNAVAILABLE_MERGE_EVIDENCE`;
+- docs cannot claim merged-to-`dev` unless `MEASURED_MERGED_TO_BRANCH` evidence is present.
+
+Gate 5A-10 is a reporting-boundary/test/documentation increment only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
