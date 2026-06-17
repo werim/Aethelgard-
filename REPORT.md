@@ -1,3 +1,46 @@
+# Aethelgard Report
+
+## Gate 5A-12 validation and repair
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `743cd92c772a8ea3bc4847c9dbb4dd8caead125a`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5A-11 exchange mutation boundary evidence adapter on package version `0.22.0` with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary.
+- Chosen smallest safe increment: validate and repair Gate 5A-12 secret material boundary evidence adapter because the latest patch introduced that bounded reporting/test/documentation surface and validation found formatting plus ledger recency drift.
+
+## Gate 5A-12 evidence classification
+
+### MEASURED
+
+- Local required repository files were read before edits.
+- Local branch `work`, starting commit `743cd92c772a8ea3bc4847c9dbb4dd8caead125a`, and clean starting working tree were observed before edits.
+- Gate 5A-12 source, tests, public reporting exports, and documentation were inspected locally.
+- Gate 5A-12 preserves explicit classifications: `MEASURED_NO_SECRET_MATERIAL`, `MEASURED_SECRET_PLACEHOLDER_ONLY`, `USER_REPORTED_SECRETS_NOT_SHARED`, `UNAVAILABLE_SECRET_AUDIT`, `UNAVAILABLE_RUNTIME_SECRET_PROOF`, and `VIOLATION_SECRET_MATERIAL_EXPOSED`.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev`.
+- Connector-visible CI/workflow status for this workspace commit.
+- Remote branch refresh, merge, and workflow artifact evidence.
+- Runtime secret proof remains `UNAVAILABLE_RUNTIME_SECRET_PROOF` unless directly measured.
+- Missing secret audit evidence remains `UNAVAILABLE_SECRET_AUDIT`.
+
+## Gate 5A-12 safety boundary
+
+Gate 5A-12 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation capability, or readiness status. It does not read environment variables, request credentials, expose secrets, connect to exchanges, place exchange orders, mutate exchange state, approve live trading, approve live readiness, or approve production readiness. User-reported “secrets not shared” is not measured proof. Requested, committed, logged, or documented real secrets classify as `VIOLATION_SECRET_MATERIAL_EXPOSED`. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5A-12 validation, continue with the next missing Gate 5A measured-evidence adapter or ledger consistency hardening. Do not add optimizer behavior, strategy alpha logic, lifecycle simulation expansion, performance calculation changes, exchange mutation, secret collection, or readiness approval.
+
+
+## Prior report content
+
 # Aethelgard Engineering Report
 
 ## Current classification

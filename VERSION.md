@@ -1,3 +1,22 @@
+# Aethelgard Version Ledger
+
+## 0.22.0 - 2026-06-17
+
+**Engineering milestone:** Gate 5A-12 secret material boundary evidence adapter validation and repair.
+
+- Validated and repaired the Gate 5A-12 secret material boundary evidence adapter formatting and ledger recency.
+- Confirmed public reporting exports include the Gate 5A-12 classification, evidence, assessment, classifier, and documentation-claim helpers.
+- Package version remains `0.22.0`; this is a reporting-boundary/test/documentation repair and does not publish a runtime package increment.
+
+**Evidence classification:**
+
+- `MEASURED_LOCAL`: Gate 5A-12 source, focused tests, public exports, and documentation were inspected locally.
+- `UNAVAILABLE_SECRET_AUDIT`: missing secret audit evidence remains unavailable.
+- `UNAVAILABLE_RUNTIME_SECRET_PROOF`: missing runtime proof remains unavailable.
+- `UNAVAILABLE`: open PR, remote CI, workflow artifacts, and remote merge evidence were not visible in this workspace.
+
+**Safety boundary:** Gate 5A-12 does not read environment variables, request credentials, expose secrets, connect to exchanges, place exchange orders, mutate exchange state, approve live trading, approve live readiness, or approve production readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
 # Version History
 
 ## 0.22.0 - 2026-06-16

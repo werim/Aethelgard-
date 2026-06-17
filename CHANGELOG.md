@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.22.0] - 2026-06-17
+
+### Changed
+
+- Validated and repaired Gate 5A-12 secret material boundary evidence adapter formatting.
+- Updated Gate 5A-12 ledger wording across project state, report, version, changelog, plan, and evidence ledger documentation.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- Gate 5A-12 secret-material evidence never permits live-readiness or production-readiness claims.
+- User-reported “secrets not shared” remains `USER_REPORTED_SECRETS_NOT_SHARED`, not measured proof.
+- Missing secret audit evidence remains `UNAVAILABLE_SECRET_AUDIT`; missing runtime proof remains `UNAVAILABLE_RUNTIME_SECRET_PROOF`.
+- Requested, committed, logged, or documented real secrets classify as `VIOLATION_SECRET_MATERIAL_EXPOSED`.
+- No live trading, secret requests, exchange connections, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval was added.
+
+### Evidence
+
+- `MEASURED_LOCAL`: local Gate 5A-12 source, tests, exports, and docs were inspected and validation commands were executed in this workspace.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, and merge evidence were unavailable.
+
 ## [0.22.0] - 2026-06-16
 
 ### Added
