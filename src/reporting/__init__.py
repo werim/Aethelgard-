@@ -79,6 +79,14 @@ from src.reporting.risk_control_evidence import (
     assess_risk_control_enforcement_for_gate5a,
     risk_control_evidence_assessment_json,
 )
+from src.reporting.secret_material_boundary_evidence import (
+    SecretMaterialBoundaryAssessment,
+    SecretMaterialBoundaryClassification,
+    SecretMaterialBoundaryEvidence,
+    classify_secret_material_boundary_evidence,
+    docs_may_claim_live_readiness_from_secret_evidence,
+    docs_may_claim_secret_safety,
+)
 
 __all__ = [
     "BranchHeadEvidence",
@@ -111,6 +119,9 @@ __all__ = [
     "RiskControlEvidenceAssessment",
     "RiskControlEvidenceStatus",
     "RiskControlPolicyEvidence",
+    "SecretMaterialBoundaryAssessment",
+    "SecretMaterialBoundaryClassification",
+    "SecretMaterialBoundaryEvidence",
     "UserReportedCommitEvidence",
     "UserReportedPullRequestEvidence",
     "UserReportedValidationEvidence",
@@ -128,12 +139,15 @@ __all__ = [
     "classify_exchange_mutation_boundary_evidence",
     "classify_local_validation_evidence",
     "classify_pr_visibility_evidence",
+    "classify_secret_material_boundary_evidence",
     "classify_user_reported_commit_evidence",
     "classify_user_reported_pr_evidence",
     "classify_user_reported_validation_evidence",
     "data_freshness_evidence_assessment_json",
+    "docs_may_claim_live_readiness_from_secret_evidence",
     "docs_may_claim_merged_to_branch",
     "docs_may_claim_production_ready",
+    "docs_may_claim_secret_safety",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",
     "guarded_performance_report_json",
