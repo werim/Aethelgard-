@@ -182,3 +182,19 @@ def test_gate5a11_exchange_mutation_boundary_fails_closed() -> None:
     assert "VIOLATION_EXCHANGE_MUTATION_ALLOWED" in combined_ledger
     assert "PAPER_ONLY evidence does not imply live readiness" in combined_ledger
     assert "Docs cannot claim production readiness" in combined_ledger
+
+
+def test_gate5a12_secret_material_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5a_secret_material_boundary_evidence.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5A-12 secret material boundary evidence adapter" in combined_ledger
+    assert "src/reporting/secret_material_boundary_evidence.py" in combined_ledger
+    assert "tests/test_secret_material_boundary_evidence.py" in combined_ledger
+    assert "MEASURED_NO_SECRET_MATERIAL" in combined_ledger
+    assert "MEASURED_SECRET_PLACEHOLDER_ONLY" in combined_ledger
+    assert "USER_REPORTED_SECRETS_NOT_SHARED" in combined_ledger
+    assert "UNAVAILABLE_SECRET_AUDIT" in combined_ledger
+    assert "UNAVAILABLE_RUNTIME_SECRET_PROOF" in combined_ledger
+    assert "VIOLATION_SECRET_MATERIAL_EXPOSED" in combined_ledger
+    assert "Secret-material evidence never permits live-readiness" in combined_ledger
