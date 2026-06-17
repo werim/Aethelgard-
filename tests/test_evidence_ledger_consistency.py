@@ -291,3 +291,27 @@ def test_gate5b1_paper_runtime_dry_run_boundary_fails_closed() -> None:
     assert "no exchange connection" in combined_ledger
     assert "no market fetch" in combined_ledger
     assert "no order path" in combined_ledger
+
+
+def test_gate5b2_main_startup_contract_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5b_main_startup_contract.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5B-2 main startup contract" in combined_ledger
+    assert "tests/test_main_startup_contract.py" in combined_ledger
+    assert "docs/gates/gate5b_main_startup_contract.md" in combined_ledger
+    assert "foundation_runtime_initialized" in combined_ledger
+    assert "PAPER_ONLY" in combined_ledger
+    assert "RESEARCH_ONLY" in combined_ledger
+    assert "MEASURED_PAPER_DRY_RUN" in combined_ledger
+    assert "does not add runtime behavior" in combined_ledger
+    assert "does not prove production readiness, live readiness" in combined_ledger
+    assert "no live trading" in combined_ledger.lower()
+    assert "secret request/read/exposure" in combined_ledger
+    assert "exchange connection" in combined_ledger
+    assert "market fetch" in combined_ledger
+    assert "order placement" in combined_ledger
+    assert "strategy alpha" in combined_ledger
+    assert "optimizer" in combined_ledger
+    assert "performance calculation" in combined_ledger
+    assert "readiness approval" in combined_ledger

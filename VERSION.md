@@ -1,5 +1,22 @@
 # Aethelgard Version Ledger
 
+## 0.22.3 - 2026-06-17
+
+**Engineering milestone:** Gate 5B-2 main startup contract regression harness.
+
+- Added `tests/test_main_startup_contract.py` to run `main.py` through the current Python executable in a controlled subprocess.
+- Added `docs/gates/gate5b_main_startup_contract.md` to record the bounded startup-contract evidence limits.
+- Package version advanced to `0.22.3`.
+
+**Evidence classification:**
+
+- `MEASURED_PAPER_DRY_RUN`: a passing local subprocess test may prove only bounded startup evidence for PAPER_ONLY / RESEARCH_ONLY metadata.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, exchange safety, market-data correctness, execution realism, strategy validity, profitability, and runtime proof beyond bounded startup remain unavailable.
+
+**Safety boundary:** Gate 5B-2 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It does not enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve readiness, or mutate exchange state. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
+
 ## 0.22.2 - 2026-06-17
 
 **Engineering milestone:** Gate 5B-1 PAPER runtime dry-run evidence ledger.
