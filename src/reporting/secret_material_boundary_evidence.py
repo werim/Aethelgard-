@@ -105,7 +105,10 @@ def classify_secret_material_boundary_evidence(
             source,
         )
 
-    if evidence.committed_secret_material_present or evidence.docs_or_logs_expose_secret:
+    if (
+        evidence.committed_secret_material_present
+        or evidence.docs_or_logs_expose_secret
+    ):
         return _assessment(
             SecretMaterialBoundaryClassification.VIOLATION_SECRET_MATERIAL_EXPOSED,
             "secret material is exposed in repository, documentation, or logs",
@@ -145,7 +148,10 @@ def classify_secret_material_boundary_evidence(
             source,
         )
 
-    if evidence.secret_material_present and not evidence.placeholder_or_env_reference_only:
+    if (
+        evidence.secret_material_present
+        and not evidence.placeholder_or_env_reference_only
+    ):
         return _assessment(
             SecretMaterialBoundaryClassification.VIOLATION_SECRET_MATERIAL_EXPOSED,
             "non-placeholder secret material is present",

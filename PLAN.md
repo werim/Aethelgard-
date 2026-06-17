@@ -2,6 +2,30 @@
 
 ## Current increment
 
+Gate 5A-12 — Secret Material Boundary Evidence Adapter validation and repair.
+
+This is the smallest safe next step after Gate 5A-11 because it only validates and repairs the latest bounded secret-material evidence adapter, its public export surface, focused tests, formatting, and ledger wording. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, secret handling at runtime, or readiness status.
+
+## Evidence rules preserved
+
+- Secret-material evidence never permits live-readiness or production-readiness claims.
+- User-reported “secrets not shared” remains `USER_REPORTED_SECRETS_NOT_SHARED`, not measured proof.
+- Missing secret audit evidence remains `UNAVAILABLE_SECRET_AUDIT`.
+- Missing runtime proof remains `UNAVAILABLE_RUNTIME_SECRET_PROOF`.
+- Requested, committed, logged, or documented real secrets classify as `VIOLATION_SECRET_MATERIAL_EXPOSED`.
+- Gate 5A-12 does not read environment variables, request credentials, connect to exchanges, place orders, mutate exchange state, approve live trading, or approve production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5A-12 is validated, continue with the next missing Gate 5A measured-evidence adapter or ledger consistency hardening. Do not add optimizer behavior, strategy alpha logic, lifecycle simulation expansion, performance calculation changes, exchange mutation, secret collection, or readiness approval.
+
+
+## Prior report content
+
+# Aethelgard Plan
+
+## Current increment
+
 Gate 5A-11 — Exchange Mutation Boundary Evidence Adapter.
 
 This is the smallest safe next step after Gate 5A-10 because it only hardens exchange mutation boundary evidence classification for measured no-mutation paths, measured PAPER_ONLY guards, user-reported no-live-use, unavailable exchange audit evidence, unavailable runtime proof, and unguarded mutation violations. It does not add live trading, real exchange order placement, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.

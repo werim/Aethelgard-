@@ -104,3 +104,18 @@ Gate 5A-11 preserves these fail-closed evidence boundaries:
 - Docs cannot claim production readiness from exchange mutation boundary evidence.
 
 Gate 5A-11 is a reporting-boundary/test/documentation increment only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation capability, or readiness status.
+
+## Gate 5A-12 secret material boundary evidence note
+
+Gate 5A-12 adds `src/reporting/secret_material_boundary_evidence.py`, `tests/test_secret_material_boundary_evidence.py`, and `docs/gates/gate5a_secret_material_boundary_evidence.md` as the secret material boundary evidence adapter.
+
+Gate 5A-12 preserves these fail-closed evidence boundaries:
+
+- `MEASURED_NO_SECRET_MATERIAL` for measured source/test evidence showing no secret material path.
+- `MEASURED_SECRET_PLACEHOLDER_ONLY` for source, test, audit, and runtime evidence showing only placeholders or environment references.
+- `USER_REPORTED_SECRETS_NOT_SHARED` for user statements that secrets were not shared; this is not measured proof.
+- `UNAVAILABLE_SECRET_AUDIT` when secret audit evidence is missing or incomplete.
+- `UNAVAILABLE_RUNTIME_SECRET_PROOF` when runtime proof for placeholder/env-reference handling is missing or incomplete.
+- `VIOLATION_SECRET_MATERIAL_EXPOSED` when requested, committed, logged, or documented real secret material is present.
+
+Secret-material evidence never permits live-readiness or production-readiness claims. Gate 5A-12 does not read environment variables, request credentials, connect to exchanges, place orders, mutate exchange state, approve live trading, or approve production readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
