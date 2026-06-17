@@ -114,7 +114,9 @@ def classify_secret_material_boundary_evidence(
         )
 
     if evidence.docs_claim_secret_safety and not (
-        evidence.source_reviewed and evidence.test_reviewed and _has_text(evidence.secret_audit_source)
+        evidence.source_reviewed
+        and evidence.test_reviewed
+        and _has_text(evidence.secret_audit_source)
     ):
         return _assessment(
             SecretMaterialBoundaryClassification.UNAVAILABLE_SECRET_AUDIT,
@@ -124,7 +126,9 @@ def classify_secret_material_boundary_evidence(
         )
 
     if evidence.user_reported_secrets_not_shared and not (
-        evidence.source_reviewed or evidence.test_reviewed or evidence.runtime_proof_observed
+        evidence.source_reviewed
+        or evidence.test_reviewed
+        or evidence.runtime_proof_observed
     ):
         return _assessment(
             SecretMaterialBoundaryClassification.USER_REPORTED_SECRETS_NOT_SHARED,
@@ -150,7 +154,9 @@ def classify_secret_material_boundary_evidence(
         )
 
     if evidence.placeholder_or_env_reference_only:
-        if not evidence.runtime_proof_observed or not _has_text(evidence.runtime_proof_source):
+        if not evidence.runtime_proof_observed or not _has_text(
+            evidence.runtime_proof_source
+        ):
             return _assessment(
                 SecretMaterialBoundaryClassification.UNAVAILABLE_RUNTIME_SECRET_PROOF,
                 "runtime secret-handling proof is unavailable",
