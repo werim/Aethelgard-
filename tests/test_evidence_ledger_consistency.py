@@ -241,7 +241,11 @@ def test_gate5a13_user_reported_green_validation_reconciliation() -> None:
 
 
 def test_gate5b0_paper_runtime_preflight_boundary_fails_closed() -> None:
-    paths = (*LEDGER_PATHS, "docs/gates/gate5b_paper_runtime_preflight_evidence.md")
+    paths = (
+        *LEDGER_PATHS,
+        "docs/gates/gate5b_paper_runtime_preflight_evidence.md",
+        "docs/gates/gate5b_paper_runtime_dry_run_evidence.md",
+    )
     combined_ledger = "\n".join(_read(path) for path in paths)
 
     assert "Gate 5B-0 PAPER runtime safe startup preflight evidence" in combined_ledger
@@ -262,3 +266,28 @@ def test_gate5b0_paper_runtime_preflight_boundary_fails_closed() -> None:
     assert "no optimizer" in combined_ledger
     assert "no readiness approval" in combined_ledger
     assert "does not enable live trading" in combined_ledger
+
+
+def test_gate5b1_paper_runtime_dry_run_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5b_paper_runtime_dry_run_evidence.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5B-1 PAPER runtime dry-run evidence ledger" in combined_ledger
+    assert "src/reporting/paper_runtime_dry_run_evidence.py" in combined_ledger
+    assert "tests/test_paper_runtime_dry_run_evidence.py" in combined_ledger
+    assert "MEASURED_PAPER_DRY_RUN" in combined_ledger
+    assert "USER_PROVIDED_RUNTIME_OUTPUT" in combined_ledger
+    assert "USER_REPORTED_DRY_RUN_OK" in combined_ledger
+    assert "UNAVAILABLE_DRY_RUN" in combined_ledger
+    assert "UNAVAILABLE_DRY_RUN_LOG" in combined_ledger
+    assert "VIOLATION_LIVE_OR_EXCHANGE_PATH" in combined_ledger
+    assert "VIOLATION_SECRET_OR_READINESS_PATH" in combined_ledger
+    assert "User provided `python main.py` output on macOS" in combined_ledger
+    assert (
+        "This is user-provided runtime output unless reproduced by Codex locally"
+        in combined_ledger
+    )
+    assert "does not prove production readiness, live readiness" in combined_ledger
+    assert "no exchange connection" in combined_ledger
+    assert "no market fetch" in combined_ledger
+    assert "no order path" in combined_ledger
