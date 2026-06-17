@@ -51,6 +51,17 @@ Gate 4B-0 adds only a minimal performance metric publication boundary:
 
 It does **not** run backtests, issue signals, manage positions, authenticate exchange-origin claims beyond configured public data boundaries, establish market-data completeness, model fills or costs, repair persistence stores, or provide runtime readiness.
 
+## Backtest status on `dev`
+
+Current `dev` does **not** contain an end-to-end profit backtest runner. The implemented backtest surface is a set of bounded, research-only components:
+
+- `src/backtest/foundation.py` records run metadata and required execution-cost evidence. It fails closed before performance output when fees, slippage, spreads, latency, funding, fill quality, or orderbook state are unavailable.
+- `src/backtest/replay.py` validates and packages caller-supplied candles for deterministic replay. It does not fetch exchange data, create signals, simulate trades, or calculate PnL.
+- `src/backtest/lifecycle.py` validates caller-supplied lifecycle observations against a valid replay. It does not generate entries, model fills, calculate PnL, optimize parameters, or approve PAPER/LIVE runtime use.
+- `src/reporting/performance_boundary.py` publishes metric eligibility/refusal diagnostics only. It may return `METRICS_PUBLISHABLE` only when the Gate 4A execution evidence gate passes, but it still does not compute performance metrics.
+
+Practical result: validation tests for the backtest boundaries should run, but a real strategy backtest command that outputs returns, win rate, drawdown, Sharpe, expectancy, or monthly performance is intentionally unavailable. Treat any missing cost evidence as unavailable, never as zero.
+
 ## Getting started
 
 ```bash
@@ -65,7 +76,20 @@ black --check .
 mypy .
 ```
 
-`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Stale tick validation is an explicit research data-quality action through `src/data/stale_tick_guard.py`; it rejects questionable ticks before downstream research use but does not approve runtime use. Symbol selection helpers in `src/data/symbol_selection.py` harden configured research candidates only; they do not fetch exchange data, rank alpha, or approve execution. Backtest foundation helpers in `src/backtest/foundation.py` record metadata and execution-evidence availability only. Replay helpers in `src/backtest/replay.py` validate and package caller-supplied candles only; they do not generate signals, simulate trades, calculate performance, or approve runtime use. Effective RR helpers in `src/execution/effective_rr.py` validate caller-provided RR references only; they do not create signals, simulate fills, or approve execution. Execution context helpers in `src/execution/context.py` record explicit context evidence only; they do not assume execution quality or submit exchange instructions. Paper DB audit helpers in `src/reporting/paper_db_audit.py` inspect and report local evidence only; they do not repair, rewrite, or certify runtime readiness. Performance boundary helpers in `src/reporting/performance_boundary.py` publish only metric eligibility/refusal diagnostics; they do not compute performance, model costs, replay candles, simulate trades, or approve runtime readiness.
+`main.py` performs a safe startup check and emits runtime metadata only. It does not fetch market data or generate trade decisions. Historical acquisition is an explicit research-data action through `src/data/acquisition.py`, not part of a trading runtime. Stale tick validation is an explicit research data-quality action through `src/data/stale_tick_guard.py`; it rejects questionable ticks before downstream research use but does not approve runtime use. Symbol selection helpers in `src/data/symbol_selection.py` harden configured research candidates only; they do not fetch exchange data, rank alpha, or approve execution. Backtest foundation helpers in `src/backtest/foundation.py` record metadata and execution-evidence availability only. Replay helpers in `src/backtest/replay.py` validate and package caller-supplied candles only; they do not generate signals, simulate trades, calculate performance, or approve runtime use. Lifecycle helpers in `src/backtest/lifecycle.py` validate caller-supplied lifecycle observations only; they do not create entries, model fills, compute PnL, or approve runtime readiness. Effective RR helpers in `src/execution/effective_rr.py` validate caller-provided RR references only; they do not create signals, simulate fills, or approve execution. Execution context helpers in `src/execution/context.py` record explicit context evidence only; they do not assume execution quality or submit exchange instructions. Paper DB audit helpers in `src/reporting/paper_db_audit.py` inspect and report local evidence only; they do not repair, rewrite, or certify runtime readiness. Performance boundary helpers in `src/reporting/performance_boundary.py` publish only metric eligibility/refusal diagnostics; they do not compute performance, model costs, replay candles, simulate trades, or approve runtime readiness.
+
+## Validation status
+
+The repository declares the standard validation commands in `pyproject.toml`:
+
+```bash
+pytest -q
+ruff check .
+black --check .
+mypy .
+```
+
+In the current remote-only inspection, GitHub connector file reads were measured, but a mutable local clone and direct command execution were unavailable because the execution container could not resolve `github.com`. Connector-visible workflow runs for the inspected commit were also unavailable. Therefore, local validation and CI status must remain `UNAVAILABLE` until run directly in a clone or observed through workflow evidence.
 
 ## Repository map
 
@@ -73,7 +97,7 @@ mypy .
 - `data/`: local raw, processed, and cache data locations; substantive data is gitignored.
 - `reports/`: generated report output location; documents at repository root track readiness.
 - `src/data/`: supplied-row kline validation, read-only public acquisition, immutable raw-artifact evidence, stale tick data-quality guards, and research-only symbol-selection hardening.
-- `src/backtest/`: research-only metadata, execution-evidence availability, and deterministic candle replay boundaries; no strategy, trade simulation, or performance engine yet.
+- `src/backtest/`: research-only metadata, execution-evidence availability, deterministic candle replay, and caller-supplied lifecycle-observation validation; no strategy, trade simulation, or performance engine yet.
 - `src/execution/`: research-only execution evidence helpers such as canonical effective RR and execution-context snapshots; no order path.
 - `src/persistence/`: research-only decision audit evidence, database audit-event persistence, narrow integration, reconciliation, reporting, and report-artifact boundaries.
 - `src/reporting/`: research-only reporting, phase-closure ledgers, read-only paper DB audit reports, and metric eligibility/refusal diagnostics.
