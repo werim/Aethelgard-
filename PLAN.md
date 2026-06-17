@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5A-13
+
+Gate 5A-13 records Gate 5A-12 as `GREEN_BY_USER_REPORTED_VALIDATION` while preserving that connector-visible CI remains `UNAVAILABLE`, workflow artifacts remain `UNAVAILABLE`, and workflow job logs remain `UNAVAILABLE` unless directly measured. User-reported green validation is not connector-visible workflow evidence, is not direct workflow artifact proof, and does not prove production readiness. Missing evidence remains unavailable.
+
+Gate 5A-13 is documentation/test-only reconciliation and does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+Next smallest safe step: continue with the next missing Gate 5A measured-evidence adapter or focused ledger consistency hardening. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current increment
 
 Gate 5A-12 — Secret Material Boundary Evidence Adapter validation and repair.

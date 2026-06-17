@@ -119,3 +119,21 @@ Gate 5A-12 preserves these fail-closed evidence boundaries:
 - `VIOLATION_SECRET_MATERIAL_EXPOSED` when requested, committed, logged, or documented real secret material is present.
 
 Secret-material evidence never permits live-readiness or production-readiness claims. Gate 5A-12 does not read environment variables, request credentials, connect to exchanges, place orders, mutate exchange state, approve live trading, or approve production readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Gate 5A-13 user-reported green validation evidence reconciliation
+
+Gate 5A-13 records Gate 5A-12 as `GREEN_BY_USER_REPORTED_VALIDATION` because the user reported that Gate 5A-12 was merged with green validation at dev HEAD `545434a3bfde05323a00f64721354a8333a59b7b`.
+
+Gate 5A-13 preserves these evidence boundaries:
+
+- Gate 5A-12 green validation is user-reported as `USER_REPORTED_GREEN_VALIDATION`.
+- Connector-visible CI remains `UNAVAILABLE` unless directly measured.
+- Workflow artifacts remain `UNAVAILABLE` unless directly measured.
+- Workflow job logs remain `UNAVAILABLE` unless directly measured.
+- User-reported green validation is not connector-visible workflow evidence.
+- User-reported green validation is not direct workflow artifact proof.
+- User-reported green validation does not prove production readiness.
+- Missing evidence remains unavailable.
+- Gate 5A-12 remains secret-material boundary evidence only; it does not become CI, workflow-artifact, production-readiness, or live-readiness evidence.
+
+Gate 5A-13 is a documentation/test-only reconciliation. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. No live trading, secret request, secret exposure, exchange connection, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, production readiness approval, or live-readiness approval is added. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.

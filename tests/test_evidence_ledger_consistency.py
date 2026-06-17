@@ -198,3 +198,43 @@ def test_gate5a12_secret_material_boundary_fails_closed() -> None:
     assert "UNAVAILABLE_RUNTIME_SECRET_PROOF" in combined_ledger
     assert "VIOLATION_SECRET_MATERIAL_EXPOSED" in combined_ledger
     assert "Secret-material evidence never permits live-readiness" in combined_ledger
+
+
+def test_gate5a13_user_reported_green_validation_reconciliation() -> None:
+    paths = (
+        *LEDGER_PATHS,
+        "PLAN.md",
+        "docs/gates/gate5a_secret_material_boundary_evidence.md",
+    )
+    combined_ledger = "\n".join(_read(path) for path in paths)
+    lower_ledger = combined_ledger.lower()
+
+    assert (
+        "Gate 5A-13 user-reported green validation evidence reconciliation"
+        in combined_ledger
+    )
+    assert "GREEN_BY_USER_REPORTED_VALIDATION" in combined_ledger
+    assert "USER_REPORTED_GREEN_VALIDATION" in combined_ledger
+    assert (
+        "Gate 5A-12 remains secret-material boundary evidence only" in combined_ledger
+    )
+    assert "connector-visible CI remains `UNAVAILABLE`" in combined_ledger
+    assert "workflow artifacts remain `UNAVAILABLE`" in combined_ledger
+    assert "workflow job logs remain `UNAVAILABLE`" in combined_ledger
+    assert (
+        "user-reported green validation is not connector-visible workflow evidence"
+        in lower_ledger
+    )
+    assert (
+        "user-reported green validation is not direct workflow artifact proof"
+        in lower_ledger
+    )
+    assert (
+        "user-reported green validation does not prove production readiness"
+        in lower_ledger
+    )
+    assert "documentation/test-only reconciliation" in combined_ledger
+    assert "does not change runtime behavior" in combined_ledger
+    assert "secret handling" in combined_ledger
+    assert "No live trading" in combined_ledger
+    assert "No live trading, secret request" in combined_ledger

@@ -2,6 +2,23 @@
 
 ## 0.22.0 - 2026-06-17
 
+**Engineering milestone:** Gate 5A-13 user-reported green validation evidence reconciliation.
+
+- Recorded Gate 5A-12 as `GREEN_BY_USER_REPORTED_VALIDATION` based on the user report that Gate 5A-12 was merged with green validation.
+- Preserved that connector-visible CI remains `UNAVAILABLE`, workflow artifacts remain `UNAVAILABLE`, and workflow job logs remain `UNAVAILABLE` unless directly measured.
+- Clarified that user-reported green validation is not connector-visible workflow evidence, is not direct workflow artifact proof, and does not prove production readiness.
+- Package version remains `0.22.0`; this is a documentation/test-only reconciliation and does not publish a runtime package increment.
+
+**Evidence classification:**
+
+- `MEASURED_LOCAL`: local documentation and focused ledger tests were updated in this workspace.
+- `USER_REPORTED_GREEN_VALIDATION`: Gate 5A-12 was reported by the user as merged with green validation.
+- `UNAVAILABLE`: connector-visible CI, workflow artifacts, workflow job logs, open PR visibility, and direct remote validation evidence remain unavailable in this workspace.
+
+**Safety boundary:** Gate 5A-13 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. No live trading, secret request, secret exposure, exchange connection, order placement, exchange mutation, strategy alpha logic, performance calculation, or readiness approval is added. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## 0.22.0 - 2026-06-17
+
 **Engineering milestone:** Gate 5A-12 secret material boundary evidence adapter validation and repair.
 
 - Validated and repaired the Gate 5A-12 secret material boundary evidence adapter formatting and ledger recency.
