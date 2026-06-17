@@ -11,6 +11,44 @@ PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
 ## Current Verified Repository State
 
 - Repository: `werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Target branch: `dev`
+- Observed local branch before Gate 5B-0 edits: `work`
+- Starting commit before Gate 5B-0 edits: `053052b4e35ecf2c2bc609e3c92fa9778cfeb3b1`
+- Starting working tree before Gate 5B-0 edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit: `UNAVAILABLE`
+- Workflow job logs for Gate 5B-0: `UNAVAILABLE`
+- Workflow artifacts for Gate 5B-0: `UNAVAILABLE`
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5B-0 PAPER runtime safe startup preflight evidence. Gate 5B-0 records `src/reporting/paper_runtime_preflight_evidence.py`, `tests/test_paper_runtime_preflight_evidence.py`, and `docs/gates/gate5b_paper_runtime_preflight_evidence.md` as the fail-closed startup/preflight evidence adapter for `MEASURED_SAFE_STARTUP`, `USER_REPORTED_STARTUP_OK`, `UNAVAILABLE_STARTUP_RUN`, `UNAVAILABLE_RUNTIME_LOG`, `VIOLATION_LIVE_RUNTIME_ENABLED`, and `VIOLATION_SECRET_OR_EXCHANGE_ACCESS`.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-0 does not enable live trading, request or expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, compute performance, claim profitability, approve readiness, mutate exchange state, or prove exchange safety, data completeness, execution realism, strategy validity, production readiness, or live readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next Recommended Step
+
+After Gate 5B-0 validation evidence is checked, keep the next safe increment small and fail-closed: add a narrow local startup metadata schema guard or ledger consistency test for bounded `python main.py` evidence without changing runtime behavior.
+
+
+## Prior report content
+
+# PROJECT_STATE.md
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Current Verified Repository State
+
+- Repository: `werim/Aethelgard-`
 - Selected repository: `werim/aethelgard-`
 - Target branch: `dev`
 - Observed local branch before Gate 5A-13 reconciliation edits: `work`
