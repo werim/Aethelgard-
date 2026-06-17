@@ -137,3 +137,19 @@ Gate 5A-13 preserves these evidence boundaries:
 - Gate 5A-12 remains secret-material boundary evidence only; it does not become CI, workflow-artifact, production-readiness, or live-readiness evidence.
 
 Gate 5A-13 is a documentation/test-only reconciliation. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. No live trading, secret request, secret exposure, exchange connection, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, production readiness approval, or live-readiness approval is added. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Gate 5B-0 PAPER runtime safe startup preflight evidence note
+
+Gate 5B-0 adds `src/reporting/paper_runtime_preflight_evidence.py`, `tests/test_paper_runtime_preflight_evidence.py`, and `docs/gates/gate5b_paper_runtime_preflight_evidence.md` as the PAPER runtime safe startup preflight evidence adapter.
+
+Gate 5B-0 preserves these fail-closed evidence boundaries:
+
+- direct safe startup evidence classifies as `MEASURED_SAFE_STARTUP` only when PAPER_ONLY mode, no secret access, no exchange connection, no market fetch, no order path, no strategy alpha, no optimizer, and no readiness approval are evidenced;
+- user-reported startup success remains `USER_REPORTED_STARTUP_OK`, not measured startup proof;
+- missing startup evidence remains `UNAVAILABLE_STARTUP_RUN`;
+- missing runtime logs remain `UNAVAILABLE_RUNTIME_LOG`;
+- LIVE mode, readiness approval, strategy alpha execution, or optimizer execution classifies as `VIOLATION_LIVE_RUNTIME_ENABLED`;
+- secret access, credential requirements, exchange connection, market fetch, order placement/cancellation, or external mutation classifies as `VIOLATION_SECRET_OR_EXCHANGE_ACCESS`;
+- PAPER_ONLY startup does not prove exchange safety, data completeness, execution realism, strategy validity, production readiness, or live readiness.
+
+Gate 5B-0 does not enable live trading, request or expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, compute performance, claim profitability, mutate exchange state, or approve readiness. PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY remains unchanged. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.

@@ -1,5 +1,56 @@
 # Aethelgard Report
 
+## Gate 5B-0 PAPER runtime safe startup preflight evidence
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `053052b4e35ecf2c2bc609e3c92fa9778cfeb3b1`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5A-13 user-reported green validation evidence reconciliation on package version `0.22.0`, with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary and no runtime readiness approval.
+- Chosen smallest safe increment: Gate 5B-0 PAPER runtime safe startup preflight evidence adapter because `main.py` already performs a safe startup metadata emission and the next bounded step is to classify local startup/preflight evidence without rewriting runtime behavior.
+
+## Gate 5B-0 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits: `README.md`, `main.py`, `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, `pyproject.toml`, `config/settings.yaml`, `config/symbols.yaml`, `.github/workflows/ci.yml`, runtime/config/logging source, and existing runtime/config/logging tests.
+- Local branch `work`, starting commit `053052b4e35ecf2c2bc609e3c92fa9778cfeb3b1`, and clean starting working tree were observed before edits.
+- Gate 5B-0 adds `src/reporting/paper_runtime_preflight_evidence.py`, `tests/test_paper_runtime_preflight_evidence.py`, and `docs/gates/gate5b_paper_runtime_preflight_evidence.md`, and updates reporting exports plus ledgers.
+- `MEASURED_SAFE_STARTUP` is limited to direct startup/preflight evidence showing PAPER_ONLY mode, no secret access, no exchange connection, no market fetch, no order path, no strategy alpha, no optimizer, and no readiness approval.
+
+### USER_REPORTED
+
+- The user requested Gate 5B-0 and described the intended safe startup boundary.
+- User-reported startup success, if supplied later, remains `USER_REPORTED_STARTUP_OK` and is not measured startup evidence.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts remain `UNAVAILABLE`.
+- Workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof remains `UNAVAILABLE`; Gate 5B-0 does not connect to or audit an exchange.
+- Production readiness, live readiness, exchange safety, data completeness, execution realism, strategy validity, and profitability evidence remain unavailable and unclaimed.
+
+## Gate 5B-0 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-0 does not enable live trading, request or expose secrets, connect to Binance or any exchange, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, compute performance, claim profitability, approve readiness, mutate exchange state, or prove exchange safety, data completeness, execution realism, strategy validity, production readiness, or live readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5B-0 validation, the next smallest safe step is to add a narrow local startup evidence fixture or ledger consistency guard that records the exact bounded `python main.py` runtime metadata schema without changing runtime behavior, market-data behavior, strategy logic, optimizer behavior, execution-cost modeling, exchange mutation, or readiness status.
+
+
+## Prior report content
+
+# Aethelgard Report
+
 ## Gate 5A-13 user-reported green validation evidence reconciliation
 
 - Repository: `werim/Aethelgard-`

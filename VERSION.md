@@ -1,5 +1,24 @@
 # Aethelgard Version Ledger
 
+## 0.22.1 - 2026-06-17
+
+**Engineering milestone:** Gate 5B-0 PAPER runtime safe startup preflight evidence.
+
+- Added `src/reporting/paper_runtime_preflight_evidence.py` for fail-closed `MEASURED_SAFE_STARTUP`, `USER_REPORTED_STARTUP_OK`, `UNAVAILABLE_STARTUP_RUN`, `UNAVAILABLE_RUNTIME_LOG`, `VIOLATION_LIVE_RUNTIME_ENABLED`, and `VIOLATION_SECRET_OR_EXCHANGE_ACCESS` classification.
+- Added focused tests in `tests/test_paper_runtime_preflight_evidence.py` and public reporting exports for the bounded preflight evidence adapter.
+- Added `docs/gates/gate5b_paper_runtime_preflight_evidence.md` to record the Gate 5B-0 startup/preflight boundary.
+- Package version advanced to `0.22.1`.
+
+**Evidence classification:**
+
+- `MEASURED_LOCAL`: local branch `work`, starting commit `053052b4e35ecf2c2bc609e3c92fa9778cfeb3b1`, clean starting tree, source/docs/tests/config/workflow files, and safe startup behavior were inspected locally.
+- `MEASURED_SAFE_STARTUP`: `python main.py` is required to be run locally for this gate and only proves bounded PAPER_ONLY startup metadata when observed.
+- `USER_REPORTED`: the user requested Gate 5B-0; no user statement is promoted to measured runtime proof.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, and production/live readiness evidence remain unavailable.
+
+**Safety boundary:** Gate 5B-0 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It does not enable live trading, request or expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, compute performance, claim profitability, approve readiness, or mutate exchange state. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
 ## 0.22.0 - 2026-06-17
 
 **Engineering milestone:** Gate 5A-13 user-reported green validation evidence reconciliation.

@@ -48,6 +48,13 @@ from src.reporting.paper_db_audit import (
     paper_db_audit_json,
     render_paper_db_audit_markdown,
 )
+from src.reporting.paper_runtime_preflight_evidence import (
+    PaperRuntimePreflightAssessment,
+    PaperRuntimePreflightClassification,
+    PaperRuntimePreflightEvidence,
+    classify_paper_runtime_preflight_evidence,
+    docs_may_claim_runtime_readiness,
+)
 from src.reporting.performance_boundary import (
     MetricPublicationEligibility,
     MetricPublicationStatus,
@@ -112,6 +119,9 @@ __all__ = [
     "PaperDbAuditIssue",
     "PaperDbAuditReport",
     "PaperDbAuditStatus",
+    "PaperRuntimePreflightAssessment",
+    "PaperRuntimePreflightClassification",
+    "PaperRuntimePreflightEvidence",
     "PullRequestVisibilityEvidence",
     "RepositoryProvenanceAssessment",
     "RepositoryProvenanceClassification",
@@ -138,6 +148,7 @@ __all__ = [
     "classify_connector_visible_ci_evidence",
     "classify_exchange_mutation_boundary_evidence",
     "classify_local_validation_evidence",
+    "classify_paper_runtime_preflight_evidence",
     "classify_pr_visibility_evidence",
     "classify_secret_material_boundary_evidence",
     "classify_user_reported_commit_evidence",
@@ -147,6 +158,7 @@ __all__ = [
     "docs_may_claim_live_readiness_from_secret_evidence",
     "docs_may_claim_merged_to_branch",
     "docs_may_claim_production_ready",
+    "docs_may_claim_runtime_readiness",
     "docs_may_claim_secret_safety",
     "evaluate_metric_publication_eligibility",
     "evaluate_operational_evidence_gate",

@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B-0
+
+Gate 5B-0 adds a PAPER runtime safe startup preflight evidence adapter. It classifies directly observed bounded startup evidence as `MEASURED_SAFE_STARTUP` only when PAPER_ONLY mode, no secret access, no exchange connection, no market fetch, no order path, no strategy alpha, no optimizer, and no readiness approval are all evidenced. User-reported startup success remains `USER_REPORTED_STARTUP_OK`; missing startup runs remain `UNAVAILABLE_STARTUP_RUN`; missing runtime logs remain `UNAVAILABLE_RUNTIME_LOG`; unsafe live, secret, exchange, fetch, order, mutation, alpha, or optimizer behavior remains a violation.
+
+Gate 5B-0 does not enable live trading, secret requests, exchange connections, market-data fetching, order placement, strategy alpha, optimizer behavior, performance calculation, profitability claims, exchange mutation, or readiness approval. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+Next smallest safe step: add a narrow local startup metadata schema guard or ledger consistency hardening for the bounded `python main.py` startup evidence. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current next step after Gate 5A-13
 
 Gate 5A-13 records Gate 5A-12 as `GREEN_BY_USER_REPORTED_VALIDATION` while preserving that connector-visible CI remains `UNAVAILABLE`, workflow artifacts remain `UNAVAILABLE`, and workflow job logs remain `UNAVAILABLE` unless directly measured. User-reported green validation is not connector-visible workflow evidence, is not direct workflow artifact proof, and does not prove production readiness. Missing evidence remains unavailable.

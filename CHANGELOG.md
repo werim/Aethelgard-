@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.22.1] - 2026-06-17
+
+### Added
+
+- Added Gate 5B-0 PAPER runtime safe startup preflight evidence classification in `src/reporting/paper_runtime_preflight_evidence.py`.
+- Added focused regression coverage in `tests/test_paper_runtime_preflight_evidence.py`.
+- Added Gate 5B-0 documentation in `docs/gates/gate5b_paper_runtime_preflight_evidence.md`.
+- Exported the Gate 5B-0 reporting adapter through `src.reporting`.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- `MEASURED_SAFE_STARTUP` only applies to directly observed bounded startup evidence showing PAPER_ONLY mode, no secret access, no exchange connection, no market fetch, no order path, no strategy alpha, no optimizer, and no readiness approval.
+- User-reported startup success remains `USER_REPORTED_STARTUP_OK`, missing startup proof remains `UNAVAILABLE_STARTUP_RUN`, and missing runtime logs remain `UNAVAILABLE_RUNTIME_LOG`.
+- LIVE mode, readiness approval, secret access, credential requirements, exchange connection, market fetch, order placement/cancellation, external mutation, strategy alpha execution, or optimizer execution classify as violations.
+- No live trading, secret requests, exchange connections, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, profitability claim, or readiness approval was added.
+
+### Evidence
+
+- `MEASURED_LOCAL`: Gate 5B-0 source, tests, exports, docs, and local startup command are in scope for direct workspace validation.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, and live/production readiness evidence remain unavailable.
+
+
 ## [0.22.0] - 2026-06-17
 
 ### Gate 5A-13 user-reported green validation evidence reconciliation

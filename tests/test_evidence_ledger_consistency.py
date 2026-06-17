@@ -238,3 +238,27 @@ def test_gate5a13_user_reported_green_validation_reconciliation() -> None:
     assert "secret handling" in combined_ledger
     assert "No live trading" in combined_ledger
     assert "No live trading, secret request" in combined_ledger
+
+
+def test_gate5b0_paper_runtime_preflight_boundary_fails_closed() -> None:
+    paths = (*LEDGER_PATHS, "docs/gates/gate5b_paper_runtime_preflight_evidence.md")
+    combined_ledger = "\n".join(_read(path) for path in paths)
+
+    assert "Gate 5B-0 PAPER runtime safe startup preflight evidence" in combined_ledger
+    assert "src/reporting/paper_runtime_preflight_evidence.py" in combined_ledger
+    assert "tests/test_paper_runtime_preflight_evidence.py" in combined_ledger
+    assert "MEASURED_SAFE_STARTUP" in combined_ledger
+    assert "USER_REPORTED_STARTUP_OK" in combined_ledger
+    assert "UNAVAILABLE_STARTUP_RUN" in combined_ledger
+    assert "UNAVAILABLE_RUNTIME_LOG" in combined_ledger
+    assert "VIOLATION_LIVE_RUNTIME_ENABLED" in combined_ledger
+    assert "VIOLATION_SECRET_OR_EXCHANGE_ACCESS" in combined_ledger
+    assert "PAPER_ONLY startup does not prove exchange safety" in combined_ledger
+    assert "no secret access" in combined_ledger
+    assert "no exchange connection" in combined_ledger
+    assert "no market fetch" in combined_ledger
+    assert "no order path" in combined_ledger
+    assert "no strategy alpha" in combined_ledger
+    assert "no optimizer" in combined_ledger
+    assert "no readiness approval" in combined_ledger
+    assert "does not enable live trading" in combined_ledger
