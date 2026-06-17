@@ -1,5 +1,23 @@
 # Aethelgard Version Ledger
 
+## 0.22.2 - 2026-06-17
+
+**Engineering milestone:** Gate 5B-1 PAPER runtime dry-run evidence ledger.
+
+- Added `src/reporting/paper_runtime_dry_run_evidence.py` for fail-closed dry-run evidence classification.
+- Added focused tests in `tests/test_paper_runtime_dry_run_evidence.py` and public reporting exports.
+- Added `docs/gates/gate5b_paper_runtime_dry_run_evidence.md` to record user-provided and Codex-measured dry-run evidence boundaries.
+- Package version advanced to `0.22.2`.
+
+**Evidence classification:**
+
+- `MEASURED_PAPER_DRY_RUN`: Codex directly ran `python main.py` locally and observed bounded PAPER_ONLY / RESEARCH_ONLY startup metadata only.
+- `USER_PROVIDED_RUNTIME_OUTPUT`: user provided `python main.py` output on macOS showing `foundation_runtime_initialized`, `PAPER_ONLY`, `RESEARCH_ONLY`, and initialized without execution capabilities; this does not prove production readiness, live readiness, exchange safety, data completeness, execution realism, or profitability.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, and live/production runtime proof remain unavailable.
+
+**Safety boundary:** Gate 5B-1 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It does not enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, compute or publish performance, claim profitability, approve readiness, or mutate exchange state. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
 ## 0.22.1 - 2026-06-17
 
 **Engineering milestone:** Gate 5B-0 PAPER runtime safe startup preflight evidence.

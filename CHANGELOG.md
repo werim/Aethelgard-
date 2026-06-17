@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.22.2] - 2026-06-17
+
+### Added
+
+- Added Gate 5B-1 PAPER runtime dry-run evidence classification in `src/reporting/paper_runtime_dry_run_evidence.py`.
+- Added focused regression coverage in `tests/test_paper_runtime_dry_run_evidence.py`.
+- Added Gate 5B-1 documentation in `docs/gates/gate5b_paper_runtime_dry_run_evidence.md`.
+- Exported the Gate 5B-1 reporting adapter through `src.reporting`.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- User-provided runtime output remains `USER_PROVIDED_RUNTIME_OUTPUT`, not measured local proof.
+- User-reported dry-run success remains `USER_REPORTED_DRY_RUN_OK`, missing dry-run proof remains `UNAVAILABLE_DRY_RUN`, and missing logs remain `UNAVAILABLE_DRY_RUN_LOG`.
+- LIVE mode, exchange connection, market fetch, order path, exchange mutation, secret access, or readiness claims classify as violations.
+- No live trading, secret requests, exchange connections, market fetches, order paths, exchange mutation, optimizer behavior, strategy alpha logic, performance publication, profitability claim, or readiness approval was added.
+
+### Evidence
+
+- `MEASURED_PAPER_DRY_RUN`: Codex directly ran `python main.py` locally and observed bounded PAPER_ONLY / RESEARCH_ONLY startup metadata only.
+- `USER_PROVIDED_RUNTIME_OUTPUT`: user provided `python main.py` output on macOS showing `foundation_runtime_initialized`, `PAPER_ONLY`, `RESEARCH_ONLY`, and initialized without execution capabilities; it does not prove production readiness, live readiness, exchange safety, data completeness, execution realism, or profitability.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, and live/production runtime proof remain unavailable.
+
+
 ## [0.22.1] - 2026-06-17
 
 ### Added

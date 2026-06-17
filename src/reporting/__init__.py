@@ -48,6 +48,13 @@ from src.reporting.paper_db_audit import (
     paper_db_audit_json,
     render_paper_db_audit_markdown,
 )
+from src.reporting.paper_runtime_dry_run_evidence import (
+    PaperRuntimeDryRunAssessment,
+    PaperRuntimeDryRunClassification,
+    PaperRuntimeDryRunEvidence,
+    classify_paper_runtime_dry_run_evidence,
+    docs_may_claim_live_readiness_from_dry_run,
+)
 from src.reporting.paper_runtime_preflight_evidence import (
     PaperRuntimePreflightAssessment,
     PaperRuntimePreflightClassification,
@@ -119,6 +126,9 @@ __all__ = [
     "PaperDbAuditIssue",
     "PaperDbAuditReport",
     "PaperDbAuditStatus",
+    "PaperRuntimeDryRunAssessment",
+    "PaperRuntimeDryRunClassification",
+    "PaperRuntimeDryRunEvidence",
     "PaperRuntimePreflightAssessment",
     "PaperRuntimePreflightClassification",
     "PaperRuntimePreflightEvidence",
@@ -148,6 +158,7 @@ __all__ = [
     "classify_connector_visible_ci_evidence",
     "classify_exchange_mutation_boundary_evidence",
     "classify_local_validation_evidence",
+    "classify_paper_runtime_dry_run_evidence",
     "classify_paper_runtime_preflight_evidence",
     "classify_pr_visibility_evidence",
     "classify_secret_material_boundary_evidence",
@@ -155,6 +166,7 @@ __all__ = [
     "classify_user_reported_pr_evidence",
     "classify_user_reported_validation_evidence",
     "data_freshness_evidence_assessment_json",
+    "docs_may_claim_live_readiness_from_dry_run",
     "docs_may_claim_live_readiness_from_secret_evidence",
     "docs_may_claim_merged_to_branch",
     "docs_may_claim_production_ready",
