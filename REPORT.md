@@ -1,5 +1,58 @@
 # Aethelgard Report
 
+## Gate 5A-13 user-reported green validation evidence reconciliation
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `545434a3bfde05323a00f64721354a8333a59b7b`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Connector-visible workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5A-12 secret material boundary evidence adapter on package version `0.22.0` with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary.
+- Chosen smallest safe increment: Gate 5A-13 documentation/test-only reconciliation because the user reported Gate 5A-12 was merged with green validation, while connector-visible CI, workflow job logs, and workflow artifact evidence remain unavailable unless directly measured.
+
+## Gate 5A-13 evidence classification
+
+### MEASURED
+
+- Local required repository files were read before edits.
+- Local branch `work`, starting commit `545434a3bfde05323a00f64721354a8333a59b7b`, and clean starting working tree were observed before edits.
+- Gate 5A-13 changes are limited to documentation and focused ledger consistency tests.
+- Gate 5A-12 remains secret-material boundary evidence only and preserves `MEASURED_NO_SECRET_MATERIAL`, `MEASURED_SECRET_PLACEHOLDER_ONLY`, `USER_REPORTED_SECRETS_NOT_SHARED`, `UNAVAILABLE_SECRET_AUDIT`, `UNAVAILABLE_RUNTIME_SECRET_PROOF`, and `VIOLATION_SECRET_MATERIAL_EXPOSED`.
+
+### USER_REPORTED
+
+- Gate 5A-12 was reported by the user as merged with green validation at dev HEAD `545434a3bfde05323a00f64721354a8333a59b7b`.
+- Gate 5A-12 status is recorded as `GREEN_BY_USER_REPORTED_VALIDATION`.
+- User-reported green validation is not connector-visible workflow evidence.
+- User-reported green validation is not direct workflow artifact proof.
+- User-reported green validation does not prove production readiness.
+
+### UNAVAILABLE
+
+- Connector-visible CI remains `UNAVAILABLE`.
+- Workflow artifacts remain `UNAVAILABLE`.
+- Workflow job logs remain `UNAVAILABLE`.
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Missing evidence remains unavailable and is not converted into measured workflow proof.
+
+## Gate 5A-13 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5A-13 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. No live trading, secret request, secret exposure, exchange connection, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, production readiness approval, or live-readiness approval is added. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5A-13 validation, continue with the next missing Gate 5A measured-evidence adapter or ledger consistency hardening. Do not add optimizer behavior, strategy alpha logic, lifecycle simulation expansion, performance calculation changes, exchange mutation, secret collection, live trading, or readiness approval.
+
+
+## Prior report content
+
+# Aethelgard Report
+
 ## Gate 5A-12 validation and repair
 
 - Repository: `werim/Aethelgard-`

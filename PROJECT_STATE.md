@@ -13,6 +13,46 @@ PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
 - Repository: `werim/Aethelgard-`
 - Selected repository: `werim/aethelgard-`
 - Target branch: `dev`
+- Observed local branch before Gate 5A-13 reconciliation edits: `work`
+- Starting commit before Gate 5A-13 reconciliation edits: `545434a3bfde05323a00f64721354a8333a59b7b`
+- Starting working tree before Gate 5A-13 reconciliation edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit: `UNAVAILABLE`
+- Workflow job logs for Gate 5A-12: `UNAVAILABLE`
+- Workflow artifacts for Gate 5A-12: `UNAVAILABLE`
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5A-13 user-reported green validation evidence reconciliation. Gate 5A-12 is recorded as `GREEN_BY_USER_REPORTED_VALIDATION` based on the user report that it was merged with green validation. User-reported green validation is not connector-visible workflow evidence, is not direct workflow artifact proof, and does not prove production readiness. Connector-visible CI remains UNAVAILABLE, workflow artifacts remain UNAVAILABLE, workflow job logs remain UNAVAILABLE, and missing evidence remains unavailable unless directly measured.
+
+Gate 5A-12 remains secret-material boundary evidence only and preserves `MEASURED_NO_SECRET_MATERIAL`, `MEASURED_SECRET_PLACEHOLDER_ONLY`, `USER_REPORTED_SECRETS_NOT_SHARED`, `UNAVAILABLE_SECRET_AUDIT`, `UNAVAILABLE_RUNTIME_SECRET_PROOF`, and `VIOLATION_SECRET_MATERIAL_EXPOSED`.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5A-13 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, or readiness status. It does not add live trading, secret request, secret exposure, exchange connection, order placement, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, production readiness approval, or live-readiness approval. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next Recommended Step
+
+After Gate 5A-13 validation evidence is checked, the next safe increment should remain small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks.
+
+
+## Prior report content
+
+# PROJECT_STATE.md
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Current Verified Repository State
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Target branch: `dev`
 - Observed local branch before Gate 5A-12 validation edits: `work`
 - Starting commit before Gate 5A-12 validation edits: `743cd92c772a8ea3bc4847c9dbb4dd8caead125a`
 - Starting working tree before Gate 5A-12 validation edits: clean

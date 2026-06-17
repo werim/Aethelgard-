@@ -2,6 +2,17 @@
 
 ## [0.22.0] - 2026-06-17
 
+### Gate 5A-13 user-reported green validation evidence reconciliation
+
+- Recorded Gate 5A-12 as `GREEN_BY_USER_REPORTED_VALIDATION` from the user report that Gate 5A-12 was merged with green validation.
+- Preserved that connector-visible CI remains `UNAVAILABLE`, workflow artifacts remain `UNAVAILABLE`, and workflow job logs remain `UNAVAILABLE` unless directly measured.
+- Clarified that user-reported green validation is not connector-visible workflow evidence, is not direct workflow artifact proof, and does not prove production readiness.
+- Added focused ledger consistency coverage to prevent drift from the Gate 5A-13 documentation/test-only reconciliation boundary.
+- Retained PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY: no runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange behavior, exchange mutation, secret handling, live trading, or readiness approval was added.
+
+
+## [0.22.0] - 2026-06-17
+
 ### Changed
 
 - Validated and repaired Gate 5A-12 secret material boundary evidence adapter formatting.
