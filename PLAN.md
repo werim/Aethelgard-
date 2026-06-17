@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B-2
+
+Gate 5B-2 adds a main startup contract regression harness. It runs `main.py` with the current Python executable in a controlled subprocess and verifies bounded JSON startup metadata remains PAPER_ONLY, RESEARCH_ONLY, deterministic-seed aware, and free of unsafe live, secret, order, market-fetch, strategy, optimizer, performance, or readiness claims.
+
+Gate 5B-2 does not add runtime behavior, enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, mutate exchange state, or approve readiness. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+Next smallest safe step: add a narrow evidence-ledger reconciliation for measured local validation results or a bounded PAPER-runtime log fixture guard. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current next step after Gate 5B-0
 
 Gate 5B-0 adds a PAPER runtime safe startup preflight evidence adapter. It classifies directly observed bounded startup evidence as `MEASURED_SAFE_STARTUP` only when PAPER_ONLY mode, no secret access, no exchange connection, no market fetch, no order path, no strategy alpha, no optimizer, and no readiness approval are all evidenced. User-reported startup success remains `USER_REPORTED_STARTUP_OK`; missing startup runs remain `UNAVAILABLE_STARTUP_RUN`; missing runtime logs remain `UNAVAILABLE_RUNTIME_LOG`; unsafe live, secret, exchange, fetch, order, mutation, alpha, or optimizer behavior remains a violation.

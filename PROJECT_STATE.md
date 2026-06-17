@@ -13,6 +13,44 @@ PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
 - Repository: `werim/Aethelgard-`
 - Selected repository: `werim/Aethelgard-`
 - Target branch: `dev`
+- Observed local branch before Gate 5B-2 edits: `work`
+- Starting commit before Gate 5B-2 edits: `ee64df2df5a0a42f755adef5af284544691c3111`
+- Starting working tree before Gate 5B-2 edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit: `UNAVAILABLE`
+- Workflow job logs for Gate 5B-2: `UNAVAILABLE`
+- Workflow artifacts for Gate 5B-2: `UNAVAILABLE`
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5B-2 main startup contract regression harness. Gate 5B-2 records `tests/test_main_startup_contract.py` and `docs/gates/gate5b_main_startup_contract.md` as a test/docs-only guard that runs `main.py` in a controlled subprocess and verifies bounded PAPER_ONLY / RESEARCH_ONLY JSON startup output without unsafe runtime claims.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-2 does not add runtime behavior, enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve readiness, mutate exchange state, or prove exchange safety, data completeness, execution realism, strategy validity, production readiness, or live readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next Recommended Step
+
+After Gate 5B-2 validation evidence is checked, keep the next safe increment small and fail-closed: add a narrow evidence-ledger reconciliation for locally measured startup validation results or a bounded PAPER-runtime log fixture guard without changing runtime behavior.
+
+
+## Prior report content
+
+# PROJECT_STATE.md
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Current Verified Repository State
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Target branch: `dev`
 - Observed local branch before Gate 5B-0 edits: `work`
 - Starting commit before Gate 5B-0 edits: `053052b4e35ecf2c2bc609e3c92fa9778cfeb3b1`
 - Starting working tree before Gate 5B-0 edits: clean

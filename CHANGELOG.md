@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.22.3] - 2026-06-17
+
+### Added
+
+- Added Gate 5B-2 subprocess startup-contract regression coverage in `tests/test_main_startup_contract.py`.
+- Added Gate 5B-2 documentation in `docs/gates/gate5b_main_startup_contract.md`.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- The subprocess harness verifies bounded JSON startup metadata, `foundation_runtime_initialized`, deterministic seed evidence, and absence of unsafe live, secret, order, market-fetch, strategy, optimizer, performance, or readiness claims.
+- No runtime behavior, live trading, secret request/read/exposure, exchange connection, market fetch, order path, optimizer behavior, strategy alpha logic, performance calculation, profitability claim, or readiness approval was added.
+
+### Evidence
+
+- `MEASURED_PAPER_DRY_RUN`: a passing local subprocess test may prove only bounded startup evidence.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, exchange safety, market-data correctness, execution realism, strategy validity, profitability, and runtime proof beyond bounded startup remain unavailable.
+
+
+
 ## [0.22.2] - 2026-06-17
 
 ### Added

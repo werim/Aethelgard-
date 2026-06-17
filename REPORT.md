@@ -1,5 +1,55 @@
 # Aethelgard Report
 
+## Gate 5B-2 main startup contract regression harness
+
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `ee64df2df5a0a42f755adef5af284544691c3111`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5B-1 PAPER runtime dry-run evidence ledger on package version `0.22.2`, with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary and no runtime readiness approval.
+- Chosen smallest safe increment: Gate 5B-2 main startup contract regression harness because `main.py` already emits bounded safe startup metadata and the next safe step is to prevent that output from drifting into unsafe claims without changing runtime behavior.
+
+## Gate 5B-2 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits: `README.md`, `main.py`, `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, `pyproject.toml`, `src/reporting/paper_runtime_dry_run_evidence.py`, `tests/test_paper_runtime_dry_run_evidence.py`, `docs/gates/gate5b_paper_runtime_dry_run_evidence.md`, and existing runtime/bootstrap/config/logging tests.
+- Local branch `work`, starting commit `ee64df2df5a0a42f755adef5af284544691c3111`, and clean starting working tree were observed before edits.
+- Gate 5B-2 adds `tests/test_main_startup_contract.py` and `docs/gates/gate5b_main_startup_contract.md`, and updates project ledgers.
+- `MEASURED_PAPER_DRY_RUN` is limited to bounded startup evidence from a passing controlled subprocess run of `main.py`.
+
+### USER_REPORTED
+
+- The user reported PR #27 was merged at `ee64df2df5a0a42f755adef5af284544691c3111` with green validation. This remains user-reported unless independently verified in this workspace.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts remain `UNAVAILABLE`.
+- Workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof remains `UNAVAILABLE`; Gate 5B-2 does not connect to or audit an exchange.
+- Production readiness, live readiness, exchange safety, data completeness, execution realism, strategy validity, runtime proof beyond bounded startup, and profitability evidence remain unavailable and unclaimed.
+
+## Gate 5B-2 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-2 does not add runtime behavior, enable live trading, request/read/expose secrets, connect to Binance or any exchange, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve readiness, mutate exchange state, or imply execution capabilities. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5B-2 validation, the next smallest safe step is a narrow evidence-ledger reconciliation for measured local validation results or bounded PAPER-runtime log fixture guard, without changing runtime behavior, market-data behavior, strategy logic, optimizer behavior, execution-cost modeling, exchange mutation, or readiness status.
+
+
+## Prior report content
+
+# Aethelgard Report
+
 ## Gate 5B-0 PAPER runtime safe startup preflight evidence
 
 - Repository: `werim/Aethelgard-`
