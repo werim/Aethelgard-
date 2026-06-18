@@ -10,6 +10,44 @@ PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
 
 ## Current Verified Repository State
 
+- Repository: `github.com/werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Target branch: `dev`
+- Observed local branch before Gate 5B-4 edits: `work`
+- Starting commit before Gate 5B-4 edits: `169075a989e4f7f1999d53297574a3e555e9fa52`
+- Starting working tree before Gate 5B-4 edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Visible CI/workflow status for this workspace commit: `UNAVAILABLE`
+- Workflow job logs for Gate 5B-4: `UNAVAILABLE`
+- Workflow artifacts for Gate 5B-4: `UNAVAILABLE`
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5B-4 runtime artifact schema ledger consistency check. Gate 5B-4 records `tests/test_runtime_artifact_schema_ledger_consistency.py` and `docs/gates/gate5b_runtime_artifact_writer.md` as a test/docs/ledger-only guard that keeps documented generated local runtime-artifact schema fields aligned with `src/reporting/runtime_artifact_writer.py` and `tests/test_runtime_artifact_writer.py`. The optional CLI wrapper is intentionally deferred because the smallest safe step was ledger consistency only.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-4 is a ledger consistency check only. Local runtime artifacts are evidence artifacts, not production approval. Runtime artifact schema documentation must not imply live readiness. Gate 5B-4 does not add runtime trading behavior, change `python main.py`, weaken the Gate 5B-2 startup contract, enable live trading, request/read/expose secrets, connect to Binance or any exchange, fetch market data, place or cancel orders, simulate real exchange orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve runtime readiness, approve live readiness, approve production readiness, or mutate exchange state. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval is added.
+
+## Next Recommended Step
+
+After Gate 5B-4 validation evidence is checked, keep the next safe increment small and fail-closed: consider a focused optional offline CLI wrapper around the existing runtime artifact writer only if it preserves the Gate 5B-2 startup contract unchanged and remains strictly local, or continue with another ledger consistency guard.
+
+
+## Prior report content
+
+# PROJECT_STATE.md
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Current Verified Repository State
+
 - Repository: `werim/Aethelgard-`
 - Selected repository: `werim/Aethelgard-`
 - Target branch: `dev`

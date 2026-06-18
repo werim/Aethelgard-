@@ -1,5 +1,58 @@
 # Aethelgard Report
 
+## Gate 5B-4 runtime artifact schema ledger consistency check
+
+- Repository: `github.com/werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `169075a989e4f7f1999d53297574a3e555e9fa52`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5B-3 offline runtime output artifact writer on package version `0.22.4`, with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary and no runtime readiness approval.
+- Chosen smallest safe increment: Gate 5B-4 runtime artifact schema ledger consistency check because it only verifies documentation/schema alignment for generated local runtime artifacts and does not change runtime behavior or the Gate 5B-2 startup contract.
+
+## Gate 5B-4 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits, including runtime artifact writer code, its tests, startup contract tests, dry-run evidence docs, project ledgers, and tooling configuration.
+- Local branch `work`, starting commit `169075a989e4f7f1999d53297574a3e555e9fa52`, and clean starting working tree were observed before edits.
+- Gate 5B-4 adds `tests/test_runtime_artifact_schema_ledger_consistency.py` and updates `docs/gates/gate5b_runtime_artifact_writer.md` plus project ledgers.
+- The ledger consistency check preserves documented top-level runtime artifact fields, safety-boundary fields, unavailable-evidence fields, and required safety phrases.
+- The optional CLI wrapper was intentionally deferred because the smallest safe step was ledger consistency only.
+
+### USER_REPORTED
+
+- The user requested Gate 5B-4 and selected the ledger consistency interpretation. This remains user-reported task direction, not remote CI or readiness evidence.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts remain `UNAVAILABLE`.
+- Workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof remains `UNAVAILABLE`; Gate 5B-4 does not connect to or audit an exchange.
+- Market-data completeness remains `UNAVAILABLE`; Gate 5B-4 does not fetch or validate market data completeness.
+- Execution realism remains `UNAVAILABLE`; Gate 5B-4 does not model fills, fees, spread, slippage, latency, funding, or order lifecycle behavior.
+- Profitability, live readiness, and production readiness evidence remain `UNAVAILABLE` and unclaimed.
+
+## Gate 5B-4 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-4 is a ledger consistency check only. Local runtime artifacts are evidence artifacts, not production approval. Runtime artifact schema documentation must not imply live readiness. Gate 5B-4 does not add runtime trading behavior, change `python main.py`, weaken the Gate 5B-2 startup contract, enable live trading, request/read/expose secrets, connect to Binance or any exchange, fetch market data, place or cancel orders, simulate real exchange orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve runtime readiness, approve live readiness, approve production readiness, or mutate exchange state. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval is added.
+
+## Next recommended smallest increment
+
+After Gate 5B-4 validation, the next smallest safe step is either a focused optional offline CLI wrapper around the existing writer if it preserves the Gate 5B-2 startup contract unchanged, or another narrow ledger consistency check.
+
+
+## Prior report content
+
+# Aethelgard Report
+
 ## Gate 5B-3 offline runtime output artifact writer
 
 - Repository: `github.com/werim/Aethelgard-`
