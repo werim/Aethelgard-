@@ -93,6 +93,13 @@ from src.reporting.risk_control_evidence import (
     assess_risk_control_enforcement_for_gate5a,
     risk_control_evidence_assessment_json,
 )
+from src.reporting.runtime_artifact_writer import (
+    REQUIRED_SAFETY_BOUNDARY,
+    REQUIRED_UNAVAILABLE_EVIDENCE,
+    RuntimeArtifactWriterError,
+    runtime_artifact_payload,
+    write_runtime_artifact,
+)
 from src.reporting.secret_material_boundary_evidence import (
     SecretMaterialBoundaryAssessment,
     SecretMaterialBoundaryClassification,
@@ -103,6 +110,8 @@ from src.reporting.secret_material_boundary_evidence import (
 )
 
 __all__ = [
+    "REQUIRED_SAFETY_BOUNDARY",
+    "REQUIRED_UNAVAILABLE_EVIDENCE",
     "BranchHeadEvidence",
     "CommitAncestryEvidence",
     "ConnectorCiSnapshot",
@@ -139,6 +148,7 @@ __all__ = [
     "RiskControlEvidenceAssessment",
     "RiskControlEvidenceStatus",
     "RiskControlPolicyEvidence",
+    "RuntimeArtifactWriterError",
     "SecretMaterialBoundaryAssessment",
     "SecretMaterialBoundaryClassification",
     "SecretMaterialBoundaryEvidence",
@@ -182,4 +192,6 @@ __all__ = [
     "render_deployment_blocker_matrix_markdown",
     "render_paper_db_audit_markdown",
     "risk_control_evidence_assessment_json",
+    "runtime_artifact_payload",
+    "write_runtime_artifact",
 ]

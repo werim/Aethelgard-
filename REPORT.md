@@ -1,5 +1,57 @@
 # Aethelgard Report
 
+## Gate 5B-3 offline runtime output artifact writer
+
+- Repository: `github.com/werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `d9495176d52a998655d6d2ed3993cb7b956b65d5`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5B-2 main startup contract regression harness on package version `0.22.3`, with PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY safety boundary and no runtime readiness approval.
+- Chosen smallest safe increment: Gate 5B-3 offline runtime artifact writer because it only persists bounded caller-supplied startup/runtime metadata to local JSON under `reports/` and does not change trading, exchange, market-data, strategy, optimizer, performance, or readiness behavior.
+
+## Gate 5B-3 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits: `README.md`, `main.py`, `PROJECT_STATE.md`, `REPORT.md`, `VERSION.md`, `CHANGELOG.md`, `PLAN.md`, `pyproject.toml`, `tests/test_main_startup_contract.py`, `src/reporting/paper_runtime_dry_run_evidence.py`, `docs/gates/gate5b_paper_runtime_dry_run_evidence.md`, `.gitignore`, and existing reporting/persistence helpers.
+- Local branch `work`, starting commit `d9495176d52a998655d6d2ed3993cb7b956b65d5`, and clean starting working tree were observed before edits.
+- Gate 5B-3 adds `src/reporting/runtime_artifact_writer.py`, `tests/test_runtime_artifact_writer.py`, and `docs/gates/gate5b_runtime_artifact_writer.md`, and updates reporting exports plus ledgers.
+- The artifact writer accepts caller-supplied runtime/startup metadata, writes deterministic sorted-key JSON with newline at EOF under `reports/`, creates local parent directories, rejects absolute/outside/non-JSON paths, records PAPER_ONLY / RESEARCH_ONLY safety flags, and records unavailable evidence explicitly.
+
+### USER_REPORTED
+
+- The user reported Gate 5B-2 was merged. This remains user-reported unless independently verified through remote branch or workflow evidence.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts remain `UNAVAILABLE`.
+- Workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof remains `UNAVAILABLE`; Gate 5B-3 does not connect to or audit an exchange.
+- Market-data completeness remains `UNAVAILABLE`; Gate 5B-3 does not fetch or validate market data completeness.
+- Execution realism remains `UNAVAILABLE`; Gate 5B-3 does not model fills, fees, spread, slippage, latency, funding, or order lifecycle behavior.
+- Profitability, live readiness, and production readiness evidence remain `UNAVAILABLE` and unclaimed.
+
+## Gate 5B-3 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-3 does not enable live trading, request/read/expose secrets, connect to Binance or any exchange, fetch market data, place or cancel orders, simulate real exchange orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve runtime readiness, approve live readiness, approve production readiness, mutate exchange state, or prove exchange safety, data completeness, execution realism, strategy validity, production readiness, or live readiness. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5B-3 validation, the next smallest safe step is to add a narrow ledger consistency check for generated local runtime-artifact schema documentation or a focused optional CLI wrapper around the existing writer only if it preserves the Gate 5B-2 startup contract and remains strictly offline.
+
+
+## Prior report content
+
+# Aethelgard Report
+
 ## Gate 5B-2 main startup contract regression harness
 
 - Repository: `werim/Aethelgard-`

@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.22.4] - 2026-06-18
+
+### Added
+
+- Added Gate 5B-3 offline runtime artifact writer in `src/reporting/runtime_artifact_writer.py`.
+- Added focused regression coverage in `tests/test_runtime_artifact_writer.py`.
+- Added Gate 5B-3 documentation in `docs/gates/gate5b_runtime_artifact_writer.md`.
+- Exported the Gate 5B-3 artifact writer through `src.reporting`.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- Runtime artifacts are deterministic local JSON files under `reports/` only and contain bounded caller-supplied startup/runtime metadata.
+- Unsafe paths, absolute paths, parent traversal, non-JSON files, secret-like fields, strategy alpha fields, optimizer/performance/profitability fields, and readiness-upgrade fields fail closed.
+- No live trading, secret request/read/exposure, exchange connection, market fetch, order path, optimizer behavior, strategy alpha logic, performance calculation, profitability claim, or readiness approval was added.
+
+### Evidence
+
+- `MEASURED_PAPER_DRY_RUN`: admitted only for caller-supplied measured safe dry-run evidence.
+- `USER_PROVIDED_RUNTIME_OUTPUT`: preserved as user-provided evidence only.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable.
+
+
+
 ## [0.22.3] - 2026-06-17
 
 ### Added
