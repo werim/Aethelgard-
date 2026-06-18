@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B-3
+
+Gate 5B-3 adds an offline runtime output artifact writer. It writes deterministic local JSON under `reports/` from caller-supplied startup/runtime metadata only, records PAPER_ONLY / RESEARCH_ONLY safety flags and explicit unavailable evidence, and rejects unsafe paths plus secret-like, alpha, optimizer, performance, profitability, and readiness-upgrade fields.
+
+Gate 5B-3 does not add runtime trading behavior, enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, mutate exchange state, or approve readiness. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+Next smallest safe step: add a narrow ledger consistency check for runtime-artifact schema documentation or a focused optional CLI wrapper around the existing writer only if it preserves Gate 5B-2 startup behavior and remains strictly offline. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, market-data fetching, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current next step after Gate 5B-2
 
 Gate 5B-2 adds a main startup contract regression harness. It runs `main.py` with the current Python executable in a controlled subprocess and verifies bounded JSON startup metadata remains PAPER_ONLY, RESEARCH_ONLY, deterministic-seed aware, and free of unsafe live, secret, order, market-fetch, strategy, optimizer, performance, or readiness claims.

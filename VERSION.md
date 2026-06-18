@@ -1,5 +1,27 @@
 # Aethelgard Version Ledger
 
+## 0.22.4 - 2026-06-18
+
+**Engineering milestone:** Gate 5B-3 offline runtime output artifact writer.
+
+- Added `src/reporting/runtime_artifact_writer.py` for deterministic local JSON runtime evidence artifacts under `reports/` only.
+- Added `tests/test_runtime_artifact_writer.py` to verify deterministic JSON, bounded safety metadata, explicit unavailable evidence, forbidden secret/performance fields, no readiness implication, and fail-closed path policy.
+- Added `docs/gates/gate5b_runtime_artifact_writer.md` to document the local offline artifact boundary.
+- Package version advanced to `0.22.4`.
+
+**Evidence classification:**
+
+- `MEASURED_PAPER_DRY_RUN`: admitted only when the caller supplies measured local safe dry-run evidence.
+- `USER_PROVIDED_RUNTIME_OUTPUT`: admitted only as user-provided runtime output, not measured local proof.
+- `UNAVAILABLE_DRY_RUN` / `UNAVAILABLE_DRY_RUN_LOG`: missing evidence remains unavailable.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable unless directly measured.
+
+**Safety boundary:** Gate 5B-3 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It does not enable live trading, request/read/expose secrets, connect to exchanges, fetch market data, place or cancel orders, generate strategy alpha, run an optimizer, calculate or publish performance, claim profitability, approve readiness, or mutate exchange state. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
+
+
+
+# Aethelgard Version Ledger
+
 ## 0.22.3 - 2026-06-17
 
 **Engineering milestone:** Gate 5B-2 main startup contract regression harness.
