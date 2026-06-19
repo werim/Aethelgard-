@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B code evidence documentation reconciliation
+
+Gate 5B runtime artifact documentation has been reconciled with code evidence directly observed on `dev`. The reconciliation documents `src/reporting/runtime_artifact_writer.py`, `tests/test_runtime_artifact_writer.py`, `tests/test_runtime_artifact_schema_ledger_consistency.py`, `src/reporting/__init__.py`, and `pyproject.toml` in `docs/gates/gate5b_runtime_artifact_writer.md`.
+
+This step is documentation-only. It does not add a CLI wrapper, does not change `python main.py`, does not change package version `0.22.5`, and does not weaken the Gate 5B-2 startup contract. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, exchange mutation, or readiness approval is added.
+
+Next smallest safe step: run or inspect validation evidence for the doc-only reconciliation if available, then consider a focused optional offline CLI wrapper around the existing runtime artifact writer only if it preserves the Gate 5B-2 startup contract unchanged and remains strictly local. Otherwise continue with another narrow evidence-ledger consistency guard. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, market-data fetching, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current next step after Gate 5B-4
 
 Gate 5B-4 adds a runtime artifact schema ledger consistency check. It verifies that generated local runtime-artifact schema documentation preserves the top-level artifact fields, `safety_boundary` fields, `unavailable_evidence` fields, and safety phrases aligned with the existing runtime artifact writer and tests.
@@ -218,51 +231,3 @@ After Gate 5A-10 is validated, continue with the next missing Gate 5A measured-e
 - `UNAVAILABLE`: mutable local clone validation in this execution environment.
 - `UNAVAILABLE`: exact branch-head full local validation, Ruff, Black, and Mypy in this execution environment.
 - `UNAVAILABLE`: connector-visible workflow runs, workflow artifacts, and job logs for the Gate 5A-6 green-by-user-report head.
-- `UNAVAILABLE`: atomic multi-file commit evidence; connector contents writes were performed as separate commits.
-- `MODELED`: none.
-
-### Validation commands
-
-```bash
-python -m compileall -q src tests main.py
-pytest -q tests/test_evidence_ledger_consistency.py
-pytest -q tests/test_validation_command_ledger_consistency.py
-pytest -q tests/test_gate4_completion_evidence_matrix.py
-pytest -q tests/test_gate4_public_safety_exports.py
-pytest -q tests/test_cost_evidence.py
-pytest -q tests/test_public_exports.py
-pytest -q tests/test_audit_runtime_evidence.py
-pytest -q tests/test_risk_control_evidence.py
-pytest -q tests/test_data_freshness_evidence.py
-pytest -q
-ruff check .
-black --check .
-mypy .
-```
-
-### Boundary limit
-
-Gate 5A-7 is a documentation and ledger-consistency guard only. It does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
-
-## Gate 5A-8 — Documentation Evidence Reconciliation
-
-**Status:** `DOCUMENTED_PENDING_VALIDATION`.
-
-### Scope
-
-- Compare documentation claims against current local code, tests, and evidence ledgers.
-- Correct stale or over-strong evidence wording only.
-- Preserve Gate 4B-5, Gate 4B-5A, Gate 5A-4, Gate 5A-6, and Gate 5A-7 anchors.
-- Keep connector-visible CI, direct workflow artifacts, workflow job logs, remote PR visibility, and `origin` refresh evidence `UNAVAILABLE` unless directly observed.
-
-### Boundary limit
-
-Gate 5A-8 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, exchange behavior, or readiness status.
-
-## Next recommended step
-
-After Gate 5A-9 is green in CI or local validation, keep the next increment small and fail-closed: select the next missing Gate 5A measured-evidence adapter or harden existing ledger consistency checks. Do not add optimizer, strategy alpha logic, lifecycle expansion, performance calculation, exchange mutation, or readiness approval.
-
-## Gate 5B-1 PAPER runtime dry-run evidence ledger
-
-Gate 5B-1 adds `src/reporting/paper_runtime_dry_run_evidence.py`, `tests/test_paper_runtime_dry_run_evidence.py`, and `docs/gates/gate5b_paper_runtime_dry_run_evidence.md` for fail-closed `MEASURED_PAPER_DRY_RUN`, `USER_PROVIDED_RUNTIME_OUTPUT`, `USER_REPORTED_DRY_RUN_OK`, `UNAVAILABLE_DRY_RUN`, `UNAVAILABLE_DRY_RUN_LOG`, `VIOLATION_LIVE_OR_EXCHANGE_PATH`, and `VIOLATION_SECRET_OR_READINESS_PATH` classification. User provided `python main.py` output on macOS; output showed `foundation_runtime_initialized`, `PAPER_ONLY` mode, `RESEARCH_ONLY` readiness, and initialized without execution capabilities. This is user-provided runtime output unless reproduced by Codex locally. It does not prove production readiness, live readiness, exchange safety, data completeness, execution realism, or profitability. Gate 5B-1 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, secret handling, or readiness status. No live trading, no secret access, no exchange connection, no market fetch, no order path, no optimizer, no strategy alpha, no performance claim, and no readiness approval are added. PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Unknown execution costs are not zero. Missing evidence remains unavailable. Backtest performance alone does not prove production readiness.
