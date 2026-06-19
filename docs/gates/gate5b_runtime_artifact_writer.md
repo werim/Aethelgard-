@@ -1,5 +1,28 @@
 # Gate 5B-3 — Offline Runtime Output Artifact Writer
 
+## Gate 5B-4 dev code evidence reconciliation
+
+This reconciliation was performed against the `dev` branch through direct repository file reads. It documents only what is evidenced in code and tests; it does not claim local test execution, connector-visible CI success, runtime readiness, live readiness, production readiness, profitability, exchange safety, market-data completeness, or execution realism.
+
+| Code/documentation surface | Evidence observed on `dev` | Documentation status |
+| --- | --- | --- |
+| `src/reporting/runtime_artifact_writer.py` | Implements `runtime_artifact_payload`, `write_runtime_artifact`, fail-closed `RuntimeArtifactWriterError`, deterministic JSON payload construction, `reports/`-only path validation, required `PAPER_ONLY` / `RESEARCH_ONLY` fields, required safety-boundary flags, explicit unavailable-evidence fields, admitted evidence classifications, and forbidden secret/performance/alpha/profitability key rejection. | Documented in this gate file. |
+| `tests/test_runtime_artifact_writer.py` | Covers deterministic parseable newline-terminated JSON, bounded safety metadata, explicit unavailable evidence, forbidden secret/performance/alpha/profitability claims, absence of live/production-readiness implication, unsafe path rejection, and unsafe runtime claim rejection. | Documented in this gate file. |
+| `tests/test_runtime_artifact_schema_ledger_consistency.py` | Guards that the documented top-level artifact fields, `safety_boundary` fields, `unavailable_evidence` fields, and required safety phrases remain aligned with the writer payload and documentation. | Documented in this gate file. |
+| `src/reporting/__init__.py` | Exports `REQUIRED_SAFETY_BOUNDARY`, `REQUIRED_UNAVAILABLE_EVIDENCE`, `RuntimeArtifactWriterError`, `runtime_artifact_payload`, and `write_runtime_artifact`. | Documented in this gate file. |
+| `pyproject.toml` | Package version remains `0.22.5`; this reconciliation does not require a package version bump because it documents already-present code evidence only. | Documented here as a docs-only reconciliation. |
+
+### Evidence classification for this reconciliation
+
+- `MEASURED`: source, test, export, and packaging files listed above were directly read from `dev` through the GitHub connector.
+- `UNAVAILABLE`: local test execution in this environment, connector-visible CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness.
+- `MODELED`: none.
+- `USER_REPORTED`: the instruction to reconcile documentation with implemented code.
+
+### Safety boundary for this reconciliation
+
+This reconciliation is documentation-only. It does not add runtime behavior, does not add a CLI wrapper, does not change `python main.py`, does not weaken the Gate 5B-2 startup contract, does not enable live trading, does not request/read/expose secrets, does not connect to Binance or any exchange, does not fetch market data, does not place or cancel orders, does not simulate real exchange orders, does not generate strategy alpha, does not run an optimizer, does not calculate or publish performance, does not claim profitability, does not approve runtime readiness, does not approve live readiness, does not approve production readiness, and does not mutate exchange state. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
 ## Scope
 
 Gate 5B-3 adds a local, offline runtime evidence artifact writer. It accepts caller-supplied startup/runtime metadata and writes deterministic JSON under `reports/` only. Generated runtime evidence artifacts are local audit evidence, not production approval.
