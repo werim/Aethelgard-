@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.22.5] - 2026-06-18
+
+### Added
+
+- Added Gate 5B-4 runtime artifact schema ledger consistency coverage in `tests/test_runtime_artifact_schema_ledger_consistency.py`.
+- Updated Gate 5B runtime artifact writer documentation with explicit required top-level, `safety_boundary`, and `unavailable_evidence` schema fields.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- Gate 5B-4 is a ledger consistency check only.
+- Local runtime artifacts are evidence artifacts, not production approval.
+- Runtime artifact schema documentation must not imply live readiness.
+- Missing evidence remains UNAVAILABLE, unknown execution costs are not zero, and backtest performance alone does not prove production readiness.
+- No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval was added.
+- The optional CLI wrapper was intentionally deferred because the smallest safe step was ledger consistency only.
+
+### Evidence
+
+- `MEASURED`: local schema/test/docs consistency only.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable.
+
+
+
+# Changelog
+
 ## [0.22.4] - 2026-06-18
 
 ### Added

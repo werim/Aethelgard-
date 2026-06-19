@@ -1,5 +1,18 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B-4
+
+Gate 5B-4 adds a runtime artifact schema ledger consistency check. It verifies that generated local runtime-artifact schema documentation preserves the top-level artifact fields, `safety_boundary` fields, `unavailable_evidence` fields, and safety phrases aligned with the existing runtime artifact writer and tests.
+
+Gate 5B-4 is a ledger consistency check only. It does not add a CLI wrapper, does not change `python main.py`, and does not weaken the Gate 5B-2 startup contract. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval is added.
+
+Next smallest safe step: consider a focused optional offline CLI wrapper around the existing runtime artifact writer only if it preserves the Gate 5B-2 startup contract unchanged and remains strictly local; otherwise continue with another narrow evidence-ledger consistency guard. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, market-data fetching, or readiness approval.
+
+
+## Prior plan content
+
+# Aethelgard Plan
+
 ## Current next step after Gate 5B-3
 
 Gate 5B-3 adds an offline runtime output artifact writer. It writes deterministic local JSON under `reports/` from caller-supplied startup/runtime metadata only, records PAPER_ONLY / RESEARCH_ONLY safety flags and explicit unavailable evidence, and rejects unsafe paths plus secret-like, alpha, optimizer, performance, profitability, and readiness-upgrade fields.

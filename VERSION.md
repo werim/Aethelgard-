@@ -1,5 +1,25 @@
 # Aethelgard Version Ledger
 
+## 0.22.5 - 2026-06-18
+
+**Engineering milestone:** Gate 5B-4 runtime artifact schema ledger consistency check.
+
+- Added `tests/test_runtime_artifact_schema_ledger_consistency.py` to verify documented runtime artifact schema fields and safety phrases stay aligned with the runtime artifact writer.
+- Updated `docs/gates/gate5b_runtime_artifact_writer.md` with the Gate 5B-4 schema ledger consistency section.
+- Documented that the optional CLI wrapper was intentionally deferred because the smallest safe step was ledger consistency only.
+- Package version advanced to `0.22.5`.
+
+**Evidence classification:**
+
+- `MEASURED`: local schema/test/docs consistency evidence only.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable unless directly measured.
+
+**Safety boundary:** Gate 5B-4 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It is a ledger consistency check only, does not change `python main.py`, does not weaken the Gate 5B-2 startup contract, and adds no live trading, secret request/read/exposure, exchange connection, market fetch, order path, strategy alpha, optimizer, performance claim, or readiness approval. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+
+
+# Aethelgard Version Ledger
+
 ## 0.22.4 - 2026-06-18
 
 **Engineering milestone:** Gate 5B-3 offline runtime output artifact writer.

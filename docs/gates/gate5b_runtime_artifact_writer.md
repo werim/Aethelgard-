@@ -34,3 +34,49 @@ Artifacts record CI workflow artifacts, exchange audit, market-data completeness
 ## Safety boundary
 
 Gate 5B-3 is a local offline artifact-writing boundary only. It does not add runtime trading behavior, fetch market data, connect to exchanges, read or write secrets, place or cancel orders, simulate real exchange orders, add strategy alpha, run optimizers, calculate or publish performance, validate strategy, validate profitability, validate data completeness, validate execution realism, prove exchange safety, approve runtime readiness, approve live readiness, or approve production readiness. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+
+## Gate 5B-4 schema ledger consistency
+
+Gate 5B-4 is a ledger consistency check only. It keeps generated local runtime-artifact schema documentation aligned with `src/reporting/runtime_artifact_writer.py` and `tests/test_runtime_artifact_writer.py`; it does not add a CLI wrapper or change `python main.py` behavior. The optional CLI wrapper is intentionally deferred because the smallest safe step was ledger consistency only.
+
+### Documented runtime artifact schema
+
+Top-level required fields:
+
+- `schema_version`
+- `source`
+- `mode`
+- `readiness`
+- `project_name`
+- `random_seed`
+- `determinism_scope`
+- `safety_boundary`
+- `evidence_classification`
+- `unavailable_evidence`
+
+Required `safety_boundary` fields:
+
+- `paper_only`
+- `research_only`
+- `live_trading_enabled`
+- `secrets_requested`
+- `secrets_exposed`
+- `exchange_connection`
+- `market_fetch`
+- `order_path`
+- `strategy_alpha`
+- `optimizer`
+- `performance_claim`
+- `readiness_approval`
+
+Required `unavailable_evidence` fields:
+
+- `ci_workflow_artifacts`
+- `exchange_audit`
+- `market_data_completeness`
+- `execution_realism`
+- `profitability`
+- `live_readiness`
+- `production_readiness`
+
+Local runtime artifacts are evidence artifacts, not production approval. Runtime artifact schema documentation must not imply live readiness. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval is added.
