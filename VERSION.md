@@ -1,5 +1,21 @@
 # Aethelgard Version Ledger
 
+## 0.22.7 - 2026-06-19
+
+**Engineering milestone:** Gate 5B-6 offline runtime artifact CLI output-path fail-closed regression.
+
+- Added a focused CLI regression test that invalid output artifact paths exit non-zero through the existing writer validation path.
+- Verified invalid output targets outside `reports/`, non-JSON targets, parent traversal, and absolute paths do not create stray local artifacts.
+- Package version advanced to `0.22.7`.
+
+**Evidence classification:**
+
+- `MEASURED`: local repository inspection and validation commands for this bounded CLI test/documentation increment.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable unless directly measured.
+
+**Safety boundary:** Gate 5B-6 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. It is a test-only fail-closed guard for the optional offline CLI output path. It does not change `python main.py`, startup semantics, runtime boot behavior, live trading, secret request/read/exposure, exchange connection, market fetch, order path, background services, strategy alpha, optimizer, performance calculation, profitability claim, readiness approval, or exchange mutation. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+
 ## 0.22.6 - 2026-06-19
 
 **Engineering milestone:** Gate 5B-5 optional offline runtime artifact CLI.

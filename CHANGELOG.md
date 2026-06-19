@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.22.7] - 2026-06-19
+
+### Added
+
+- Added Gate 5B-6 CLI regression coverage for invalid runtime artifact output paths.
+
+### Safety
+
+- Invalid output paths outside `reports/`, non-JSON paths, parent traversal, and absolute paths remain fail-closed through the existing writer validation boundary.
+- No runtime startup, exchange, secret, order, strategy, optimizer, performance, profitability, or readiness behavior is added or changed.
+
+### Evidence
+
+- Local validation evidence only; open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain `UNAVAILABLE` unless directly measured.
+
+
 ## [0.22.6] - 2026-06-19
 
 ### Added
