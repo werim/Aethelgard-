@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.22.6] - 2026-06-19
+
+### Added
+
+- Added Gate 5B-5 optional local-only runtime artifact CLI in `src/reporting/runtime_artifact_cli.py`.
+- Added focused CLI regression coverage in `tests/test_runtime_artifact_cli.py` for local path delegation, invalid local input failure, credential-free operation, and unchanged Gate 5B-2 startup behavior.
+
+### Safety
+
+- Preserved PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY.
+- The CLI is optional and explicitly invoked; it reads only local JSON metadata and writes only local `reports/*.json` artifacts through the existing writer.
+- No startup semantics, runtime boot behavior, exchange connection, network access, API-key requirement, market fetch, order path, background service, live trading behavior, performance claim, profitability claim, or readiness approval was added.
+
+### Evidence
+
+- Gate 5A-4 evidence ledger consistency audit preserved user-reported green evidence; connector-visible CI remains UNAVAILABLE; this is not connector-visible workflow evidence. Gate 5A-8 documentation evidence reconciliation remains documentation/test-only evidence reconciliation. Gate 5A-7 workflow artifact evidence ledger, Gate 4B-5, Gate 4B-5A, remote `origin`, open PR, and direct workflow artifact evidence remain UNAVAILABLE.
+- `MEASURED`: local focused tests for the CLI, existing writer, and Gate 5B-2 startup contract were run.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable.
+
+
 ## [0.22.5-docs] - 2026-06-19
 
 ### Documentation

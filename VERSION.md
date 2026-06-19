@@ -1,5 +1,25 @@
 # Aethelgard Version Ledger
 
+## 0.22.6 - 2026-06-19
+
+**Engineering milestone:** Gate 5B-5 optional offline runtime artifact CLI.
+
+- Added `src/reporting/runtime_artifact_cli.py` as a user-invoked local-only CLI wrapper around the existing runtime artifact writer.
+- Added `tests/test_runtime_artifact_cli.py` to verify local writer delegation, invalid local input failure, credential-free operation, and unchanged Gate 5B-2 startup contract behavior.
+- Package version advanced to `0.22.6`.
+
+**Evidence classification:**
+
+- Gate 5A-4 evidence ledger consistency audit preserved user-reported green evidence; connector-visible CI remains UNAVAILABLE; this is not connector-visible workflow evidence. Gate 5A-8 documentation evidence reconciliation remains documentation/test-only evidence reconciliation. Gate 5A-7 workflow artifact evidence ledger, Gate 4B-5, Gate 4B-5A, remote `origin`, open PR, and direct workflow artifact evidence remain UNAVAILABLE.
+- `MEASURED`: local focused tests for the CLI, runtime artifact writer, and Gate 5B-2 startup contract.
+- `UNAVAILABLE`: open PR visibility, remote CI/workflow status, workflow artifacts, workflow job logs, exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain unavailable unless directly measured.
+
+
+**Ledger continuity:** Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A — VERSION ledger reconciliation remain recorded as prior documentation/test-only increments. Safety boundary phrases preserved: no runtime behavior, no strategy logic, no optimizer, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, no readiness approval.
+
+**Safety boundary:** Gate 5B-5 remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. The CLI is optional, explicitly user-invoked, local-only, and delegates to the existing writer. It does not change `python main.py`, startup semantics, runtime boot behavior, live trading, secret request/read/exposure, exchange connection, market fetch, order path, background services, strategy alpha, optimizer, performance calculation, profitability claim, readiness approval, or exchange mutation. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+
 ## 0.22.5-docs - 2026-06-19
 
 **Engineering milestone:** Gate 5B runtime artifact code evidence documentation reconciliation.

@@ -10,7 +10,7 @@ This reconciliation was performed against the `dev` branch through direct reposi
 | `tests/test_runtime_artifact_writer.py` | Covers deterministic parseable newline-terminated JSON, bounded safety metadata, explicit unavailable evidence, forbidden secret/performance/alpha/profitability claims, absence of live/production-readiness implication, unsafe path rejection, and unsafe runtime claim rejection. | Documented in this gate file. |
 | `tests/test_runtime_artifact_schema_ledger_consistency.py` | Guards that the documented top-level artifact fields, `safety_boundary` fields, `unavailable_evidence` fields, and required safety phrases remain aligned with the writer payload and documentation. | Documented in this gate file. |
 | `src/reporting/__init__.py` | Exports `REQUIRED_SAFETY_BOUNDARY`, `REQUIRED_UNAVAILABLE_EVIDENCE`, `RuntimeArtifactWriterError`, `runtime_artifact_payload`, and `write_runtime_artifact`. | Documented in this gate file. |
-| `pyproject.toml` | Package version remains `0.22.5`; this reconciliation does not require a package version bump because it documents already-present code evidence only. | Documented here as a docs-only reconciliation. |
+| `pyproject.toml` | Package version `0.22.6` records Gate 5B-5 optional offline CLI wrapper implementation. | Documented here as a bounded implementation increment. |
 
 ### Evidence classification for this reconciliation
 
@@ -103,3 +103,16 @@ Required `unavailable_evidence` fields:
 - `production_readiness`
 
 Local runtime artifacts are evidence artifacts, not production approval. Runtime artifact schema documentation must not imply live readiness. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness. No secrets, exchange connection, market fetch, order path, optimizer, strategy alpha, performance claim, or readiness approval is added.
+
+
+## Gate 5B-5 optional offline runtime artifact CLI
+
+Gate 5B-5 adds an optional local-only CLI wrapper. It is explicitly user-invoked, reads one local repo-relative JSON metadata file, writes one local `reports/*.json` artifact path, and delegates artifact generation to `write_runtime_artifact` instead of duplicating writer logic. It exits non-zero on missing local input, invalid JSON, unsafe paths, validation failure, or writer failure.
+
+Changed implementation/test files:
+
+- `src/reporting/runtime_artifact_cli.py`
+- `tests/test_runtime_artifact_cli.py`
+- `docs/gates/gate5b_runtime_artifact_writer.md`
+
+The CLI wrapper does not change `python main.py` behavior, does not modify runtime boot behavior, does not add required CLI invocation to normal startup, does not start trading loops, does not read secrets or require API keys, does not connect to Binance or any exchange, does not fetch market data, does not place or cancel orders, does not create background services, does not calculate or publish performance, and does not approve runtime, live, or production readiness. Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.

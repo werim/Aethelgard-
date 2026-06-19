@@ -1,5 +1,53 @@
 # Aethelgard Report
 
+## Gate 5B-5 optional offline runtime artifact CLI
+
+- Repository: `github.com/werim/aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `b8400f725ba998c18950e9d9645c2950165afef7`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5B runtime artifact code evidence documentation reconciliation on package version `0.22.5`, with next step permitting a focused optional offline CLI wrapper only if Gate 5B-2 startup behavior remains unchanged.
+- Chosen smallest safe increment: Gate 5B-5 optional offline runtime artifact CLI because it only wraps the existing local writer behind explicit user invocation, reads local JSON evidence, writes local `reports/*.json` artifacts, and does not change startup/runtime behavior.
+
+## Gate 5B-5 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits, including ledgers, plan, README, tooling, CI workflow, runtime artifact writer code/tests, Gate 5B-2 startup contract docs/tests, and `main.py`.
+- Local branch `work`, starting commit `b8400f725ba998c18950e9d9645c2950165afef7`, and clean starting working tree were observed before edits.
+- Gate 5B-5 adds `src/reporting/runtime_artifact_cli.py` and `tests/test_runtime_artifact_cli.py`, updates runtime artifact documentation, advances package version to `0.22.6`, and updates project ledgers.
+- Focused tests measured that the CLI delegates to the existing writer with local paths only, invalid or missing local input exits non-zero, exchange credentials are not required, and the Gate 5B-2 startup contract test remains unchanged and passing.
+
+### MODELED
+
+- None. The CLI records no execution-cost, exchange, performance, profitability, or readiness model. Unknown execution costs remain not zero.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts and workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain `UNAVAILABLE` and unclaimed.
+
+## Gate 5B-5 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-5 is an optional offline CLI wrapper only. It does not change `python main.py`, startup semantics, runtime boot behavior, required startup invocation, live trading, secret request/read/exposure, exchange connection, market fetch, order path, background service, strategy alpha, optimizer, performance calculation, profitability claim, readiness approval, live readiness, production readiness, or exchange mutation. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5B-5 validation, inspect remote validation evidence if available or continue with a narrow evidence-ledger consistency guard. Do not add runtime trading behavior, exchange mutation, strategy alpha, optimizer behavior, performance calculation, market-data fetching, or readiness approval.
+
+
+- Gate 5A-4 evidence ledger consistency audit preserved user-reported green evidence; connector-visible CI remains UNAVAILABLE; this is not connector-visible workflow evidence. Gate 5A-8 documentation evidence reconciliation remains documentation/test-only evidence reconciliation. Gate 5A-7 workflow artifact evidence ledger, Gate 4B-5, Gate 4B-5A, remote `origin`, open PR, and direct workflow artifact evidence remain UNAVAILABLE.
+
+## Prior report content
+
 ## Gate 5B-4 runtime artifact schema ledger consistency check
 
 - Repository: `github.com/werim/Aethelgard-`
