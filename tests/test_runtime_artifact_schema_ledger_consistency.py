@@ -77,5 +77,5 @@ def test_runtime_artifact_schema_ledger_preserves_safety_phrases() -> None:
     for phrase in REQUIRED_SAFETY_DOCUMENTATION_PHRASES:
         assert phrase in doc
 
-    assert "CLI wrapper is intentionally deferred" in doc
-    assert "does not add a CLI wrapper or change `python main.py` behavior" in doc
+    assert "Gate 5B-5 adds an optional local-only CLI wrapper." in doc
+    assert "does not change `python main.py` behavior" in doc

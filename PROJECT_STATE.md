@@ -11,6 +11,58 @@ PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
 ## Current Verified Repository State
 
 - Repository: `github.com/werim/Aethelgard-`
+- Repository: `werim/Aethelgard-`
+- Selected repository: `werim/aethelgard-`
+- Target branch: `dev`
+- Observed local branch before Gate 5B-5 edits: `work`
+- Starting commit before Gate 5B-5 edits: `b8400f725ba998c18950e9d9645c2950165afef7`
+- Starting working tree before Gate 5B-5 edits: clean
+- Open PR visibility for `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`; connector-visible CI remains UNAVAILABLE and is not connector-visible workflow evidence.
+- Workflow artifacts and direct workflow artifact proof: `UNAVAILABLE`
+- user-reported green evidence remains user-reported green, not connector-visible workflow evidence.
+
+## Current Ledger Position
+
+Current documented sequence includes Gate 5B-5 optional offline runtime artifact CLI after Gate 5B runtime artifact code evidence documentation reconciliation. Gate 5B-5 records `src/reporting/runtime_artifact_cli.py` and `tests/test_runtime_artifact_cli.py` as a local-only optional wrapper around the existing writer. Gate 5A-4 evidence ledger consistency audit remains recorded with user-reported green evidence while connector-visible CI remains UNAVAILABLE. Gate 5A-8 documentation evidence reconciliation remains a documentation/test-only evidence reconciliation. Gate 4B-5 project-state ledger reconciliation and Gate 4B-5A — VERSION ledger reconciliation. Gate 4B-5 was recorded as a documentation/test-only increment. remote `origin`, open PR, direct workflow artifact, and CI evidence remain UNAVAILABLE unless directly observed.
+
+## Current Safety Boundary
+
+Aethelgard remains PAPER ONLY / RESEARCH ONLY / NOT READY and PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-5 does not change runtime behavior, strategy logic, optimizer behavior, execution-cost modeling, performance calculation, PAPER runtime behavior, exchange mutation, readiness status, or place exchange orders. It adds no optimizer, no runtime behavior, no strategy logic, no execution-cost modeling, no performance calculation, no PAPER runtime expansion, no exchange mutation, and no readiness approval. Missing evidence remains unavailable. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+## Validation Commands Ledger
+
+- `python -m compileall -q src tests main.py`
+- `pytest -q tests/test_validation_command_ledger_consistency.py`
+- `pytest -q tests/test_gate4_completion_evidence_matrix.py`
+- `pytest -q tests/test_gate4_public_safety_exports.py`
+- `pytest -q tests/test_cost_evidence.py`
+- `pytest -q tests/test_public_exports.py`
+- `pytest -q`
+- `ruff check .`
+- `black --check .`
+- `mypy .`
+
+These historical canonical commands were not directly run in this execution environment for prior ledger entries unless separately reported; unavailable validation evidence remains UNAVAILABLE.
+
+## Next Recommended Step
+
+After Gate 5B-5 validation, inspect remote validation evidence if available or continue with a narrow evidence-ledger consistency guard without changing runtime behavior.
+
+
+## Prior report content
+
+## Project Name
+
+Aethelgard
+
+## Current Mode
+
+PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY
+
+## Current Verified Repository State
+
+- Repository: `github.com/werim/Aethelgard-`
 - Selected repository: `werim/Aethelgard-`
 - Target branch: `dev`
 - Documentation reconciliation commits created on `dev`: `7ff412d6b285766e8e77c0598d8b614e9fa50298`, `6fe690448157a7b56c29124adbea1e67c2f938fe`, `327266e5d7e8d384cb2b90f1a194cb6489cafcf1`, `5d6e2f47661a944b880df24c8829eb50acacd6b9`

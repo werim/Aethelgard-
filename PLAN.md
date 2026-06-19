@@ -1,5 +1,14 @@
 # Aethelgard Plan
 
+## Current next step after Gate 5B-5
+
+Gate 5B-5 adds an optional offline runtime artifact CLI wrapper around the existing writer. The CLI is user-invoked, reads only local JSON metadata, writes only local `reports/*.json` artifacts, delegates to `write_runtime_artifact`, and exits non-zero for missing or invalid local evidence. It does not change `python main.py`, startup semantics, runtime boot behavior, exchange access, network access, order paths, secrets, background services, performance calculations, or readiness approval.
+
+Next smallest safe step: inspect validation and CI evidence if available, then continue with a narrow evidence-ledger consistency guard or documentation reconciliation only if it preserves Gate 5B-2 startup behavior and the PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY boundary. Do not add live trading, secret requests, exchange mutation, optimizer behavior, strategy alpha logic, performance calculation, market-data fetching, or readiness approval.
+
+
+## Prior plan content
+
 ## Current next step after Gate 5B code evidence documentation reconciliation
 
 Gate 5B runtime artifact documentation has been reconciled with code evidence directly observed on `dev`. The reconciliation documents `src/reporting/runtime_artifact_writer.py`, `tests/test_runtime_artifact_writer.py`, `tests/test_runtime_artifact_schema_ledger_consistency.py`, `src/reporting/__init__.py`, and `pyproject.toml` in `docs/gates/gate5b_runtime_artifact_writer.md`.
