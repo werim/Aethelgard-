@@ -1,5 +1,48 @@
 # Aethelgard Report
 
+## Gate 5B-6 offline runtime artifact CLI output-path fail-closed regression
+
+- Repository: `github.com/werim/Aethelgard-`
+- Selected repository: `werim/Aethelgard-`
+- Selected base branch: `dev`
+- Observed local branch: `work`
+- Starting commit SHA: `ffb0ff8e018ef30d3d38e376224fc359c6f8e3a9`
+- Starting working tree status: clean
+- Open PRs relevant to `dev`: `UNAVAILABLE`
+- Visible CI/workflow status: `UNAVAILABLE`
+- Workflow job logs: `UNAVAILABLE`
+- Workflow artifacts: `UNAVAILABLE`
+- Authoritative milestone discovered from repository documentation: Gate 5B-5 optional offline runtime artifact CLI on package version `0.22.6`, with the next step constrained to validation/CI inspection or a narrow evidence-ledger consistency guard that preserves Gate 5B-2 startup behavior.
+- Chosen smallest safe increment: Gate 5B-6 CLI output-path fail-closed regression because existing CLI coverage checked invalid metadata inputs but did not directly assert invalid output targets fail closed without creating stray local artifacts.
+
+## Gate 5B-6 evidence classification
+
+### MEASURED
+
+- Required repository files were read before edits, including ledgers, plan, README, tooling, CI workflow, runtime artifact CLI code/tests, runtime artifact writer code, and startup contract coverage.
+- Local branch `work`, starting commit `ffb0ff8e018ef30d3d38e376224fc359c6f8e3a9`, and clean starting working tree were observed before edits.
+- Gate 5B-6 adds focused CLI test coverage for invalid output paths while preserving delegation to the existing writer validation boundary.
+
+### MODELED
+
+- None. This increment records no execution-cost, exchange, performance, profitability, or readiness model. Unknown execution costs remain not zero.
+
+### UNAVAILABLE
+
+- Open PR visibility for `dev` remains `UNAVAILABLE`.
+- Connector-visible CI/workflow status remains `UNAVAILABLE`.
+- Workflow artifacts and workflow job logs remain `UNAVAILABLE`.
+- Exchange audit proof, market-data completeness, execution realism, profitability, live readiness, and production readiness remain `UNAVAILABLE` and unclaimed.
+
+## Gate 5B-6 safety boundary
+
+Aethelgard remains PAPER_ONLY / RESEARCH_ONLY / NOT_LIVE_READY. Gate 5B-6 is a test-only fail-closed guard for the optional offline runtime artifact CLI output path. It does not change `python main.py`, startup semantics, runtime boot behavior, required startup invocation, live trading, secret request/read/exposure, exchange connection, market fetch, order path, background service, strategy alpha, optimizer, performance calculation, profitability claim, readiness approval, live readiness, production readiness, or exchange mutation. Missing evidence remains UNAVAILABLE. Unknown execution costs are not zero. Backtest performance alone does not prove production readiness.
+
+## Next recommended smallest increment
+
+After Gate 5B-6 validation, inspect remote validation evidence if available or continue with another narrow evidence-ledger consistency guard. Do not add runtime trading behavior, exchange mutation, strategy alpha, optimizer behavior, performance calculation, market-data fetching, or readiness approval.
+
+
 ## Gate 5B-5 optional offline runtime artifact CLI
 
 - Repository: `github.com/werim/aethelgard-`

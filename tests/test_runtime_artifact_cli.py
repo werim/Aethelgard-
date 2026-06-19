@@ -82,6 +82,36 @@ def test_cli_invalid_or_missing_local_input_exits_nonzero(
     assert "runtime artifact CLI failed:" in out.err
 
 
+@pytest.mark.parametrize(
+    "output_path",
+    [
+        "runtime_cli.json",
+        "reports/runtime_cli.txt",
+        "reports/../runtime_cli.json",
+        str(Path.cwd() / "reports" / "runtime_cli.json"),
+    ],
+)
+def test_cli_invalid_output_path_exits_nonzero(
+    output_path: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    metadata_path = Path("local_metadata.json")
+    metadata_path.write_text(json.dumps(_metadata(), sort_keys=True), encoding="utf-8")
+
+    result = runtime_artifact_cli.main(
+        ["--metadata", "local_metadata.json", "--output", output_path]
+    )
+
+    assert result == 1
+    out = capsys.readouterr()
+    assert out.out == ""
+    assert "runtime artifact CLI failed:" in out.err
+    assert not Path("runtime_cli.json").exists()
+
+
 def test_cli_does_not_require_exchange_credentials(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
